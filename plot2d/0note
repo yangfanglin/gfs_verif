@@ -1,0 +1,18 @@
+May 2017
+Integrated Mallory Row's update RL: https://svnemc.ncep.noaa.gov/projects/verif/global/branches/maps2d_fcstobs,
+which ontains verifications against CERES and CALIPSO and updated CAMS and GPCP datasets
+
+
+-------------------------------------------------------------
+*  modified ss2gg, save disk space by 50% and CPU 30~50%
+  new ss2ggx contains Ps, T, U,V, Q, RH, O3 and CLW
+
+*  converting one T1534 sig file to 768x384 grid takes about 1 minutes,  each file is 500MB
+*  converting one T1534 sig file to 1152x576 grid takes about 2 minutes,  each file is 1.2GB
+*  converting one T1534 sig file to 1760x880 grid takes about 4 minutes,  each file is 2.7GB
+*  converting one TL574 sig file to 1152x576 grid takes about 0.5 minutes
+* 
+*  split the conversion to many small batch jobs and wait for all conversion jobs to finish before making maps.
+   each job converts  3 days of siganl and sigges for all four ccycles, in toatl 24 files
+   T1534 ->1152x576   needs 48 minutes in total
+   TL574 ->1152x576   needs 12 minutes in total
