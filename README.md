@@ -1,9 +1,9 @@
 
 ## NCEP-EMC Global NWP Model VERIFICATION PACKAGE
 ## Fanglin Yang  
-## Global Weather and Climate Modeling Branch
-## Environmental Modeling Center         
-## National Centers for Environmental Prediction  
+Global Weather and Climate Modeling Branch
+Environmental Modeling Center         
+National Centers for Environmental Prediction  
 
 --------------------------
 Credit and Acknowledgments
@@ -419,8 +419,8 @@ Version 03 information
 -
 # Fanglin Yang, Ph.D.
 # fanglin.yang@noaa.gov
-# http://www.emc.ncep.noaa.gov/gmb/wx24fy/fyang/
-# http://www.emc.ncep.noaa.gov/gmb/STATS_vsdb/
+http://www.emc.ncep.noaa.gov/gmb/wx24fy/fyang/
+http://www.emc.ncep.noaa.gov/gmb/STATS_vsdb/
 
 
 
