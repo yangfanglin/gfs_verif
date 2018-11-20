@@ -1,7 +1,7 @@
 
 ## NCEP-EMC Global NWP Model VERIFICATION PACKAGE
 ## Fanglin Yang  
-Global Weather and Climate Modeling Branch      
+Modeling and Data Assimilation Branch      
 Environmental Modeling Center  
 National Centers for Environmental Prediction  
 
