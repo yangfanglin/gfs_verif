@@ -1,40 +1,40 @@
-############################################################
-###### NCEP-EMC Global NWP Model VERIFICATION PACKAGE  #####
-######              Fanglin Yang                       #####
-######                                                 #####
-######  Global Weather and Climate Modeling Branch     #####
-######        Environmental Modeling Center            #####
-######  National Centers for Environmental Prediction  #####
-############################################################
 
-Credit and Acknowledgments:
-##    All scripts and Fortran programs except for those listed below are written
-##    and maintained by Fanglin Yang.
-##    Binbin Zhou and Geoff DiMego provided the script and code for grid-to-grid
-##    database computation. Jack Woollen and Suranjana Saha provided the script
-##    and code for making fit-to-obs maps. Perry Shafran and Geoff DiMego provided
-##    the Grid-to-Obs fortran programs. DaNa Carlis and Rebecca LaPorta developed
-##    the SCORECARD functionality. All third-party programs and scripts have been
-##    modified before being included in this package.
-##    Yuejian Zhu, Peter Caplan, and Bob Kistler had made significant contributions
-##    to a legacy system that was used to verify, monitor and archive GFS forecast
-##    skills before mid-2000s. A few of the Fortran source code used for precipitation
-##    verification and some of the climatology fields from the legacy system are
-##    still used in this verification package.
-##    A few "NWPROD" libraries were adopted from the GFS para system Shrinivas
-##    Moorthi updated and built on Zeus for running on different platforms. A few
-##    changes made by Jim Jung  to the grid-to-grid Fortran source code were adopted
-##    to make the program compatible with Linux compilers. Shrinivas Moorthi helped
-##    with adding the script to port forecast data from different machines. Glenn
-##    White, Steve Lord and Xu Li made suggestions for creating and improving the
-##    significance test for AC dieoff curves and RMSE growth curves. Russ made a
-##    suggestion to include consensus analysis for verification. Helin Wei provided
-##    assistance for including the grid-to-obs verification. John Derber made
-##    a few suggestions to improve grid-to-obs verification, the SCORECARD and
-##    significane test graphics. Andrew Collard made a suggestion to include
-##    GDAS analysis increments. Rahul Mahajan proposed to include ENKF ensemble
-##    mean and ensemble spread maps. Many users have provided valuable comments and
-##    suggestions that helped improving the usability and  portability of this package.
+NCEP-EMC Global NWP Model VERIFICATION PACKAGE #
+Fanglin Yang  
+Global Weather and Climate Modeling Branch
+Environmental Modeling Center         
+National Centers for Environmental Prediction  
+
+--------------------------
+Credit and Acknowledgments
+--------------------------
+All scripts and Fortran programs except for those listed below are written
+and maintained by Fanglin Yang.
+Binbin Zhou and Geoff DiMego provided the script and code for grid-to-grid
+database computation. Jack Woollen and Suranjana Saha provided the script
+and code for making fit-to-obs maps. Perry Shafran and Geoff DiMego provided
+the Grid-to-Obs fortran programs. DaNa Carlis and Rebecca LaPorta developed
+the SCORECARD functionality. All third-party programs and scripts have been
+modified before being included in this package.
+Yuejian Zhu, Peter Caplan, and Bob Kistler had made significant contributions
+to a legacy system that was used to verify, monitor and archive GFS forecast
+skills before mid-2000s. A few of the Fortran source code used for precipitation
+verification and some of the climatology fields from the legacy system are
+still used in this verification package.
+A few "NWPROD" libraries were adopted from the GFS para system Shrinivas
+Moorthi updated and built on Zeus for running on different platforms. A few
+changes made by Jim Jung  to the grid-to-grid Fortran source code were adopted
+to make the program compatible with Linux compilers. Shrinivas Moorthi helped
+with adding the script to port forecast data from different machines. Glenn
+White, Steve Lord and Xu Li made suggestions for creating and improving the
+significance test for AC dieoff curves and RMSE growth curves. Russ made a
+suggestion to include consensus analysis for verification. Helin Wei provided
+assistance for including the grid-to-obs verification. John Derber made
+a few suggestions to improve grid-to-obs verification, the SCORECARD and
+significane test graphics. Andrew Collard made a suggestion to include
+GDAS analysis increments. Rahul Mahajan proposed to include ENKF ensemble
+mean and ensemble spread maps. Many users have provided valuable comments and
+suggestions that helped improving the usability and  portability of this package.
 
 
 --------------------------------------------------------------------
