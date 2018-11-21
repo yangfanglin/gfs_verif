@@ -10,39 +10,45 @@ set -x
 ## a list of executables. Check each one carefully if it fails to compile.   
 
 machine=JET ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
+curdir=`pwd`
 
-if [ $machine = IBM ];then
- FCMP=xlf_r
- CCMP=xlc_r
-elif [ $machine = WCOSS -o $machine = THEIA ];then
+if [ $machine = THEIA ];then
  FCMP=ifort
  CCMP=cc
+ ln -fs /scratch4/NCEPDEV/global/save/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
 elif [ $machine = JET ];then
  FCMP=ifort
  CCMP=icc
+ ln -fs /mnt/lfs3/projects/hfv3gfs/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
+elif [ $machine = WCOSS ];then
+ FCMP=ifort
+ CCMP=cc
+ ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb $curdir/nwprod/.
 elif [ $machine = WCOSS_C -o $machine = WCOSS_D ];then
  FCMP=ifort
  CCMP=icc
+ ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb $curdir/nwprod/.
 elif [ $machine = GAEA ];then
  FCMP=ftn
  CCMP=icc
+elif [ $machine = IBM ];then
+ FCMP=xlf_r
+ CCMP=xlc_r
 else
  echo " machine=$machine not define. Add yours !"
  exit
 fi
 
-curdir=`pwd`
 
 
 #--first libraries. Better to make use of admin built libraries if they exist.
-# also note bufr lib takes a long time to build (~hour)
-# These libraries may not be able to compile on IBM CCS. 
-
-setlib=yes
+if [ ! -s $curdir/nwprod/exec ]; then mkdir $curdir/nwprod/exec ; fi
+if [ ! -s $curdir/nwprod/lib/incmod ]; then mkdir $curdir/nwprod/lib/incmod ; fi
+if [ ! -s $curdir/precip/exec ]; then mkdir $curdir/precip/exec ; fi
 
 #--please copy the pre-existing libs to $curdir/nwprod/lib
 #if [ $machine = IBM -o $machine = JET ]; then setlib=no; fi
-
+setlib=yes
 if [ $setlib = yes ]; then
 for libname in bacio bufr ip sp sigio w3lib-2.0 w3nco_v2.0.6; do
   rm $curdir/nwprod/lib/*${libname}*.a
