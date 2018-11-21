@@ -23,11 +23,11 @@ elif [ $machine = JET ];then
 elif [ $machine = WCOSS ];then
  FCMP=ifort
  CCMP=cc
- ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb $curdir/nwprod/.
+ ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
 elif [ $machine = WCOSS_C -o $machine = WCOSS_D ];then
  FCMP=ifort
  CCMP=icc
- ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb $curdir/nwprod/.
+ ln -fs /gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
 elif [ $machine = GAEA ];then
  FCMP=ftn
  CCMP=icc
