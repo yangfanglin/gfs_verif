@@ -9,7 +9,7 @@ set -x
 ## to first build the following librairies and utilities, then compile 
 ## a list of executables. Check each one carefully if it fails to compile.   
 
-machine=JET ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
+machine=WCOSS_D ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
 curdir=`pwd`
 
 if [ $machine = THEIA ];then
@@ -43,6 +43,7 @@ fi
 
 #--first libraries. Better to make use of admin built libraries if they exist.
 if [ ! -s $curdir/nwprod/exec ]; then mkdir $curdir/nwprod/exec ; fi
+if [ ! -s $curdir/nwprod/util/exec ]; then mkdir $curdir/nwprod/util/exec ; fi
 if [ ! -s $curdir/nwprod/lib/incmod ]; then mkdir $curdir/nwprod/lib/incmod ; fi
 if [ ! -s $curdir/precip/exec ]; then mkdir $curdir/precip/exec ; fi
 
