@@ -117,7 +117,7 @@ for hr in ${fhname[3]}; do
  if [ $hr != $hrold ]; then
  fhour=`echo $hr |cut -c 2-5`
  adate=`$ndate +$fhour $sdate`   ;#analysis time
- rm -f xtmp
+ rm -f ${datadir}/xtmp
 
   if [ $exp = "gfs" ]; then
     filetmp=$gstat/$exp/pgbanl.$exp.$adate
@@ -133,11 +133,13 @@ for hr in ${fhname[3]}; do
     echo "$filetmp does not exist !"
   fi
 
+  if [ -s ${datadir}/xtmp ]; then
   if [ $GG0 = 999 ]; then GG0=`$wgrb -d 1 -V ${datadir}/xtmp -o /dev/null | grep -o 'grid=[^\n]' | cut -c6-`; fi
   if [ $GG0 = $GG -a $exp != fim ]; then
    mv ${datadir}/xtmp ${datadir}/pgbanl$dump$adate
   else
    ${cpygb} -g$GG -x  ${datadir}/xtmp ${datadir}/pgbanl$dump$adate
+  fi
   fi
  hrold=$hr
  fi

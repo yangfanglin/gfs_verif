@@ -11,12 +11,12 @@ edate=${5:-2017060400}
 fhend=${6:-240}
 fhout=${7:-3}
 
+export LN=${LN:-"ln -fs"}
+export PGBQ=${PGBQ:-"YES"}
 
 [[ ! -s $outdir/$exp ]] && mkdir -p $outdir/$exp
 cd $outdir/$exp ||exit 8
 cdate=$sdate
-#LN="ln -fs"
-LN="cp -p "
 
 while [ $cdate -le $edate ]; do
 
@@ -33,12 +33,15 @@ while [ $fha -le $fhend ]; do
   fileout=pgbf$fhb.gfs.$cdate
   [[ -s $filein ]] && $LN $filein $fileout
 
-  filein=$indir/$exp/$cdate/gfs.t${cyc}z.pgrb2.0p25.f$fha  
-  fileout=pgbq$fhb.gfs.$cdate
-  if [ -s $filein ]; then  
-    rm -f outtmp1 fileout
-    $WGRIB2 $filein -match "(:PRATE:surface:)|(:TMP:2 m above ground:)" -grib outtmp1
-    $CNVGRIB -g21 outtmp1 $fileout
+  if [ $PGBQ = YES ]; then
+    filein=$indir/$exp/$cdate/gfs.t${cyc}z.pgrb2.0p25.f$fha  
+    fileout=pgbq$fhb.gfs.$cdate
+    if [ -s $filein ]; then  
+      rm -f outtmp1 outtmp2 fileout
+      $WGRIB2 $filein -match "(:PRATE:surface)" -grib outtmp1
+      $WGRIB2 outtmp1 -match "(ave)" -grib outtmp2       
+      $CNVGRIB -g21 outtmp2 $fileout
+    fi
   fi
 
 

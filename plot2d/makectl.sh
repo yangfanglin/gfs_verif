@@ -118,7 +118,7 @@ while [ $sdate -le $edate ]; do
 hrold=f9999
 for hr in $fhlist; do
  if [ $hr != $hrold ]; then
-  rm -f xtmp
+  rm -f ${datadir}/xtmp
   if [ $exp = "gfs" ]; then
     filetmp=$gstat/$exp/pgb${hr}.$exp.$sdate
   else
@@ -133,6 +133,7 @@ for hr in $fhlist; do
     echo "$filetmp does not exist !"
   fi
 
+  if [ -s ${datadir}/xtmp ]; then
   if [ $GG0 = 999 ]; then 
    if [ $exp = ecm ]; then
     GG0=`$wgrb -d 1 -V ${datadir}/xtmp -o /dev/null | grep -o 'grid=[^\n][^\n][^\n]' | cut -c6-`
@@ -144,6 +145,7 @@ for hr in $fhlist; do
    mv ${datadir}/xtmp ${datadir}/pgb${hr}$dump$sdate
   else
    ${cpygb} -g$GG -x  ${datadir}/xtmp ${datadir}/pgb${hr}$dump$sdate
+  fi
   fi
  hrold=$hr
  fi
