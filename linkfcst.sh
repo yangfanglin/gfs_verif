@@ -36,7 +36,7 @@ while [ $fha -le $fhend ]; do
   if [ $PGBQ = YES ]; then
     filein=$indir/$exp/$cdate/gfs.t${cyc}z.pgrb2.0p25.f$fha  
     fileout=pgbq$fhb.gfs.$cdate
-    if [ -s $filein ]; then  
+    if [ -s $filein -a ! -s $fileout ]; then  
       rm -f outtmp1 outtmp2 fileout
       $WGRIB2 $filein -match "(:PRATE:surface)" -grib outtmp1
       $WGRIB2 outtmp1 -match "(ave)" -grib outtmp2       
