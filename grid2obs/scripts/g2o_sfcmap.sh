@@ -115,7 +115,7 @@ mdc.0=Obs
 *-- define line styles and model names 
 * cst.0=1; cst.1=5; cst.2=5; cst.3=3; cst.4=5; cst.5=5; cst.6=3; cst.7=5; cst.8=5; cst.9=5; cst.10=5
   cst.0=1; cst.1=1; cst.2=1; cst.3=1; cst.4=1; cst.5=1; cst.6=1; cst.7=1; cst.8=1; cst.9=1; cst.10=1
-  cth.0=10;cth.1=10; cth.2=10; cth.3=9; cth.4=9; cth.5=9; cth.6=9; cth.7=9; cth.8=9; cth.9=9; cth.10=9
+  cth.0=11;cth.1=11; cth.2=11; cth.3=11; cth.4=11; cth.5=11; cth.6=11; cth.7=11; cth.8=11; cth.9=11; cth.10=11
 * cma.0=0; cma.1=2; cma.2=8; cma.3=6; cma.4=1; cma.5=2; cma.6=0; cma.7=4; cma.8=3; cma.9=4; cma.10=5
   cma.0=0; cma.1=0; cma.2=0; cma.3=0; cma.4=0; cma.5=0; cma.6=0; cma.7=0; cma.8=0; cma.9=0; cma.10=0
   cco.0=1; cco.1=2; cco.2=4; cco.3=3; cco.4=8; cco.5=9; cco.6=5; cco.7=6; cco.8=7; cco.9=15; cco.10=10

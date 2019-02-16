@@ -364,8 +364,8 @@ if($nmd >8); mdc.9=${mdnamec[8]} ;endif
 if($nmd >9); mdc.10=${mdnamec[9]} ;endif
 
 *-- define line styles and model names 
-  cst.1=1; cst.2=5; cst.3=3; cst.4=5; cst.5=5; cst.6=3; cst.7=5; cst.8=5; cst.9=5; cst.10=5
-  cth.1=9; cth.2=9; cth.3=4; cth.4=1; cth.5=4; cth.6=1; cth.7=1; cth.8=1; cth.9=1; cth.10=1
+  cst.1=1; cst.2=1; cst.3=1; cst.4=1; cst.5=1; cst.6=1; cst.7=5; cst.8=5; cst.9=5; cst.10=5
+  cth.1=11; cth.2=11; cth.3=11; cth.4=11; cth.5=11; cth.6=11; cth.7=1; cth.8=1; cth.9=1; cth.10=1
   cma.1=0; cma.2=8; cma.3=6; cma.4=1; cma.5=2; cma.6=0; cma.7=3; cma.8=7; cma.9=4; cma.10=5
   cco.1=1; cco.2=2; cco.3=3; cco.4=4; cco.5=8; cco.6=9; cco.7=5; cco.8=6; cco.9=7; cco.10=15
 
@@ -546,8 +546,8 @@ if($nmd >8); mdc.9=${mdnamec[8]} ;endif
 if($nmd >9); mdc.10=${mdnamec[9]} ;endif
 
 *-- define line styles and model names 
-  cst.1=1; cst.2=5; cst.3=3; cst.4=5; cst.5=5; cst.6=3; cst.7=5; cst.8=5; cst.9=5; cst.10=5
-  cth.1=9; cth.2=9; cth.3=4; cth.4=1; cth.5=4; cth.6=1; cth.7=1; cth.8=1; cth.9=1; cth.10=1
+  cst.1=1; cst.2=1; cst.3=1; cst.4=1; cst.5=1; cst.6=1; cst.7=1; cst.8=1; cst.9=1; cst.10=1
+  cth.1=11; cth.2=11; cth.3=11; cth.4=11; cth.5=11; cth.6=11; cth.7=11; cth.8=11; cth.9=11; cth.10=11
   cma.1=0; cma.2=8; cma.3=6; cma.4=1; cma.5=2; cma.6=0; cma.7=3; cma.8=7; cma.9=4; cma.10=5
   cco.1=2; cco.2=4; cco.3=3; cco.4=8; cco.5=9; cco.6=5; cco.7=6; cco.8=7; cco.9=14; cco.10=15
 
@@ -640,7 +640,7 @@ fhr=(nf-1)*${fhout}
       'set xlopts 1 6 0.14';     'set ylopts 1 6 0.14'; 'set clopts 1 6 0.0'
       'set vrange 'cmin' 'cmax; 'set ylint 'cint
       'set xlint $xtick'
-      'set cstyle 'cst.i; 'set cthick 16'; 'set cmark 0'; 'set ccolor 'cco.i
+      'set cstyle 'cst.i; 'set cthick 20'; 'set cmark 0'; 'set ccolor 'cco.i
       if ( $var = bias )
        'd tloop(ave(${coeff}*(fcst(x='%i')-obs(x='%i')),t-15,t+15))'
       else
