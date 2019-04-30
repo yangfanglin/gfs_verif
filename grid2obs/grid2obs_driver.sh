@@ -140,7 +140,31 @@ export APRUN=""
 export COMROTNCO=/scratch4/NCEPDEV/rstprod/com                                           
 export COMROTNAM=$COMROTNCO                                                             
 export nproc=24
+
+elif [ $machine = JET ]; then
+
+export NOSCRUB=/mnt/lfs3/projects/hfv3gfs/$USER/noscrub             ;#noscrub directory                 
+export vsdbsave=$NOSCRUB/archive/vsdb_data                          ;#place where vsdb database is saved
+export opsvsdb=/mnt/lfs3/projects/hfv3gfs/Fanglin.Yang/VRFY/stat/vsdb_data       ;#operational model grid-to-obs data base
+export vsdbhome=/mnt/lfs3/projects/hfv3gfs/Fanglin.Yang/VRFY/vsdb                ;#verify source code and scripts
+export gdas_prepbufr_arch=/mnt/lfs3/projects/hfv3gfs/Ratko.Vasic/noscrub/phys_sel/prepbufr/gdas ;#ops gdas prepbufr archive
+export ndasbufr_arch=/mnt/lfs3/projects/hfv3gfs/Ratko.Vasic/noscrub/phys_sel/prepbufr/ndas
+export nambufr_arch=/mnt/lfs3/projects/hfv3gfs/Ratko.Vasic/noscrub/phys_sel/prepbufr/nam
+export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
+export ACCOUNT=hfv3gfs                                       ;#computer ACCOUNT task
+export CUE2RUN=batch                                        ;#account type (dev, devhigh, or 1) to run 
+export CUE2FTP=service                                      ;#account for data transfer                 
+export GROUP=hfv3gfs                                        ;#account group
+export SUBJOB=$vsdbhome/bin/sub_jet                         ;#script for submitting batch jobs
+export HPSSTAR=/lfs3/projects/hwrf-data/emc-utils/bin/hpsstar 
+export rundir=/mnt/lfs3/projects/hfv3gfs/$USER/stmp1/g2o$$   ;#running directory
+export FC=/apps/intel/composer_xe_2015.3.187/bin/intel64/ifort      ;#fortran compiler
+export APRUN=""
+export COMROTNCO=/scratch4/NCEPDEV/rstprod/com                                           
+export COMROTNAM=$COMROTNCO                                                             
+export nproc=24
 fi
+
 
 export memory=10240; export share=N
 if [ $CUE2RUN = dev_shared ]; then export memory=1024; export share=S; fi
