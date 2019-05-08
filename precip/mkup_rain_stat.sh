@@ -27,18 +27,10 @@ export DATEST=${DATEST:-20140106}                        ;#forecast starting dat
 export DATEND=${DATEND:-20140206}                        ;#forecast ending date
 export ARCDIR0=${ARCDIR:-/stmpd2/$LOGNAME/pvrfy}
 
-export machine=${machine:-WCOSS}
 export NWPROD=${NWPROD:-/nwprod}
 export ndate=${ndate:-$NWPROD/util/exec/ndate}
+export cnvgrib=${cnvgrib:-$NWPROD/util/exec/cnvgrib}
 export cpygb=${cpygb:-$NWPROD/util/exec/copygb}
-export scppgb=${scppgb:-NO}
-if [ $machine = WCOSS ]; then
- export HPSSTAR0=/nwprod/util/ush/hpsstar
-elif [ $machine = THEIA ]; then
- export HPSSTAR0=/home/Fanglin.Yang/bin/hpsstar_theia
-fi
-export HPSSTAR=${HPSSTAR:-$HPSSTAR0}
-export runhpss=${runhpss:-NO}
 
 ## default to GFS settings. May vary for different models
 export fhout=${fhout:-6}       ;#forecast output frequency in hours
@@ -67,14 +59,9 @@ nn=1; while [ $nn -le $nexp ]; do
 export expn=${expname[nn]}
 export expd=${expdir[nn]}
 export hpssdir=${hpssname[nn]}
-export CLIENT=${compname[nn]}
 export cdump=${dumpname[nn]}
 export file_type=${ftypname[nn]}
- if [ $file_type = flx ]; then export file_type=flxf ; fi   
- if [ $file_type = pgb ]; then export file_type=pgbf ; fi   
 export precip_type=${ptypname[nn]}        ;#PRATE -> precip rate; APCP -> accumulated precip
-
-myclient=`echo $CLIENT |cut -c 1-1 `
 
 export rundir=${rundir:-/ptmp/$LOGNAME/mkup_precip}
 export ARCDIR=$ARCDIR0/$expn
@@ -101,25 +88,25 @@ while [ $hr -le $fhend ]; do
  if [ $hr -le 10 ]; then hr=0$hr; fi
 
   filename=${file_type}${hr}${cdump}${CDATE}${cyc}
-  filenew=${expd}/../vrfyarch/${file_type}${hr}${cdump}${CDATE}${cyc}
+  fileina=${expd}/${expn}/${filename}
+  fileinb=${expd}/${expn}/${filename}.grib2
+  fileinc=${expd}/../vrfyarch/${filename}
+  fileind=${expd}/../vrfyarch/${filename}.grib2
 
   echo $filename >>${file_type}list
-  if [ -s ${expd}/${expn}/$filename ]; then
-   ln -fs  ${expd}/${expn}/${filename} ${file_type}${hr}${cdump}${CDATE}${cyc} 
-  elif [ -s $filenew ]; then
-   ln -fs  ${filenew} ${file_type}${hr}${cdump}${CDATE}${cyc} 
-  elif [ $myclient != $myhost -a $scppgb = YES ]; then
-   scp $LOGNAME@${CLIENT}:${expd}/${expn}/${filename} ${file_type}${hr}${cdump}${CDATE}${cyc}
+  if [ -s $fileina ]; then
+   ln -fs  $fileina $filename
+  elif [ -s $fileinb ]; then
+   $cnvgrib -g21 $fileinb $filename
+  elif [ -s $fileinc ]; then
+   ln -fs  $fileinc $filename
+  elif [ -s $fileind ]; then
+   $cnvgrib -g21 $fileind $filename
   else
    echo "$filename does not exist"
   fi
   hr=`expr $hr + 6 `
- done
-
-##retrieve data from tape
- if [ ! -s ${file_type}${fhend}${cdump}${CDATE}${cyc} -a $runhpss = YES ]; then 
-  $HPSSTAR get $hpssdir/${expn}/${CDATE}${cyc}gfs.tar `cat ${file_type}list`
- fi
+done
 
  ## interpolate all flux file to the operational flx 1152x576 grid
  #for file in `cat ${file_type}list `; do

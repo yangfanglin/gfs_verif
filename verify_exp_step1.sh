@@ -286,7 +286,7 @@ while [ $nn -le $nexp ] ; do
        fileout=${exp}.t${vhr}z.pgrbf00        
        if [ -s $fileout ]; then rm $fileout ; fi
        filein=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00${cdump}${IDAY}${vhr}
-       filein=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00${cdump}${IDAY}${vhr}.grib2
+       filein1=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00${cdump}${IDAY}${vhr}.grib2
        if [ -s $filein ]; then
          ln -fs  $filein $fileout
        elif [ -s $filein1 ]; then

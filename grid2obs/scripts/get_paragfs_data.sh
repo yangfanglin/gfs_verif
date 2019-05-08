@@ -11,14 +11,14 @@ vlength=${4:-120}                                 ;#verification end hour of for
 fhout=${5:-6}                                     ;#output frequency
 vhlist=${6:-"00 06 12 18"}                        ;#prepbufr from gdas analysis cycles
 
+NWPROD=${NWPROD:-/nwprod}
+cnvgrib=$NWPROD/util/exec/cnvgrib
 runhpss=${runhpss:-YES}                           ;#run hpsstar in batch mode
 hpsstar=${HPSSTAR:-/u/Fanglin.Yang/bin/hpsstar}
 chost=`echo $(hostname) |cut -c 1-1`
 exp_dir=${exp_dir:-/global/hires/glopara/archive} ;#experiment directory
 hpssdir=${hpssdir:-/NCEPDEV/1year/hpsspara/runhistory/glopara}  ;#HPSS archive directory
 gdas_prepbufr_arch=${gdas_prepbufr_arch:-/global/noscrub/Fanglin.Yang/prepbufr/gdas}
-scppgb=${scppgb:-"NO"}                            ;#copy pgb files from other computer?
-CLIENT=${CLIENT:-"gyre"}                          ;#name of another computer
 cdump=${cdump:-".gfs."}                           ;#file dump format
 fsub=${fsub:-f}                                   ;# string in pgb fcst file after pg
 COMROT=${COMROT:-/gpfs/hps/nco/ops/com}   
@@ -36,13 +36,14 @@ fcyc=`echo $cdate |cut -c 9-10 `
 errexp=0
 ffcst=00
 while [ $ffcst -le $vlength ] ; do
-  filein=$exp_dir/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}
+  fileina=$exp_dir/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}
+  fileinb=$exp_dir/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}.grib2
   fileout=pgbf${ffcst}.${exp}.${IDAY}${fcyc}
   rm $fileout
-  if [ -s $filein ]; then
-    ln -fs  $filein $fileout
-  elif [ $scppgb = YES ]; then
-   scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
+  if [ -s $fileina ]; then
+   ln -fs  $fileina $fileout
+  elif [ -s $fileinb ]; then
+   $cnvgrib -g21 $fileinb $fileout
   fi
   if [ ! -s $fileout ]; then errexp=1 ; fi
   ffcst=$((ffcst+fhout))
@@ -53,11 +54,7 @@ done
 #for vcyc in $vhlist; do
 #  filein=$exp_dir/prepbufr.gdas.${IDAY}${vcyc}
 #  fileout=prepbufr.gdas.${IDAY}${vcyc}  
-#  if [ -s $filein ]; then
-#   ln -fs $filein $fileout
-#  elif [ $scppgb = YES ]; then
-#    scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
-#  fi
+#  ln -fs $filein $fileout
 #  if [ ! -s $fileout ]; then errgdas=1 ; fi
 #done
 

@@ -19,6 +19,7 @@ export PARMDIR=${PARMDIR:-$grid2obshome/parm}
 export SCRIPTDIR=${SCRIPTDIR:-$grid2obshome/scripts}
 export NWPROD=${NWPROD:-/nwprod}
 export ndate=${ndate:-$NWPROD/util/exec/ndate}
+export cnvgrib=${cnvgrib:-$NWPROD/util/exec/cnvgrib}
 export grbindex=${grbindex:-$NWPROD/util/exec/grbindex}
 export gdtype=${gdtype:-3}      ;#fcst data resolution, 2-2.5deg, 3-1deg., 4-0.5deg
 export APRUN=${APRUN:-""}       ;#special afix for running in batch mode
@@ -47,7 +48,13 @@ if [ $fhour1 -lt 10 ]; then fhour1=0$fhour1; fi
 rc=0
 fhour=$fhour1; fdate=$fdate1
 while [ $fhour -le $vlength ]; do
- cp $DDIR/pgbf${fhour}.${PLLN}.${fdate}  AWIPD0${fhour}.tm00 
+ fileina=$DDIR/pgbf${fhour}.${PLLN}.${fdate}
+ fileinb=$DDIR/pgbf${fhour}.${PLLN}.${fdate}.grib2
+ if [ -s $fileina ]; then
+  cp $fileina  AWIPD0${fhour}.tm00 
+ elif [ -s $fileinb ]; then
+  $cnvgrib -g21 $fileinb  AWIPD0${fhour}.tm00 
+ fi
  $grbindex AWIPD0${fhour}.tm00 AWIPD0${fhour}i.tm00
  if [ $? -ne 0 ]; then rc=1 ; fi
 

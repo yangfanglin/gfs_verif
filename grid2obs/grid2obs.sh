@@ -79,7 +79,6 @@ export fhoutsfc=${fhoutsfc:-${fhout:-6}}                               ;#forecas
 
 export gdtype=${gdtype:-3}                                             ;#fcst data resolution, 2-2.5deg, 3-1deg., 4-0.5deg
 export fsub=${fsub:-f}                                                 ;# string in pgb fcst file after pg
-export scppgb=${scppgb:-"NO"}                                          ;#copy pgb files from other machine?
 export NWPROD=${NWPROD:-/global/save/Fanglin.Yang/VRFY/vsdb/nwprod}
 export COMROT=${COMROTNCO:-/gpfs/hps/nco/ops/com}                                           
 export COMROTNAM=${COMROTNAM:-/com}                                           
@@ -162,14 +161,8 @@ mkdir -p $comrot ; cd $comrot || exit 8
   export exp=${expname[nn]}                        ;#exp name
          expcap=`echo $exp |tr "[a-z]" "[A-Z]" `   ;#name in capital 
   export exp_dir=${expdir[nn]}/${exp}              ;#exp directory
-  export CLIENT=${compname[nn]}                    ;#computer used
   export cdump=${dumpname[nn]:-".gfs."}            ;#file dump format
   export hpssdir=${hpssname[nn]:-/NCEPDEV/1year/hpsspara/runhistory/glopara}  ;#tape archive directory
-  myclient=`echo $CLIENT |cut -c 1-1 `
-  if [ $myhost = $myclient ]; then
-   if [ $myhost = "t" ]; then export CLIENT="gyre" ;fi
-   if [ $myhost = "g" ]; then export CLIENT="tide" ;fi
-  fi
   comout=$comrot/$exp
   mkdir -p $comout; cd $comout || exit 8
   #----------------------------------------------------------
