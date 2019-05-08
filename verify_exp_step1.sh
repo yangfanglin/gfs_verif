@@ -52,9 +52,14 @@ export ecmanldir=${ecmanldir:-/global/shared/stat/ecm}          ;#ecmwf analysis
 export vsdbsave=${vsdbsave:-/stmp/$LOGNAME/vsdb_exp/vsdb_data}  ;#place where vsdb database is saved
 export vsdbhome=${vsdbhome:-/global/save/$LOGNAME/VRFY/vsdb}    ;#script home
 export rundir=${rundir:-/stmp/${LOGNAME}/vsdb_exp}              ;#temporary workplace
-export scppgb=${scppgb:-NO}                                     ;#whether or not to copy pgb files from client
 export APRUN=${APRUN:-""}                                       ;#affix for running batch jobs                
 if [ ${batch:-NO} != YES ]; then export APRUN="" ; fi
+
+export scppgb=${scppgb:-NO}                                     ;#whether or not to copy pgb files from client
+if [ $scppgb = YES ]; then 
+ echo "scppgb capability has been removed. set scppgb=NO. exit" 
+ exit
+fi
 
 mkdir -p $rundir $vsdbsave 
 myhost=`echo $(hostname) |cut -c 1-1 `
@@ -74,9 +79,12 @@ export vlength=`expr $nfcst \* $fhout  `
 export exe=${exe:-$vsdbhome/exe}
 export NWPROD=${NWPROD:-/nwprod}
 export wgrb=${wgrib:-$NWPROD/util/exec/wgrib}
+export wgrib2=${wgrib:-$NWPROD/util/exec/wgrib2}
 export gbindex=${gbindex:-$NWPROD/util/exec/grbindex}
 export cpygb=${cpygb:-$NWPROD/util/exec/copygb}
 export ndate=${ndate:-$NWPROD/util/exec/ndate}
+export cnvgrib=${cnvgrib:-$NWPROD/util/exec/cnvgrib}
+
 export gd=${gd:-G2}         ### 2.5x2.5 common grid for verification
 if [ $gd = "G2" ]; then 
  export gdtype=-g2          ### 2.5x2.5 common grid for verification
@@ -113,12 +121,13 @@ rm -f input$nn
   export cdump=${dumpname[nn]:-".gfs."}
   myclient=`echo $CLIENT |cut -c 1-1 `
   export filename=${expdir[nn]}/${expname[nn]}/pgb${asub}nl${cdump}${sdate}${vhr}
+  export filename1=${expdir[nn]}/${expname[nn]}/pgb${asub}nl${cdump}${sdate}${vhr}.grib2
   if [ -s $filename ]; then
    $cpygb $gdtype -x  $filename input$nn
-  elif [ $scppgb = YES -a $myclient != $myhost ]; then
-   rm input${nn}x
-   scp $LOGNAME@${CLIENT}:${filename} input${nn}x
-   $cpygb $gdtype -x input${nn}x input$nn
+  elif [ -s $filename1 ]; then
+   if [ -s ytmp ]; then rm -f ytmp; fi
+   $cnvgrib -g21 $filename1 ytmp
+   $cpygb $gdtype -x  ytmp input$nn
   else
    echo "$filename does not exist, exit"
    exit 8
@@ -179,12 +188,13 @@ while [ $nn -le $nexp ] ; do
        ffcst=00
        while [ $ffcst -le $vlength ] ; do
          filein=$exp_dir/$exp/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}
+         filein1=$exp_dir/$exp/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}.grib2
          fileout=${exp}.t${fcyc}z.pgrbf${ffcst}
          if [ -s $fileout ]; then rm $fileout ;fi
          if [ -s $filein ]; then
            ln -fs  $filein $fileout
-         elif [ $scppgb = YES ]; then
-          scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
+         elif [ -s $filein1 ]; then
+           $cnvgrib -g21 $filein1 $fileout
          fi
          ffcst=$((ffcst+fhout))
          if [ $ffcst -lt 10 ]; then ffcst=0$ffcst ; fi
@@ -192,12 +202,13 @@ while [ $nn -le $nexp ] ; do
 
        if [ $iauf00 = YES ];  then
         filein=$exp_dir/$exp/pgb${asub}nl${cdump}${IDAY}${fcyc}
+        filein1=$exp_dir/$exp/pgb${asub}nl${cdump}${IDAY}${fcyc}.grib2
         fileout=${exp}.t${fcyc}z.pgrbf00           
-        rm -f $fileout                    
+        if [ -s $fileout ]; then rm -f $fileout ;fi 
         if [ -s $filein ]; then
-         ln -fs $filein $fileout                   
-        elif [ $scppgb = YES ]; then
-          scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
+          ln -fs  $filein $fileout
+        elif [ -s $filein1 ]; then
+          $cnvgrib -g21 $filein1 $fileout
         fi
        fi 
     loop=$($ndate +24 $loop)
@@ -218,19 +229,12 @@ while [ $nn -le $nexp ] ; do
        fileout=${exp}.t${vhr}z.pgrbanl        
        if [ -s $fileout ]; then rm $fileout ; fi
        if [ $anl_type = "canl" ]; then 
-        if [ -s $canldir/pgb${asub}nl.${IDAY}${vhr} ] ; then
          ln -fs $canldir/pgb${asub}nl.${IDAY}${vhr} $fileout
-        elif [ $scppgb = YES ]; then
-          scp -p ${LOGNAME}@${CLIENT}:$canldir/pgb${asub}nl.${IDAY}${vhr} $fileout
-        fi
        elif [ $anl_type = "ecmwf" ]; then 
         if [ -s $ecmanldir/pgb${asub}nl.${IDAY}${vhr} ] ; then
          ln -fs $ecmanldir/pgb${asub}nl.${IDAY}${vhr} $fileout
         elif [ -s $ecmanldir/pgb${asub}nl.ecm.${IDAY}${vhr} ] ; then
          ln -fs $ecmanldir/pgb${asub}nl.ecm.${IDAY}${vhr} $fileout
-        elif [ $scppgb = YES ]; then
-          scp -Bp ${LOGNAME}@${CLIENT}:$ecmanldir/pgb${asub}nl.${IDAY}${vhr} $fileout
-          if [ $? -ne 0 ]; then scp -Bp ${LOGNAME}@${CLIENT}:$ecmanldir/pgb${asub}nl.ecm.${IDAY}${vhr} $fileout ; fi
         fi
        elif [ $anl_type = "manl" ]; then 
          ln -fs $manldir/pgbanl.${IDAY}${vhr} $fileout
@@ -238,30 +242,34 @@ while [ $nn -le $nexp ] ; do
          fcfh=$(echo $anl_type |cut -c 5-7)
          fcini=$($ndate -$fcfh ${IDAY}${vhr})
          filein=$exp_dir/$exp/pgbf${fcfh}${cdump}${fcini}
+         filein1=$exp_dir/$exp/pgbf${fcfh}${cdump}${fcini}.grib2
          if [ $fcfh = 00 ]; then
-          cp $filein $fileout
-          if [ $? -ne 0 ]; then scp -Bp ${LOGNAME}@${CLIENT}:$filein $fileout ;fi                                       
+          if [ -s $filein ]; then
+           cp $filein $fileout
+          elif [ -s $filein1 ]; then
+           $cnvgrib -g21 $filein1 $fileout
+          fi
          else
           if [ -s xtmp ]; then rm -f xtmp ;fi
-          cp -p $filein xtmp
-          if [ $? -ne 0 ]; then scp -Bp ${LOGNAME}@${CLIENT}:$filein xtmp ;fi                                       
+          if [ -s $filein ]; then
+           cp -p $filein xtmp
+          elif [ -s $filein1 ]; then
+           $cnvgrib -g21 $filein1 xtmp
+          fi
           $vsdbhome/nwprod/util/exec/mvgribdate xtmp $fileout ${IDAY}${vhr}
          fi
        else
         if [ $anl_type = "gdas" ]; then 
          filein=${anl_dir:-$exp_dir/$exp}/pgb${asub}nl.gdas.${IDAY}${vhr}
-         filein1=$filein
+         filein1=${anl_dir:-$exp_dir/$exp}/pgb${asub}nl.gdas.${IDAY}${vhr}.grib2
         else
          filein=${anl_dir:-$exp_dir/$exp}/pgb${asub}nl${cdump}${IDAY}${vhr}
-         filein1=${anl_dir:-$exp_dir/$exp}/pgb${asub}nl.${IDAY}${vhr}
+         filein1=${anl_dir:-$exp_dir/$exp}/pgb${asub}nl${cdump}${IDAY}${vhr}.grib2
         fi
         if [ -s $filein ]; then
           ln -fs  $filein $fileout
         elif [ -s $filein1 ]; then
-          ln -fs  $filein1 $fileout
-        elif [ $scppgb = YES ]; then
-          scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
-          if [ $? -ne 0 ]; then scp -p ${LOGNAME}@${CLIENT}:$filein1 $fileout ; fi
+          $cnvgrib -g21 $filein1 $fileout
         fi
         if [ ! -s $fileout ]; then 
           if [ -s ${exp}.t${vhr}z.pgrbf00 ]; then
@@ -278,14 +286,11 @@ while [ $nn -le $nexp ] ; do
        fileout=${exp}.t${vhr}z.pgrbf00        
        if [ -s $fileout ]; then rm $fileout ; fi
        filein=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00${cdump}${IDAY}${vhr}
-       filein1=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00.${IDAY}${vhr}
+       filein=${anl_dir:-$exp_dir/$exp}/pgb${fsub}00${cdump}${IDAY}${vhr}.grib2
        if [ -s $filein ]; then
          ln -fs  $filein $fileout
        elif [ -s $filein1 ]; then
-         ln -fs  $filein1 $fileout
-       elif [ $scppgb = YES ]; then
-         scp -p ${LOGNAME}@${CLIENT}:$filein $fileout
-         if [ $? -ne 0 ]; then scp -p ${LOGNAME}@${CLIENT}:$filein1 $fileout ; fi
+         $cnvgrib -g21 $filein1 $fileout
        fi
       fi
 

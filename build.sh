@@ -64,14 +64,18 @@ fi
 
 
 #--then utilities
-utilvar="copygb grbindex ndate nhour ss2ggx mvgribdate"
-if [ $machine = IBM -o $machine = WCOSS -o $machine = JET ]; then 
- if [ $machine = IBM -o $machine = WCOSS ]; then srcdir=/nwprod/util/exec ;fi
- if [ $machine = JET ]; then srcdir=/lfs3/projects/hwrf-vd/soft/grib_util.v1.0.1/bin ;fi
- cp -p $srcdir/copygb   $curdir/nwprod/util/exec/.
- cp -p $srcdir/grbindex $curdir/nwprod/util/exec/.
- utilvar="ndate nhour ss2ggx mvgribdate"
-fi
+if [ $machine = IBM -o $machine = WCOSS ]; then srcdir=/nwprod/util/exec ;fi
+if [ $machine = WCOSS_C ]; then srcdir=/gpfs/hps/nco/ops/nwprod/grib_util.v1.1.0/exec ;fi
+if [ $machine = WCOSS_D ]; then srcdir=/gpfs/dell1/nco/ops/nwprod/grib_util.v1.1.0/exec ;fi
+if [ $machine = THEIA ]; then srcdir=/scratch4/NCEPDEV/global/save/Fanglin.Yang/para_gfs/nwprod_wcoss/util/exec ; fi
+if [ $machine = JET ]; then srcdir=/lfs3/projects/hwrf-vd/soft/grib_util.v1.0.1/bin ;fi
+for utilname in copygb copygb2 wgrib wgrib2 cnvgrib grbindex ; do
+ cp -p $srcdir/$utilname    $curdir/nwprod/util/exec/.
+done
+#wgrib=`which wgrib`
+#cp -p $wgrib $curdir/nwprod/util/exec/.
+
+utilvar="ndate nhour ss2ggx mvgribdate"
 for utilname in $utilvar ; do
   rm $curdir/nwprod/util/exec/$utilname                 
   cd $curdir/nwprod/util/sorc/${utilname}.fd
@@ -79,8 +83,6 @@ for utilname in $utilvar ; do
   makefile.sh $FCMP 
   if [ $? -ne 0 ]; then exit ;fi
 done
-wgrib=`which wgrib`
-cp -p $wgrib $curdir/nwprod/util/exec/.
 
 
 #export EXTRA_OPTION=" "
