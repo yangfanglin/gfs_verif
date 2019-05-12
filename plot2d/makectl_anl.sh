@@ -80,13 +80,13 @@ for exp in $expnlist; do
 
  if [ $grid = G2 ]; then
   nptx=144; npty=73; dxy=2.5; gribtype=2
-  grid2="0 6 0 0 0 0 0 0 144 73 0 0 90000000 0 48 -90000000 357500000 2500000 2500000 0"
+  gridout="0 6 0 0 0 0 0 0 144 73 0 0 90000000 0 48 -90000000 357500000 2500000 2500000 0"
  elif [ $grid = G3 ]; then
   nptx=360; npty=181; dxy=1.0; gribtype=3
-  grid3="0 6 0 0 0 0 0 0 360 181 0 0 90000000 0 48 -90000000 359000000 1000000 1000000 0"
+  gridout="0 6 0 0 0 0 0 0 360 181 0 0 90000000 0 48 -90000000 359000000 1000000 1000000 0"
  elif [ $grid = G4 ]; then
   nptx=720; npty=361; dxy=0.5; gribtype=4
-  grid4="0 6 0 0 0 0 0 0 720 361 0 0 90000000 0 48 -90000000 359500000 500000 500000 0"
+  gridout="0 6 0 0 0 0 0 0 720 361 0 0 90000000 0 48 -90000000 359500000 500000 500000 0"
  else
   echo " pgb file grid $grid not supported, exit"
   exit 
@@ -94,29 +94,12 @@ for exp in $expnlist; do
 npts=$((nptx*npty))
 GG=`echo $grid |cut -c2- `
 
-
 export dump=${dumpname[n]}
 expdir=${expdname[n]}
 CLIENT=${compname[n]}
 myhost=`echo $(hostname) |cut -c 1-1 `
 myclient=`echo $CLIENT |cut -c 1-1 `
 ncepcmp=`echo $machine |cut -c 1-5`
-
-# determine data grib type and resolution
-gribend=""
-if [ -s ${expdir}/${exp}/pgbanl$dump$cdate$cyc.grib2 ]; then gribend=".grib2"; fi
-sampe=${expdir}/${exp}/pgbf24${dump}${cdate}${cyc}${gribend}
-if [ $gribend = ".grib2" ]; then
-  points=`$wgrb2 -d 1 -V $sample |grep -o 'points=[^\n][^\n][^\n][^\n][^\n]' |cut -c8-`
-  docpygb=NO
-  if [ $points -ne $npts ]; then docpygb=YES; fi
-  if [ $exp = ecm ]; then docpygb=NO ; fi
-else
-  gtype=`$wgrb -d 1 -V $sample -o /dev/null | grep -o 'grid=[^\n]' | cut -c6-`
-  docpygb=NO
-  if [ $gtype -ne $GG ]; then docpygb=YES; fi
-  if [ $exp = ecm ]; then docpygb=NO ; fi
-fi
 
 export datadir=$rundir/$exp/d${fcst_day}                  
 export ctldir=$ctldir0/$exp
@@ -128,31 +111,49 @@ edate=`$ndate +$nhours $sdate`
 
 #------------------------------
 while [ $sdate -le $edate ]; do
+testa=${expdir}/${exp}/pgbanl$dump$sdate
+testb=${expdir}/${exp}/pgbanl$dump$sdate.grib2
+if [ -s $testa -o -s $testb ]; then
 #------------------------------
-hrold=f9999
-for hr in ${fhname[3]}; do
- if [ $hr != $hrold ]; then
-  fhour=`echo $hr |cut -c 2-5`
-  adate=`$ndate +$fhour $sdate`   ;#analysis time
-  filein=${expdir}/${exp}/pgbanl${dump}${adate}${gribend}
-  fileout=${datadir}/pgbanl${dump}${sdate}${gribend}        
-  if [ -s $filein  ]; then
-   if [ $docpygb = NO ]; then
-    ln -fs $filein $fileout
-   else
-    if [ $gribend = ".grib2" ]; then
-      $cpygb2 -g "${grid[$GG]}" -x $filein $fileout
-    else
-      ${cpygb} -g$GG -x $filein $fileout
-    fi
-   fi
-  else
-    echo "$filetmp does not exist !"
-  fi
-  hrold=$hr
+
+ # determine data grib type and resolution
+ gribend=""
+ if [ -s $testb ]; then gribend=".grib2"; fi
+ if [ $gribend = ".grib2" ]; then
+   points=`$wgrb2 -d 1 -V $testb |grep -o 'points=[^\n][^\n][^\n][^\n][^\n]' |cut -c8-`
+   docpygb=NO
+   if [ $points -ne $npts ]; then docpygb=YES; fi
+ else
+   gtype=`$wgrb -d 1 -V $testa -o /dev/null | grep -o 'grid=[^\n]' | cut -c6-`
+   docpygb=NO
+   if [ $gtype -ne $GG ]; then docpygb=YES; fi
  fi
-done
+
+ hrold=f9999
+ for hr in ${fhname[3]}; do
+  if [ $hr != $hrold ]; then
+   fhour=`echo $hr |cut -c 2-5`
+   adate=`$ndate +$fhour $sdate`   ;#analysis time
+   filein=${expdir}/${exp}/pgbanl${dump}${adate}${gribend}
+   fileout=${datadir}/pgbanl${dump}${sdate}${gribend}        
+    if [ -s $filein  ]; then
+      if [ $docpygb = NO ]; then
+       ln -fs $filein $fileout
+      else
+        if [ $gribend = ".grib2" ]; then
+          $cpygb2 -g "${gridout}" -x $filein $fileout
+        else
+          ${cpygb} -g$GG -x $filein $fileout
+        fi
+      fi
+    else
+       echo "$filetmp does not exist !"
+    fi
+  hrold=$hr
+  fi
+ done
 #------------------------------
+fi
 sdate=`$ndate +24 $sdate`
 done
 #------------------------------

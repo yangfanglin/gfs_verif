@@ -93,13 +93,13 @@ mong=${mlist[$mong]}
 
 if [ $grid = G2 ]; then
  nptx=144; npty=73; dxy=2.5; gribtype=2
- grid2="0 6 0 0 0 0 0 0 144 73 0 0 90000000 0 48 -90000000 357500000 2500000 2500000 0"
+ gridout="0 6 0 0 0 0 0 0 144 73 0 0 90000000 0 48 -90000000 357500000 2500000 2500000 0"
 elif [ $grid = G3 ]; then
  nptx=360; npty=181; dxy=1.0; gribtype=3
- grid3="0 6 0 0 0 0 0 0 360 181 0 0 90000000 0 48 -90000000 359000000 1000000 1000000 0"
+ gridout="0 6 0 0 0 0 0 0 360 181 0 0 90000000 0 48 -90000000 359000000 1000000 1000000 0"
 elif [ $grid = G4 ]; then
  nptx=720; npty=361; dxy=0.5; gribtype=4
- grid4="0 6 0 0 0 0 0 0 720 361 0 0 90000000 0 48 -90000000 359500000 500000 500000 0"
+ gridout="0 6 0 0 0 0 0 0 720 361 0 0 90000000 0 48 -90000000 359500000 500000 500000 0"
 else
  echo " pgb file grid $grid not supported, exit"
  exit
@@ -117,31 +117,33 @@ CLIENT=${compname[n]}
 myhost=`echo $(hostname) |cut -c 1-1 `
 myclient=`echo $CLIENT |cut -c 1-1 `
 
-
-# determine data grib type and resolution
-gribend=""
-if [ -s ${expdir}/${exp}/pgbanl$dump${DATESTA}.grib2 ]; then gribend=".grib2"; fi
-sampe=${expdir}/${exp}/pgbanl${dump}${DATESTA}${gribend}
-if [ $gribend = ".grib2" ]; then
-  points=`$wgrb2 -d 1 -V $sample |grep -o 'points=[^\n][^\n][^\n][^\n][^\n]' |cut -c8-`
-  docpygb=NO
-  if [ $points -ne $npts ]; then docpygb=YES; fi
-  if [ $exp = ecm ]; then docpygb=NO ; fi
-else
-  gtype=`$wgrb -d 1 -V $sample -o /dev/null | grep -o 'grid=[^\n]' | cut -c6-`
-  docpygb=NO
-  if [ $gtype -ne $GG ]; then docpygb=YES; fi
-  if [ $exp = ecm ]; then docpygb=NO ; fi
-fi
-
-
 export datadir=$rundir/$exp
 if [ ! -s $datadir ]; then mkdir -p $datadir ;fi
 cd $datadir ||exit 8
 
 sdate=${DATEST}${cycs}
 edate=${DATEND}${cyce}            
+
+#------------------------------
 while [ $sdate -le $edate ]; do
+testa=${expdir}/${exp}/pgbanl$dump$sdate
+testb=${expdir}/${exp}/pgbanl$dump$sdate.grib2
+if [ -s $testa -o -s $testb ]; then
+#------------------------------
+
+ # determine data grib type and resolution
+ gribend=""
+ if [ -s $testb ]; then gribend=".grib2"; fi
+ if [ $gribend = ".grib2" ]; then
+   points=`$wgrb2 -d 1 -V $testb |grep -o 'points=[^\n][^\n][^\n][^\n][^\n]' |cut -c8-`
+   docpygb=NO
+   if [ $points -ne $npts ]; then docpygb=YES; fi
+ else
+   gtype=`$wgrb -d 1 -V $testa -o /dev/null | grep -o 'grid=[^\n]' | cut -c6-`
+   docpygb=NO
+   if [ $gtype -ne $GG ]; then docpygb=YES; fi
+ fi
+
  gdate=`$ndate -$cychour ${sdate}`   ;##first guess 
  inputa=${expdir}/${exp}/pgbanl$dump$sdate$gribend
  outputa=${datadir}/pgbanl$dump$sdate$gribend
@@ -154,8 +156,8 @@ while [ $sdate -le $edate ]; do
     ln -fs $inputg  $outputg          
    else
     if [ $gribend = ".grib2" ]; then
-      $cpygb2 -g "${grid[$GG]}" -x $inputa $outputa
-      $cpygb2 -g "${grid[$GG]}" -x $inputg $outputg
+      $cpygb2 -g "${gridout}" -x $inputa $outputa
+      $cpygb2 -g "${gridout}" -x $inputg $outputg
     else
       ${cpygb} -g$GG -x $inputa $outputa
       ${cpygb} -g$GG -x $inputg $outputg
@@ -165,8 +167,13 @@ while [ $sdate -le $edate ]; do
    echo "$input does not exist !"
   fi
 
- sdate=`$ndate +$inchr $sdate`
+#----------------------------------
+fi
+sdate=`$ndate +$inchr $sdate`
 done
+#----------------------------------
+
+
 
 #----------------------------------
 if [ $gribend = ".grib2" ]; then

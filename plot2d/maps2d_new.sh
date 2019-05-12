@@ -2635,7 +2635,7 @@ if [ $mapair_layer = "yes" ]; then
 
 #for var in  TMPprs CLWMRprs HGTprs O3MRprs RHprs SPFHprs UGRDprs VGRDprs VVELprs ;do
 for var in  TMPprs CLWMRprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs ;do
-for lev in 1000 850 700 500 200 100 70 50 10 5 1; do
+for lev in 1000 850 700 500 200 100 70 50 10 5 1 0.5 0.1 0.05 0.01; do
 
 if [ $var = "TMPprs" ];   then varname="Temp (K)"           scal=1            ; fi
 if [ $var = "ABSVprs" ];  then varname="Vorticity"          scal=1000         ; fi
@@ -3518,7 +3518,7 @@ endwhile
       if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
       if(i=1); 'set rbcols          0   31     33    35   37    42     44   46   48';endif    
     endif
-    'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1'
+    'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1 0.7 0.4 0.2 0.1 0.07 0.04 0.02 0.01'
     'd sn'i 
 *
     'set gxout contour'
@@ -3791,7 +3791,7 @@ endwhile
       if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
       if(i=1); 'set rbcols          0   31     33    35   37    42     44   46   48';endif    
     endif
-    'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1'
+    'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1 0.7 0.4 0.2 0.1 0.07 0.04 0.02 0.01'
     'd sn'i 
 *
     'set gxout contour'
