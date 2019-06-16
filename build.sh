@@ -9,7 +9,7 @@ set -x
 ## to first build the following librairies and utilities, then compile 
 ## a list of executables. Check each one carefully if it fails to compile.   
 
-machine=WCOSS_D ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
+machine=THEIA ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
 curdir=`pwd`
 
 if [ $machine = THEIA ];then
