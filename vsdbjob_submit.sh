@@ -154,7 +154,7 @@ export DATEST=20130601                                   ;#forecast starting dat
 export DATEND=20130630                                   ;#forecast ending date 
 export vhour=180                                         ;#verification length in hour
 export ARCDIR=$GNOSCRUB/$LOGNAME/archive                 ;#directory to save stats data
-export rundir=$tmpdir/mkup_precip                        ;#temporary running directory
+export rundir=$tmpdir/mkup_precip$cyc                    ;#temporary running directory
 export runhpss=YES                                       ;#retrieve missing data from HPSS archive
 export scrdir=${vsdbhome}/precip                  
                                                                                                                            
