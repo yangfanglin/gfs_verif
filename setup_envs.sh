@@ -11,7 +11,7 @@ export rc=0
 #==================================
 ## machine-independent parameters
 #==================================
-export anl_type=ecmwf          ;#analysis type: gfs, gdas, ecmwf, manl, canl, or fcst00, fcst120 etc
+export anl_type=gfs            ;#analysis type: gfs, gdas, ecmwf, manl, canl, or fcst00, fcst120 etc
                                 ##gfs/gdas--own anl of each exps, manl--mean in expnlist; canl--mean of GFS,EC and UK.
 export iauf00="NO"             ;#for forecasts using IAU method, force pgbf00=pgbanl
 export sfcvsdb="YES"           ;#include the group of surface variables       
