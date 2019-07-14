@@ -459,11 +459,7 @@ endif
      'set clevs   $varclev '                                                            
     endif
    endif
-    if ( $difmap = YES )
-     if(i=1);'d sn'%i ;endif
-    else
-     'd sn'%i 
-    endif
+   if ( $difmap = YES & i=1 ); 'd sn'%i ;endif
                                                                                                                  
     'set gxout stat'
     'd yn'%i
@@ -2938,9 +2934,11 @@ endwhile
   'set vpage off'
 'quit'
 EOF1
+
 #...........................
 else                           
 #.........................
+
 cat >${var}${lev}.gs <<EOF1 
 'reinit'; 'set font 1'
 'set display color  white'
@@ -3020,13 +3018,13 @@ while ( n <= ${nexp} )
    'define ps=0.01*ave((PRESsfc.'%f1' + PRESsfc.'%f2' + PRESsfc.'%f3' + PRESsfc.'%f4')/4, time=${sdate},time=${edate})-'%cutoff
   endif
 
-  if(n=1) 
-   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}),ps)'
-  endif
-  if(n>1) 
+  'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}),ps)'
+
+  if( $difmap = YES & n>1 ) 
    'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})-sn1,ps)'
   endif
   'define yn'%n'=aave(sn'%n',lon=$lon1,lon=$lon2,lat=$lat1,lat=$lat2)'
+
   n=n+1
 endwhile
 
@@ -3139,87 +3137,98 @@ endwhile
     'set mproj scaled'
 *    'set mpdset mres'
 
-
     'set gxout shaded'
     'set grads off'
-    'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
-    'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-    if(i=1); 'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 ;endif
-    if(i=1); 'set rbcols 31    33   35    37    39    43    45   47     49    21     23    25   27  ';endif
-    if ( $var= "TMPprs" & i > 1 )
-      'set clevs   -4     -3    -2    -1   -0.5   -0.1  0.1   0.5   1     2     3     4'
-      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-    endif
+
+    'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 
+    'set rbcols 31    33   35    37    39    43    45   47     49    21     23    25   27  '
     if ( $var= "VVELprs" )
-      'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  
-      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-      if(i=1); 'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  ;endif
-      if(i=1); 'set rbcols 49    47    45    43    0   73  75  77  79'; endif
+      'set clevs    -4    -3   -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  
+      'set rbcols 49    47   45   43    37   33      0     63   65   67     73   76  79'
     endif
     if ( $var= "UGRDprs" )
-     'set clevs   -10   -7   -5  -3   -2   -1   1  2  3  5  7  10'  
-     'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-     if(i=1); 'set clevs    -100   -70   -50  -30   -20   -10  -5     5  10  20  30  50  70  100'  ;endif
-     if(i=1); 'set rbcols 49    47    45    43     37   35   33   0      63  65  67  73  75  77  79'; endif
+     'set clevs    -100   -70   -50  -30   -20   -10  -5     5  10  20  30  50  70  100' 
+     'set rbcols 49    47    45    43     37   35   33   0      63  65  67  73  75  77  79'
     endif
     if ( $var= "VGRDprs" )
-     'set clevs   -10   -7   -5  -3   -2   -1  -0.5 -0.2 0.2  0.5  1  2  3  5  7  10'  
-     'set rbcols 49    46   44  42   39   36  34   32    0     22    24   26    29   73  75   77   79'
-     if(i=1); 'set clevs     -50  -30   -20    -10  -5     -1   1   5  10  20  30  50   '  ;endif
-     if(i=1); 'set rbcols 49    47    45    37   35   33   0  63  65  67 75  77  79'; endif
+     'set clevs     -50  -30   -20    -10  -5     -1   1   5    10  20  30  50   '  
+     'set rbcols 49    47    45    37   35    33     0    63  65  67 75  77  79'
     endif
     if ( $var= "RHprs" )
-     'set clevs   -50   -40  -30   -20   -10   -5    5   10    20    30    40   50'  
-     'set rbcols 49   46    42   39    36    32    0     22    26    29   73     76   79'
-     if(i=1); 'set clevs     10  30  50  70  90 '  ;endif
-     if(i=1); 'set rbcols  0   33  35  37  43  45 '; endif
+     'set clevs     10  30  50  70  90 '  
+     'set rbcols  0   33  35  37  43  45 '
     endif
     if ( $var= "CLWMRprs" )
-     'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
-     'set rbcols 4    46    42   39    36  34   32    0     22  24  26    29   73     76   79'
-     if(i=1); 'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'  ;endif
-     if(i=1); 'set rbcols  0   63 65  67  69   73   75  77   79  33  35  37'; endif
+     'set clevs    0.5  1  5   10   20   40  60   80 100 120 140' 
+     'set rbcols  0   63 65  67  69   73   75  77   79  33  35  37'
     endif
-*   'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1'
+
+
+    if( $difmap = YES & i>1 ) 
+     'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
+     'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     if ( $var= "TMPprs")
+      'set clevs   -4     -3    -2    -1   -0.5   -0.1  0.1   0.5   1     2     3     4'
+      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     endif
+     if ( $var= "VVELprs" )
+      'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  
+      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     endif
+     if ( $var= "UGRDprs" )
+      'set clevs   -10   -7   -5  -3   -2   -1   1  2  3  5  7  10'  
+      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     endif
+     if ( $var= "VGRDprs" )
+      'set clevs   -10   -7   -5  -3   -2   -1  -0.5 -0.2 0.2  0.5  1  2  3  5  7  10'  
+      'set rbcols 49    46   44  42   39   36  34   32    0     22    24   26    29   73  75   77   79'
+     endif
+     if ( $var= "RHprs" )
+      'set clevs   -50   -40  -30   -20   -10   -5    5   10    20    30    40   50'  
+      'set rbcols 49   46    42   39    36    32    0     22    26    29   73     76   79'
+     endif
+     if ( $var= "CLWMRprs" )
+      'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
+      'set rbcols 4    46    42   39    36  34   32    0     22  24  26    29   73     76   79'
+     endif
+    endif
     'd smth9(sn'%i')' 
 *
+
     'set gxout contour'
     'set grads off'
     'set ccolor 15'
 *   'set clab forced'
     'set cstyle 1'
     'set clopts 1 4 0.07'
-    'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
-    if(i=1); 'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 ;endif
+    'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 
     if ( $var= "VVELprs" )
-      'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  
-       if(i=1); 'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  ;endif
-     endif
+     'set clevs   -4    -3      -2   -1    -0.5   -0.1  0.1   0.5   1     2     3    4 '  
+    endif
     if ( $var= "UGRDprs" )
-     'set clevs   -10   -7   -5  -3   -2   -1   1  2  3  5  7  10'  
-     if(i=1); 'set clevs    -100   -70   -50  -30   -20   -10  -5     5  10  20  30  50  70  100'  ;endif
+     'set clevs    -100   -70   -50  -30   -20   -10  -5     5  10  20  30  50  70  100' 
     endif
     if ( $var= "VGRDprs" )
-     'set clevs   -10   -7   -5  -3   -2   -1  -0.5 -0.2 0.2  0.5  1  2  3  5  7  10'  
-     if(i=1); 'set clevs     -50  -30   -20    -10  -5     -1   1   5  10  20  30  50   '  ;endif
+     'set clevs     -50  -30   -20    -10  -5     -1   1   5  10  20  30  50   '  
     endif
     if ( $var= "RHprs" )
-     'set clevs   -50   -40  -30   -20   -10   -5    5   10    20    30    40   50'  
-     if(i=1); 'set clevs     10  30  50  70  90 '  ;endif
+     'set clevs     10  30  50  70  90 '  
     endif
     if ( $var= "CLWMRprs" )
-     'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
-     if(i=1); 'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'  ;endif
+     'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'
     endif
-    if(i=1);'d smth9(sn'%i')' ;endif
+    if( $difmap = YES & i=1 );'d smth9(sn'%i')' ;endif
                                                                                                                  
     'set gxout stat'
     'd yn'%i
     ln=sublin(result,8); wd=subwrd(ln,4); a=substr(wd,1,14)
     'set string 1 bl 7'
     'set strsiz 0.15 0.15'
-    if(i=1); 'draw string 'titlx' 'titly ' 'mdc.1'  'a; endif
-    if(i>1); 'draw string 'titlx' 'titly ' 'mdc.i'-'mdc.1' 'a; endif
+    if( $difmap = YES & i>1) 
+     'draw string 'titlx' 'titly ' 'mdc.i'-'mdc.1' 'a; 
+    else
+     'draw string 'titlx' 'titly ' 'mdc.i'  'a; 
+    endif
   i=i+1
   endwhile
 
@@ -3644,16 +3653,15 @@ while ( n <= ${nexp} )
   f4=(n-1)*4+4
   say f1 f2 f3 f4 
 
-  if(n=1) 
-   'set lon $lon1 $lon2'
-   'define aa=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})'
-    'set lon 0'
-   'define sn'%n'=ave(aa,lon=$lon1,lon=$lon2)'
-  endif
-  if(n>1) 
+  'set lon $lon1 $lon2'
+  'define aa=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})'
+  'set lon 0'
+  'define sn'%n'=ave(aa,lon=$lon1,lon=$lon2)'
+
+  if( $difmap = YES & n>1) 
    'set lon $lon1 $lon2'
    'define bb=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})-sn1'
-    'set lon 0'
+   'set lon 0'
    'define sn'%n'=ave(bb,lon=$lon1,lon=$lon2)'
   endif
   n=n+1
@@ -3771,6 +3779,9 @@ endwhile
 
     'set gxout shaded'
     'set grads off'
+    'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 
+    'set rbcols 49   46    43    39    36    33    73   76     79    23     25    27   29  '
+   if( $difmap = YES & i >1 ) 
     'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
     'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
     if ( $var = TMPprs ); 'set clevs   -4      -3   -2    -1   -0.5   -0.1  0.1   0.5   1     2     3     4';  endif
@@ -3778,18 +3789,18 @@ endwhile
     if ( $var = RHprs );  'set clevs  -80    -60   -40   -20  -10     -5    5     10   20    40    60   80 ';  endif
     if ( $var = UGRDprs );   'set clevs -10 -5 -3  -1 -0.5  -0.2    0.2   0.5 1 3 5 10'; endif
     if ( $var = VGRDprs );   'set clevs -3  -1 -0.5  -0.2  -0.1 -0.05 0.05 0.1   0.2   0.5 1 3 '; endif
-    if(i=1); 'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 ;endif
-    if(i=1); 'set rbcols 49   46    43    39    36    33    73   76     79    23     25    27   29  ';endif
+   endif
     if ( $var = "VVELprs" )
       'set clevs    -1.8  -1.2 -0.9  -0.6  -0.3  -0.1  0.1 0.3    0.6   0.9   1.2  1.8 '
-      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-      if(i=1); 'set rbcols 49    46    43   39    37      35   33    0     73    76    79   23   25  27   29  '; endif
+      'set rbcols 49    46    42   39    36     32    0   22    26    29   73    76   79'
     endif
     if ( $var = "CLWMRprs" )
-      'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
-      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
-      if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
-      if(i=1); 'set rbcols          0   31     33    35   37    42     44   46   48';endif    
+      'set clevs             0      3      6   9     12     15   18   21'
+      'set rbcols          0   31     33    35   37    42     44   46   48'
+      if( $difmap = YES & i >1 ) 
+       'set clevs     -15  -12  -9   -6   -3   -1  1  3  6  9  12  15 '                                        
+       'set rbcols 49    46    42   39  36  32   0  22 26  29 73 76   79'
+      endif
     endif
     'set ylevs 1000 700 500 300 200 100 70 50 30 20 10 7 5 3 2 1 0.7 0.4 0.2 0.1 0.07 0.04 0.02 0.01'
     'd sn'i 
@@ -3800,24 +3811,31 @@ endwhile
 *   'set clab forced'
     'set cstyle 1'
     'set clopts 1 4 0.07'
-    'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
-    if(i=1); 'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 ;endif
+    'set clevs   'aa1' 'aa2' 'aa3' 'aa4' 'aa5' 'aa6' 'aa7' 'aa8' 'aa9' 'aa10' 'aa11 
+    if( $difmap = YES & i >1 ) 
+      'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
+    endif
     if ( $var = "VVELprs" )
       'set clevs             -1.8  -1.2 -0.9  -0.6  -0.3  -0.1  0  0.1 0.3    0.6   0.9   1.2  1.8 '
     endif
     if ( $var = "CLWMRprs" )
-      'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
-      if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
+      'set clevs             0      3      6   9     12     15   18   21'
+      if( $difmap = YES & i >1 ) 
+       'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
+      endif
     endif
-    if(i=1);'d sn'%i ;endif
+    if( $difmap = YES & i=1 );'d sn'%i ;endif
                                                                                                                  
 *   'set gxout stat'
 *   'd yn'%i
 *   ln=sublin(result,8); wd=subwrd(ln,4); a=substr(wd,1,14)
     'set string 1 bl 7'
     'set strsiz 0.18 0.18'
-    if(i=1); 'draw string 'titlx' 'titly ' 'mdc.1; endif
-    if(i>1); 'draw string 'titlx' 'titly ' 'mdc.i' - 'mdc.1 ; endif
+    if( $difmap = YES & i >1 ) 
+     'draw string 'titlx' 'titly ' 'mdc.i' - 'mdc.1 
+    else
+     'draw string 'titlx' 'titly ' 'mdc.i
+    endif
   i=i+1
   endwhile
 
