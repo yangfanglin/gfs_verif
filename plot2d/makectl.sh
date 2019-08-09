@@ -127,7 +127,7 @@ for hr in $fhlist; do
  
   if [ -s $filetmp ]; then
     ln -fs $filetmp ${datadir}/xtmp
-  elif [ $ncepcmp = WCOSS ]; then
+  elif [ $ncepcmp = WCOSS -a $scppgb = YES ]; then
     scp -pB ${LOGNAME}@${CLIENT}:$filetmp ${datadir}/xtmp
   else
     echo "$filetmp does not exist !"
