@@ -210,34 +210,10 @@ $SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r 
         -t 6:00:00 -j g2oecm -o $rundir/g2oecm.out $JJOB 
 
 
-##-FIM      
-fimarch="/global/noscrub/Fanglin.Yang"
-export cyclist="00 12"                      ;#forecast cycles
-export expnlist="fim"                       ;#experiment names
-export expdlist="$fimarch" 
-export dumplist=".fim."  
-export complist="$(hostname)"
-export fhoutair="6"                        ;#forecast output frequency in hours for raobs vrfy
-export fhoutsfc="6"                        ;#forecast output frequency in hours for sfc vrfy
-export gdtype="3"                           ;#pgb file resolution, 2 for 2.5-deg and 3 for 1-deg
-export vsdbsfc="YES"                        ;#run sfc verification
-export vsdbair="YES"                        ;#run upper-air verification
-export vlength=168                          ;#forecast length in hour
-export DATEST=$CDATM1                       ;#verification starting date
-export DATEND=$CDATM1                       ;#verification ending date
-export batch=YES
-export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
-listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
-listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
-export listvar=$listvar1,$listvar2
-JJOB=${vsdbhome}/grid2obs/grid2obs.sh
-#$SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
-#        -t 6:00:00 -j g2ofim -o $rundir/g2ofim.out $JJOB 
-
-
 ##-ops ensemble means
 export cyclist="00 12"                      ;#forecast cycles
-export expnlist="gefsm ecmwfm cmcem fensm naefsm"        ;#experiment names
+#export expnlist="gefsm ecmwfm cmcem fensm naefsm"        ;#experiment names
+export expnlist="gefsm"        ;#experiment names
 export expdlist="$myarch $myarch $myarch $myarch $myarch " 
 export dumplist=".gefsm. .ecmwfm. .cmcem. .fensm. .naefsm."  
 export complist="$(hostname) $(hostname) $(hostname) $(hostname) $(hostname)"
@@ -271,7 +247,7 @@ dd=`echo $today |cut -c 8-8`
 if [ $dd -eq 2 -o $dd -eq 7 ]; then
 
 #--ops GFS
-ndays=457
+ndays=731
 nhours=`expr $ndays \* 24 `
 export rundir=/stmpd2/$LOGNAME/g2o_ops/gfs                     ;#running directory
 export DATEND=`/nwprod/util/exec/ndate -48 $(date +%Y%m%d)00 |cut -c 1-8`     ;#forecast ending date
@@ -298,30 +274,6 @@ ${vsdbhome}/grid2obs/grid2obs_plot.sh
 
 
 
-#--ops FIM
-ndays=181
-nhours=`expr $ndays \* 24 `
-export rundir=/stmpd2/$LOGNAME/g2o_ops/fim                     ;#running directory
-export DATEND=`/nwprod/util/exec/ndate -48 $(date +%Y%m%d)00 |cut -c 1-8`     ;#forecast ending date
-export DATEST=`/nwprod/util/exec/ndate -$nhours ${DATEND}00 |cut -c 1-8 `     ;#forecast starting date
-export mdlist="gfs fim"                        ;#experiment names, up to 10
-export cyclist="00"                        ;#forecast cycles to verify
-export vlength=168                         ;#forecast length in hour
-export fhoutair="6"                        ;#forecast output frequency in hours for raobs vrfy
-export fhoutsfc="3"                        ;#forecast output frequency in hours for sfc vrfy
-export maskmiss=1                          ;#remove missing data from all runs, 0-->NO, 1-->Yes
-export obairtype=ADPUPA                    ;#uppair observation type, ADPUPA or ANYAIR
-export plotair="YES"                        ;#make upper plots
-export plotsfc="YES"                       ;#make sfc plots
-export MPMD="YES"                          ;#use MPMD to submit multiple jobs in one node
-
-export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
-export webhostid=wx24fy                    ;#login id on webhost
-export ftpdir=/home/people/emc/www/htdocs/gmb/wx24fy/fim      ;#where maps are displayed on webhost
-export doftp="YES"                                            ;#whether or not sent maps to ftpdir
-#${vsdbhome}/grid2obs/grid2obs_plot.sh
-
-
 #--ops ensemble means
 sleep 7200
 ndays=181
@@ -344,7 +296,7 @@ export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
 export webhostid=wx24fy                    ;#login id on webhost
 export ftpdir=/home/people/emc/www/htdocs/gmb/STATS_vsdb/ensm      ;#where maps are displayed on webhost
 export doftp="YES"                                            ;#whether or not sent maps to ftpdir
-${vsdbhome}/grid2obs/grid2obs_plot.sh
+#${vsdbhome}/grid2obs/grid2obs_plot.sh
 
 #-------
 fi

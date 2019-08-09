@@ -698,6 +698,7 @@ if (fhour=24|fhour=72|fhour=120|fhour=144|fhour=192|fhour=240)
     'd ${var}(x='%i')'
     ln=sublin(result,11); wd=subwrd(ln,2); a=substr(wd,1,5);sc.i=subwrd(ln,2)
     ln=sublin(result,7); wd=subwrd(ln,8); b=substr(wd,1,4)
+    'set font 5'
     if ( b>0 )
       if( i <=5);
         'set strsiz 0.13 0.13'; yt=yt-yy
@@ -726,6 +727,7 @@ if (fhour=24|fhour=72|fhour=120|fhour=144|fhour=192|fhour=240)
    i=i+1
    endwhile
 
+  'set font 1'
   'set string 1 bc 7'
   'set strsiz 0.14 0.14'
   'draw string 'titlx' 'titly' ${vnam}: ${title} '
