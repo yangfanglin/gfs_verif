@@ -131,7 +131,7 @@ elif [ $chost = t -o $machine = WCOSS ]; then
  export FFLAG="-O2 -convert big_endian -FR"            ;#fortran compiler options
  export APRUN=""
  export COMROTNCO=${COMROTNCO:-/gpfs/hps/nco/ops/com}
- export COMROTNAM=${COMROTNAM:-/com2}
+ export COMROTNAM=${COMROTNAM:-/gpfs/dell1/nco/ops/com}
 
 elif [ $machine = WCOSS_C ]; then
  export vsdbhome=${vsdbhome:-/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/VRFY/vsdb}    ;#script home, do not change
@@ -162,7 +162,7 @@ elif [ $machine = WCOSS_C ]; then
   module load prod_envir
   module load GrADS/2.0.2
   export COMROTNCO=${COMROTNCO:-$COMROOT}
-  export COMROTNAM=${COMROTNAM:-$COMROOTp2}
+  export COMROTNAM=${COMROTNAM:-$COMROOTp3}
 elif [ $machine = WCOSS_DELL_P3 ]; then
  export vsdbhome=${vsdbhome:-/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/vsdb} ;#script home, do not change
  export GNOSCRUB=${GNOSCRUB:-/gpfs/dell2/emc/modeling/noscrub}       ;#archive directory
@@ -198,7 +198,7 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export FFLAG="-O2 -convert big_endian -FR"            ;#fortran compiler options
  export APRUN="mpirun -n 1 "                           ;#affix to run batch jobs
  export COMROTNCO=${COMROTNCO:-$COMROOT}
- export COMROTNAM=${COMROTNAM:-$COMROOTp2}
+ export COMROTNAM=${COMROTNAM:-$COMROOTp3}
 fi
 
 if [ $gfs_cyc = 1 ]; then
