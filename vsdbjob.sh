@@ -82,6 +82,34 @@ if [ $machine = THEIA ]; then
  export COMROTNCO=${COMROTNCO:-/scratch4/NCEPDEV/rstprod/com}
  export COMROTNAM=$COMROTNCO
 
+if [ $machine = HERA ]; then
+ export vsdbhome=${vsdbhome:-/scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/vsdb} ;#script home, do not change
+ export GNOSCRUB=${GNOSCRUB:-/scratch1/NCEPDEV/global/$LOGNAME}        ;#archive directory
+ export STMP=${STMP:-/scratch1/NCEPDEV/stmp2}                          ;#temporary directory
+ export PTMP=${PTMP:-/scratch1/NCEPDEV/stmp2}                          ;#temporary directory
+
+ export obdata=/scratch4/NCEPDEV/global/save/Fanglin.Yang/obdata      ;#observation data for making 2dmaps
+ export gstat=/scratch1/NCEPDEV/global/Fanglin.Yang/stat    ;#global stat dir  
+ export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
+ export canldir=$gstat/canl                                 ;#consensus analysis directory
+ export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
+ export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
+ export gfswgnedir=$gstat/wgne1                             ;#operational gfs precip QPF scores
+ export gfsfitdir=$gstat/surufits                           ;#Suru operational model fit-to-obs database
+ export gdas_prepbufr_arch=$gstat/prepbufr/gdas
+ export ndasbufr_arch=$gstat/prepbufr/ndas
+ export nambufr_arch=$gstat/prepbufr/nam
+ export SUBJOB=$vsdbhome/bin/sub_theia                       ;#script for submitting batch jobs
+ export CUE2FTP=service                                     ;#data transfer queue 
+ export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
+ export GRADSBIN=/apps/grads/2.0.1a/bin                     ;#GrADS executables
+ export IMGCONVERT=/usr/bin/convert                         ;#image magic converter
+ export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64 
+ export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
+ export APRUN=""
+ export COMROTNCO=${COMROTNCO:-/scratch1/NCEPDEV/rstprod/com}
+ export COMROTNAM=$COMROTNCO
+
 elif [ $machine = JET ]; then
  export vsdbhome=${vsdbhome:-/pan2/projects/gnmip/Fanglin.Yang/VRFY/vsdb}   ;#script home, do not change
  export GNOSCRUB=${GNOSCRUB:-/pan2/projects/gnmip/$LOGNAME/noscrub} ;#temporary directory                  

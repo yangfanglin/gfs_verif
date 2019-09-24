@@ -9,10 +9,10 @@ set -x
 ## to first build the following librairies and utilities, then compile 
 ## a list of executables. Check each one carefully if it fails to compile.   
 
-machine=WCOSS_D ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA
+machine=HERA  ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, THEIA, HERA
 curdir=`pwd`
 
-if [ $machine = THEIA ];then
+if [ $machine = THEIA -o $machine = HERA ];then
  FCMP=ifort
  CCMP=cc
  ln -fs /scratch4/NCEPDEV/global/save/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
@@ -68,6 +68,7 @@ if [ $machine = IBM -o $machine = WCOSS ]; then srcdir=/nwprod/util/exec ;fi
 if [ $machine = WCOSS_C ]; then srcdir=/gpfs/hps/nco/ops/nwprod/grib_util.v1.1.0/exec ;fi
 if [ $machine = WCOSS_D ]; then srcdir=/gpfs/dell1/nco/ops/nwprod/grib_util.v1.1.0/exec ;fi
 if [ $machine = THEIA ]; then srcdir=/scratch4/NCEPDEV/global/save/Fanglin.Yang/para_gfs/nwprod_wcoss/util/exec ; fi
+if [ $machine = HERA ]; then srcdir=/scratch1/NCEPDEV/global/Fanglin.Yang/save/para_gfs/nwprod_wcoss/util/exec ; fi
 if [ $machine = JET ]; then srcdir=/lfs3/projects/hwrf-vd/soft/grib_util.v1.0.1/bin ;fi
 for utilname in copygb copygb2 wgrib wgrib2 cnvgrib grbindex ; do
  cp -p $srcdir/$utilname    $curdir/nwprod/util/exec/.

@@ -71,6 +71,16 @@ elif [ $machine = THEIA ]; then
  export cputime=6:00:00                                ;#CPU time hh:mm:ss to run each batch job
  export MPMD=NO  
 #----------------------------
+elif [ $machine = HERA ]; then
+ export vsdbsave=/scratch1/NCEPDEV/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
+ export ACCOUNT=fv3-cpu                                ;#computer ACCOUNT task
+ export CUE2RUN=batch                                  ;#default to batch queue
+ export CUE2FTP=batch                                  ;#queue for data transfer
+ export GROUP=g01                                      ;#group of account, g01 etc
+ export nproc=40                                       ;#number of PEs per node   
+ export cputime=6:00:00                                ;#CPU time hh:mm:ss to run each batch job
+ export MPMD=NO  
+#----------------------------
 elif [ $machine = JET ]; then
  export vsdbsave=/mnt/lfs3/projects/hfv3gfs/$LOGNAME/noscrub/archive/vsdb_data  ;#place where vsdb database is saved
  export ACCOUNT=hfv3gfs                                ;#computer ACCOUNT task
@@ -198,6 +208,27 @@ elif [ $machine = THEIA ]; then
  export FC=/apps/intel/composer_xe_2013_sp1.2.144/bin/intel64/ifort              ;#intel compiler
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
  export APRUN=""                                            ;#affix to run batch jobs   
+
+elif [ $machine = HERA ]; then
+ export vsdbhome=/scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/vsdb ;#script home, do not change
+ export obdata=/scratch1/NCEPDEV/global/Fanglin.Yang/save/obdata      ;#observation data for making 2dmaps
+ export gstat=/scratch1/NCEPDEV/global/Fanglin.Yang/stat  ;#global stats directory              
+ export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
+ export canldir=$gstat/canl                                 ;#consensus analysis directory
+ export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
+ export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
+ export gfswgnedir=$gstat/wgne                              ;#operational gfs precip QPF scores
+ export gfsfitdir=$gstat/surufits                           ;#Suru operational model fit-to-obs database
+ export SUBJOB=$vsdbhome/bin/sub_slurm                      ;#script for submitting batch jobs
+ export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
+ export GNOSCRUB=/scratch1/NCEPDEV/global/$LOGBAME          ;#temporary directory                          
+ export STMP=/scratch1/NCEPDEV/stmp2                        ;#temporary directory                          
+ export PTMP=/scratch1/NCEPDEV/stmp2                        ;#temporary directory                          
+ export GRADSBIN=/apps/grads/2.0.1a/bin                     ;#GrADS executables
+ export IMGCONVERT=/usr/bin/convert                         ;#image magic converter
+ export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64
+ export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
+ export APRUN=""
 
 #----------------------------
 elif [ $machine = JET ]; then
