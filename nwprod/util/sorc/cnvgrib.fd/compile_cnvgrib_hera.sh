@@ -2,7 +2,7 @@
 
 LMOD_EXACT_MATCH=no
 
-machine_lc=theia
+machine_lc=hera
 makefile=makefile_wcoss_${machine_lc}
 
 # Load required modules
