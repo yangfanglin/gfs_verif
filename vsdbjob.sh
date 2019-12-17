@@ -82,9 +82,9 @@ if [ $machine = THEIA ]; then
  export COMROTNCO=${COMROTNCO:-/scratch4/NCEPDEV/rstprod/com}
  export COMROTNAM=$COMROTNCO
 
-if [ $machine = HERA ]; then
+elif [ $machine = HERA ]; then
  export vsdbhome=${vsdbhome:-/scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/vsdb} ;#script home, do not change
- export GNOSCRUB=${GNOSCRUB:-/scratch1/NCEPDEV/global/$LOGNAME}        ;#archive directory
+ export GNOSCRUB=${GNOSCRUB:-/scratch1/NCEPDEV/global}                 ;#archive directory
  export STMP=${STMP:-/scratch1/NCEPDEV/stmp2}                          ;#temporary directory
  export PTMP=${PTMP:-/scratch1/NCEPDEV/stmp2}                          ;#temporary directory
 

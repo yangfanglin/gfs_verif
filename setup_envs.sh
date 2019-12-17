@@ -72,7 +72,7 @@ elif [ $machine = THEIA ]; then
  export MPMD=NO  
 #----------------------------
 elif [ $machine = HERA ]; then
- export vsdbsave=/scratch1/NCEPDEV/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
+ export vsdbsave=/scratch1/NCEPDEV/global/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
  export ACCOUNT=fv3-cpu                                ;#computer ACCOUNT task
  export CUE2RUN=batch                                  ;#default to batch queue
  export CUE2FTP=batch                                  ;#queue for data transfer
@@ -221,12 +221,12 @@ elif [ $machine = HERA ]; then
  export gfsfitdir=$gstat/surufits                           ;#Suru operational model fit-to-obs database
  export SUBJOB=$vsdbhome/bin/sub_slurm                      ;#script for submitting batch jobs
  export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
- export GNOSCRUB=/scratch1/NCEPDEV/global/$LOGBAME          ;#temporary directory                          
+ export GNOSCRUB=/scratch1/NCEPDEV/global                   ;#temporary directory                          
  export STMP=/scratch1/NCEPDEV/stmp2                        ;#temporary directory                          
  export PTMP=/scratch1/NCEPDEV/stmp2                        ;#temporary directory                          
- export GRADSBIN=/apps/grads/2.0.1a/bin                     ;#GrADS executables
+ export GRADSBIN=/apps/grads/2.0.2/bin                      ;#GrADS executables
  export IMGCONVERT=/usr/bin/convert                         ;#image magic converter
- export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64
+ export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64/ifort
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
  export APRUN=""
 

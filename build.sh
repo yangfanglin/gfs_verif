@@ -15,7 +15,7 @@ curdir=`pwd`
 if [ $machine = THEIA -o $machine = HERA ];then
  FCMP=ifort
  CCMP=cc
- ln -fs /scratch4/NCEPDEV/global/save/Fanglin.Yang/VRFY/fixvsdb/fix $curdir/nwprod/.
+ ln -fs /scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/fixvsdb/fix $curdir/nwprod/.
 elif [ $machine = JET ];then
  FCMP=ifort
  CCMP=icc
