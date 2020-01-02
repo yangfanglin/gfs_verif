@@ -662,6 +662,7 @@ cggg
         do n = 1, numvarbl
          if(k5(n).eq.7.and.k6(n).eq.100) anomly_mrk(n)=1
          if(k5(n).eq.2.and.k6(n).eq.102) anomly_mrk(n)=1
+         if(k5(n).eq.130.and.k6(n).eq.102) anomly_mrk(n)=1
          if(k5(n).eq.15.and.k6(n).eq.105) anomly_mrk(n)=1
          if(k5(n).eq.16.and.k6(n).eq.105) anomly_mrk(n)=1
          if(k5(n).eq.11.and.k6(n).eq.100) anomly_mrk(n)=1

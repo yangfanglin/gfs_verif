@@ -31,7 +31,8 @@
               end do
              end if
                                                                                                                       
-             if(k5(n).eq.2.and.k6(n).eq.102) anomlylev(n,1) = 1    !Sfc pressure has climate anomly
+             if(k5(n).eq.2.and.k6(n).eq.102) anomlylev(n,1) = 1    !Sfc pressure PMSL has climate anomly
+             if(k5(n).eq.130.and.k6(n).eq.102) anomlylev(n,1) = 1    !Sfc pressure MSLET has climate anomly
                                                                                                                       
              if((k5(n).eq.11.and.k6(n).eq.105) .or.             !2m T
      +          (k5(n).eq.15.and.k6(n).eq.105) .or.             !2m Tmax
