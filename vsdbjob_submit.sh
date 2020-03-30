@@ -81,7 +81,7 @@ export listvar="$listvar1,$listvar2"
 
 ## pgb files must be saved as $expdlist/$expnlist/pgbf${fhr}${cdump}${yyyymmdd}${cyc}
 if [ $batch = YES ]; then
-  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/N -r 2048/1 -t 6:00:00 \
+  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/N -r 4096/1 -t 6:00:00 \
      -j vstep1 -o $tmpdir/vstep1.out  ${vsdbhome}/verify_exp_step1.sh
 else
      ${vsdbhome}/verify_exp_step1.sh 1>${tmpdir}/vstep1.out 2>&1
