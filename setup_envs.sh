@@ -157,7 +157,7 @@ elif [ $machine = WCOSS_C ]; then
 #----------------------------
 elif [ $machine = WCOSS_D ]; then
  chost=`echo $(hostname) |cut -c 1-1`
- export vsdbhome=/gpfs/dell2/emc/modeling/noscrub/emc.glopara/git/verif/global/tags/vsdb              
+ export vsdbhome=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/vsdb                              
  export obdata=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/obdata       ;#observation data for making 2dmaps
  export gstat=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat          ;#global stats directory              
  export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
