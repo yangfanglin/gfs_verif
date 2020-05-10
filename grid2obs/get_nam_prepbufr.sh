@@ -8,16 +8,20 @@ set -x
 #  retied. All files are now in the "nam.YYYYMMDD" com2 directory.
 #  Fanglin Yang, April 2017
 
-nambufr_arch=/global/noscrub/Fanglin.Yang/prepbufr/nam
+nambufr_arch=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat/prepbufr/nam
+NDATE=/gpfs/dell1/nco/ops/nwprod/prod_util.v1.1.0/exec/ips/ndate
+HPSSTAR=/u/Fanglin.Yang/bin/hpsstar
+
 myhost=`echo $(hostname) |cut -c 1-1 `
-if [ $myhost = t ]; then HOST=tide; CLIENT=gyre ; fi
-if [ $myhost = g ]; then HOST=gyre; CLIENT=tide ; fi
+if [ $myhost = m ]; then HOST=mars; CLIENT=venus ; fi
+if [ $myhost = v ]; then HOST=venus; CLIENT=mars ; fi
 rhost=`echo $CLIENT |cut -c 1-1 `
 
+#----------------------------------------------
 
 today=$(date +%Y%m%d)00
-daym1=`/nwprod/util/exec/ndate -24 $today`
-daym2=`/nwprod/util/exec/ndate -48 $today`
+daym1=`$NDATE -24 $today`
+daym2=`$NDATE -48 $today`
 sdate=${1:-$daym2}
 edate=${2:-$daym1}
 
@@ -25,11 +29,6 @@ edate=${2:-$daym1}
 #edate=2017041700
 
 
-export NWPROD=${NWPROD:-/nwprod}
-export ndate=${ndate:-$NWPROD/util/exec/ndate}
-export hpsstar=${HPSSTAR:-/u/Fanglin.Yang/bin/hpsstar}    
-export COM=${HPSSPROD:-/NCEPPROD/hpssprod/runhistory}
-export COMROT="/com2"
 
 #-------------------------------------
 vdate=$edate
@@ -43,7 +42,7 @@ if [ $(((HH/6)*6)) -eq $HH ]; then
   xdate=$DATE
   suffix=tm00
 else
-  xdate=$($ndate +3 $DATE )
+  xdate=$($NDATE +3 $DATE )
   suffix=tm03
 fi
 eval YYYY=`echo $xdate |cut -c 1-4 `
@@ -51,9 +50,13 @@ eval YYYYMM=`echo $xdate |cut -c 1-6 `
 eval PDY=`echo $xdate |cut -c 1-8 `
 eval CYC=`echo $xdate |cut -c 9-10 `
 
+ARCH=/NCEPPROD/hpssprod/runhistory
+COMROT="/gpfs/dell1/nco/ops/com"
+ARCHNAM="/gpfs_dell1_nco_ops_com"
+if [ $PDY -le 20190820 ]; then COMROT="/com2" ;fi
 namcomdir=$COMROT/nam/prod/nam.$PDY
 namarcdir=${nambufr_arch}/nam.$PDY
-namtar=$COM/rh${YYYY}/${YYYYMM}/${PDY}${COMROT}_nam_prod_nam.${PDY}${CYC}.bufr.tar
+namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_nam_prod_nam.${PDY}${CYC}.bufr.tar
 bufrfile=nam.t${CYC}z.prepbufr.$suffix
 
 #........................................
@@ -65,7 +68,7 @@ cd $namarcdir ||exit 8
 if [ -s $namcomdir/$bufrfile ]; then
   cp -p $namcomdir/$bufrfile  .               
 else 
-  $hpsstar get $namtar ./$bufrfile
+  $HPSSTAR get $namtar ./$bufrfile
 fi
 
 chmod a+r $namarcdir/$bufrfile                   
@@ -77,7 +80,7 @@ fi
 #........................................
 
 #----------------------------------------
-vdate=`$ndate -3 $vdate`
+vdate=`$NDATE -3 $vdate`
 #----------------------------------------
 done
 exit
