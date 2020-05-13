@@ -190,8 +190,8 @@ elif [ $machine = WCOSS_D ]; then
 #----------------------------
 elif [ $machine = THEIA ]; then
  export vsdbhome=/scratch4/NCEPDEV/global/save/Fanglin.Yang/VRFY/vsdb ;#script home, do not change
- export obdata=/scratch4/NCEPDEV/global/save/Fanglin.Yang/obdata      ;#observation data for making 2dmaps
- export gstat=/scratch4/NCEPDEV/global/noscrub/stat  ;#global stats directory              
+ export obdata=/scratch1/NCEPDEV/global/Fanglin.Yang/save/obdata      ;#observation data for making 2dmaps
+ export gstat=/scratch1/NCEPDEV/global/Fanglin.Yang/stat    ;#global stats directory              
  export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
  export canldir=$gstat/canl                                 ;#consensus analysis directory
  export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
