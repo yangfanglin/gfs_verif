@@ -9,18 +9,18 @@ set -x
 
 
 export grp_com="TMP2m DPT2m TMAX2m TMIN2m RH2m SPFH2m TMPsfc  \
-APCPsfc ACPCPsfc NCPCPsfc PRATEsfc CPRATsfc WATRsfc WEASDsfc SNODsfc PWATclm  \
-CRAINsfc CSNOWsfc CFRZRsfc CICEPsfc MSLETmsl PRESsfc PRESmsl PRMSLmsl  \
+APCPsfc ACPCPsfc PRATEsfc CPRATsfc WATRsfc WEASDsfc SNODsfc PWATclm  \
+CRAINsfc CSNOWsfc CFRZRsfc CICEPsfc MSLETmsl PRESsfc PRMSLmsl  \
 LFTXsfc no4LFTXsfc CAPEsfc CINsfc CWATclm CWORKclm  \
-TOZNEclm VISsfc VRATEpbl HGTsfc HGThtfl HINDEXsfc HPBLsfc ICECsfc ICETKsfc LANDsfc"
+TOZNEclm VISsfc VRATEpbl HGTsfc HINDEXsfc HPBLsfc ICECsfc ICETKsfc LANDsfc"
 
 export grp_wind="UGWDsfc UFLXsfc UGRD10m UGRDpbl VGWDsfc VFLXsfc VGRD10m VGRDpbl  FRICVsfc GUSTsfc"
 
 export grp_rad="DLWRFsfc ULWRFsfc ULWRFtoa DSWRFsfc USWRFsfc USWRFtoa ALBDOsfc \
-GFLUXsfc LHTFLsfc SHTFLsfc SUNSDsfc CDUVBsfc DUVBsfc PEVPRsfc BRTMPtoa "
+GFLUXsfc LHTFLsfc SHTFLsfc SUNSDsfc PEVPRsfc "
 
-export grp_cld="TCDC475mb TCDCclm \
-TCDCbcl TCDClcl TCDCmcl TCDChcl TCDCcvl \
+export grp_cld="TCDCclm \
+TCDCblcl TCDClcl TCDCmcl TCDChcl TCDCcvl \
 PRESlcb PRESmcb PREShcb PREScvb PRESlct PRESmct PREShct PREScvt  \
 TMPlct  TMPmct  TMPhct  "
 
@@ -32,9 +32,8 @@ TSOIL0_10cm TSOIL10_40cm TSOIL40_100cm TSOIL100_200cm "
 export grp_sig="\
 TMPtrp PREStrp HGTtrp ICAHTtrp UGRDtrp VGRDtrp VWSHtrp  \
 RHsig995 POTsig995 VVELsig995 UGRDsig995 VGRDsig995 TMPsig995  \
-MNTSF320K PVORT320K TMP320K UGRD320K VGRD320K \
 TMPmwl PRESmwl HGTmwl ICAHTmwl UGRDmwl VGRDmwl  \
-RHclm RHhtfl USTM0_6000m VSTM0_6000m  DPT30_0mb PWAT30_0mb PLI30_0mb \
+RHclm USTM0_6000m VSTM0_6000m  \
 HLCY0_3000m PRES80m SPFH80m  HGT0deg RH0deg \
 PLPL255_0mb CAPE255_0mb CAPE180_0mb CIN255_0mb CIN180_0mb "
 
@@ -334,7 +333,7 @@ export color0_HGThtfl="0  41   42  43   44   45   46   47   48   22    24   26  
 export clevs_HGThtfl="  -400 -200 -100 -50   -20   -10     10     20 50   100 200 400" 
 export color_HGThtfl="49   46   42   39    36   32      0     22   26   29  73  76   79" 
 
-export vname_HGT0deg="0C Isotherm Level Geopotential Height [gpm] "
+export vname_HGT0deg="0deg Isotherm Level Geopotential Height [gpm] "
 export scale_HGT0deg=1
 export clevs0_HGT0deg=" 100 500 1000 1500 2000 2500 3000 3500 4000 4500 5000 6000 7000 8000"                
 export color0_HGT0deg="0  41   42  43   44   45   46   47   48   22    24   26   27   28   29"           
@@ -752,7 +751,7 @@ export color0_RHhtfl="0  32  34  36  38   42   43    45  47   48   49"
 export clevs_RHhtfl="  -30   -20   -15 -10   -5   -2      2    5    10   15  20   30"
 export color_RHhtfl="49   46   42   39    36   32      0     22   26   29  73  76   79" 
 
-export vname_RH0deg="0C Isotherm Level Relative Humidity [%] "
+export vname_RH0deg="0deg Isotherm Level Relative Humidity [%] "
 export scale_RH0deg=1
 export clevs0_RH0deg=" 10  20  30  40   50   60   70   80   90 100"
 export color0_RH0deg="0  32  34  36  38   42   43    45  47   48   49"
@@ -913,12 +912,12 @@ export color0_TCDCclm="0  41  43  45  47  49  21   23  25  27"
 export clevs_TCDCclm="  -30  -20  -15  -10  -5    -2      2     5    10   15  20  30"
 export color_TCDCclm="49   46   42   39    36   32      0     22   26   29  73  76   79" 
 
-export vname_TCDCbcl="Boundary Layer Total Cloud cover [%] "
-export scale_TCDCbcl=1
-export clevs0_TCDCbcl="  0  10  20  30  40  50   60  80 100"
-export color0_TCDCbcl="0  41  43  45  47  49  21   23  25  27"   
-export clevs_TCDCbcl="  -30  -20  -15  -10  -5    -2      2     5    10   15  20  30"
-export color_TCDCbcl="49   46   42   39    36   32      0     22   26   29  73  76   79" 
+export vname_TCDCblcl="Boundary Layer Total Cloud cover [%] "
+export scale_TCDCblcl=1
+export clevs0_TCDCblcl="  0  10  20  30  40  50   60  80 100"
+export color0_TCDCblcl="0  41  43  45  47  49  21   23  25  27"   
+export clevs_TCDCblcl="  -30  -20  -15  -10  -5    -2      2     5    10   15  20  30"
+export color_TCDCblcl="49   46   42   39    36   32      0     22   26   29  73  76   79" 
 
 export vname_TCDClcl="Low Level Total Cloud Cover [%] "
 export scale_TCDClcl=1

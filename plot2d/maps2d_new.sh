@@ -297,7 +297,7 @@ while ( n <= ${nexp} )
    if(n=1); 'define sn'%n'=${varscal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})';endif
    if(n>1) 
     if( $difmap = YES ) 
-     'define sn'%n'=${varscal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})-sn1'
+     'define sn'%n'=${varscal}*ave((${var}.'%f1'-${var}.1 + ${var}.'%f2'-${var}.2 + ${var}.'%f3'-${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate})'
     else
      'define sn'%n'=${varscal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})'
     endif
@@ -2629,20 +2629,28 @@ if [ $mapair_layer = "yes" ]; then
 ###  generate 2D maps on specific layers of the air. No obs 
 #### ---------------------------------------------------------- 
 
-#for var in  TMPprs CLWMRprs HGTprs O3MRprs RHprs SPFHprs UGRDprs VGRDprs VVELprs ;do
-for var in  TMPprs CLWMRprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs ;do
-for lev in 1000 850 700 500 200 100 70 50 10 5 1 0.5 0.1 0.05 0.01; do
+#for var in  TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs; do
+for var in  TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs; do
+ levlist="1000 850 700 500 200 100 70 50 30 20 10 5 1 0.5 0.1 0.05 0.01"
+ if [ $var = RHprs -o $var = CLWMRprs -o  $var = ICMRprs -o  $var = SNMRprs -o $var = GRLEprs -o  $var = RWMRprs ]; then
+   levlist="1000 850 700 500 200 100 70 50"
+ fi
+for lev in $levlist ; do
 
-if [ $var = "TMPprs" ];   then varname="Temp (K)"           scal=1            ; fi
-if [ $var = "ABSVprs" ];  then varname="Vorticity"          scal=1000         ; fi
-if [ $var = "CLWMRprs" ]; then varname="Cloud Water (ppmg)" scal=1000000      ; fi
-if [ $var = "HGTprs" ];   then varname="HGT (m)"            scal=1            ; fi
-if [ $var = "O3MRprs" ];  then varname="O3 (ppmg)"          scal=1000000      ; fi
-if [ $var = "RHprs" ];    then varname="RH "                scal=1            ; fi
-if [ $var = "SPFHprs" ];  then varname="Q (1E-6 kg/kg)"     scal=1000000      ; fi
-if [ $var = "UGRDprs" ];  then varname="U (m/s)"            scal=1            ; fi
-if [ $var = "VGRDprs" ];  then varname="V (m/s)"            scal=1            ; fi
-if [ $var = "VVELprs" ];  then varname="W (mb/hr)"          scal=36        ; fi
+if [ $var = "TMPprs" ];   then varname="Temp (K)"            scal=1            ; fi
+if [ $var = "ABSVprs" ];  then varname="Vorticity"           scal=1000         ; fi
+if [ $var = "CLWMRprs" ]; then varname="Liquid Cloud (ppmg)" scal=1000000      ; fi
+if [ $var = "ICMRprs" ];  then varname="Ice Cloud (ppmg)"    scal=1000000      ; fi
+if [ $var = "SNMRprs" ];  then varname="Snow (ppmg)"         scal=1000000      ; fi
+if [ $var = "GRLEprs" ];  then varname="Graupel (ppmg)"      scal=1000000      ; fi
+if [ $var = "RWMRprs" ];  then varname="Rain Water (ppmg)"   scal=1000000      ; fi
+if [ $var = "HGTprs" ];   then varname="HGT (m)"             scal=1            ; fi
+if [ $var = "O3MRprs" ];  then varname="O3 (ppmg)"           scal=1000000      ; fi
+if [ $var = "RHprs" ];    then varname="RH "                 scal=1            ; fi
+if [ $var = "SPFHprs" ];  then varname="Q (1E-6 kg/kg)"      scal=1000000      ; fi
+if [ $var = "UGRDprs" ];  then varname="U (m/s)"             scal=1            ; fi
+if [ $var = "VGRDprs" ];  then varname="V (m/s)"             scal=1            ; fi
+if [ $var = "VVELprs" ];  then varname="W (mb/hr)"           scal=36           ; fi
 
 #...........................
 if [ $fma_map = yes ]; then
@@ -2706,10 +2714,9 @@ while ( n <= ${nexp} )
    'define an4=${scal}*ave(${var}.'%a4', time=${sdate_a4},time=${edate_a4})'
 
   if(n=1)
-   'define sn'%n'=fc4 '
-  endif
-  if(n>1)
-   'define sn'%n'=fc4-sn1 '
+   'define sn1=${scal}*ave(${var}.1, time=${sdate},time=${edate})'
+  else
+   'define sn'%n'=${scal}*ave(${var}.'%f4' - ${var}.1, time=${sdate},time=${edate})'
   endif
   'define yn'%n'=aave(sn'%n',lon=$lon1,lon=$lon2,lat=$lat1,lat=$lat2)'
 
@@ -2864,7 +2871,7 @@ endwhile
      if(i=1); 'set clevs     10  30  50  70  90 '  ;endif
      if(i=1); 'set rbcols  0   33  35  37  43  45 '; endif
     endif
-    if ( $var= "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
      'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
      'set rbcols 4    46    42   39    36  34   32    0     22  24  26    29   73     76   79'
      if(i=1); 'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'  ;endif
@@ -2897,7 +2904,7 @@ endwhile
      'set clevs   -50   -40  -30   -20   -10   -5    5   10    20    30    40   50'  
      if(i=1); 'set clevs     10  30  50  70  90 '  ;endif
     endif
-    if ( $var= "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
      'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
      if(i=1); 'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'  ;endif
     endif
@@ -3021,7 +3028,7 @@ while ( n <= ${nexp} )
   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}),ps)'
 
   if( $difmap = YES & n>1 ) 
-   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})-sn1,ps)'
+   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1'-${var}.1 + ${var}.'%f2'-${var}.2 + ${var}.'%f3'-${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate}),ps)'
   endif
   'define yn'%n'=aave(sn'%n',lon=$lon1,lon=$lon2,lat=$lat1,lat=$lat2)'
 
@@ -3158,7 +3165,7 @@ endwhile
      'set clevs     10  30  50  70  90 '  
      'set rbcols  0   33  35  37  43  45 '
     endif
-    if ( $var= "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
      'set clevs    0.5  1  5   10   20   40  60   80 100 120 140' 
      'set rbcols  0   63 65  67  69   73   75  77   79  33  35  37'
     endif
@@ -3187,7 +3194,7 @@ endwhile
       'set clevs   -50   -40  -30   -20   -10   -5    5   10    20    30    40   50'  
       'set rbcols 49   46    42   39    36    32    0     22    26    29   73     76   79'
      endif
-     if ( $var= "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
       'set clevs   -40  -20   -10   -6   -3  -1 -0.1  0.1  1   3   6    10    20    40 '  
       'set rbcols 4    46    42   39    36  34   32    0     22  24  26    29   73     76   79'
      endif
@@ -3214,7 +3221,7 @@ endwhile
     if ( $var= "RHprs" )
      'set clevs     10  30  50  70  90 '  
     endif
-    if ( $var= "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
      'set clevs    0.5  1  5   10   20   40  60   80 100 120 140'
     endif
     if( $difmap = YES & i=1 );'d smth9(sn'%i')' ;endif
@@ -3298,7 +3305,8 @@ if [ $mapair_zonalmean = "yes" ]; then
 ###  generate zonal mean maps  compare between different runs. No obs 
 #### ---------------------------------------------------------------- 
 
-vlist="TMPprs CLWMRprs HGTprs O3MRprs RHprs SPFHprs UGRDprs VGRDprs VVELprs"
+#vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
 nvar=`echo $vlist |wc -w`
 
 #---------------------
@@ -3306,16 +3314,20 @@ for var in  $vlist ;do
 #---------------------
 lev1=$pbtm; lev2=$ptop
 
-if [ $var = "TMPprs" ];   then varname="Temp (K)"           scal=1            ; fi
-if [ $var = "ABSVprs" ];  then varname="Vorticity"          scal=1000         ; fi
-if [ $var = "CLWMRprs" ]; then varname="Cloud Water (ppmg)" scal=1000000  lev2=90    ; fi
-if [ $var = "HGTprs" ];   then varname="HGT (m)"            scal=1            ; fi
-if [ $var = "O3MRprs" ];  then varname="O3 (ppmg)"          scal=1000000      ; fi
-if [ $var = "RHprs" ];    then varname="RH "                scal=1        lev2=90 ; fi
-if [ $var = "SPFHprs" ];  then varname="Q (1E-6 kg/kg)"     scal=1000000   ; fi
-if [ $var = "UGRDprs" ];  then varname="U (m/s)"            scal=1            ; fi
-if [ $var = "VGRDprs" ];  then varname="V (m/s)"            scal=1            ; fi
-if [ $var = "VVELprs" ];  then varname="W (mb/hr)"          scal=36       lev2=90 ; fi
+if [ $var = "TMPprs" ];   then varname="Temp (K)"            scal=1            ; fi
+if [ $var = "ABSVprs" ];  then varname="Vorticity"           scal=1000         ; fi
+if [ $var = "CLWMRprs" ]; then varname="Liquid Cloud (ppmg)" scal=1000000  lev2=50    ; fi
+if [ $var = "ICMRprs" ];  then varname="Ice Cloud (ppmg)"    scal=1000000  lev2=50    ; fi
+if [ $var = "SNMRprs" ];  then varname="Snow (ppmg)"         scal=1000000  lev2=50    ; fi
+if [ $var = "GRLEprs" ];  then varname="Graupel (ppmg)"      scal=1000000  lev2=50    ; fi
+if [ $var = "RWMRprs" ];  then varname="Rain Water (ppmg)"   scal=1000000  lev2=50    ; fi
+if [ $var = "HGTprs" ];   then varname="HGT (m)"             scal=1            ; fi
+if [ $var = "O3MRprs" ];  then varname="O3 (ppmg)"           scal=1000000      ; fi
+if [ $var = "RHprs" ];    then varname="RH "                 scal=1        lev2=50 ; fi
+if [ $var = "SPFHprs" ];  then varname="Q (1E-6 kg/kg)"      scal=1000000   ; fi
+if [ $var = "UGRDprs" ];  then varname="U (m/s)"             scal=1            ; fi
+if [ $var = "VGRDprs" ];  then varname="V (m/s)"             scal=1            ; fi
+if [ $var = "VVELprs" ];  then varname="W (mb/hr)"           scal=36       lev2=50 ; fi
 
 
 #.........................
@@ -3375,22 +3387,34 @@ while ( n <= ${nexp} )
   f4=(n-1)*2+1
   a4=(n-1)*2+2
 
+  if(n=1) 
+
    'set lon $lon1 $lon2'
-   'define fc4=${scal}*ave(${var}.'%f4', time=${sdate},time=${edate})'
-   'define an4=${scal}*ave(${var}.'%a4', time=${sdate_a4},time=${edate_a4})'
+   'define an1=${scal}*ave(${var}.'%a4', time=${sdate_a4},time=${edate_a4})'
+   'define tm1=${scal}*ave(${var}.1, time=${sdate},time=${edate})'
+   'set lon 0'
+   'define zan1=ave(an1,lon=$lon1,lon=$lon2)'
+   'define zm1=ave(tm1,lon=$lon1,lon=$lon2)'
+   'define sn'%n'=zm1 '                                 
+   m=${nexp}+n
+   'define sn'%m'=zm1-zan1 '                                 
+
+  else 
+
+   'set lon $lon1 $lon2'
+   'define an=${scal}*ave(${var}.'%a4', time=${sdate_a4},time=${edate_a4})'
+   'define tm=${scal}*ave( ${var}.'%f4', time=${sdate},time=${edate})'
+   'define tmd=${scal}*ave( ${var}.'%f4' - ${var}.1, time=${sdate},time=${edate})'
 
    'set lon 0'
-   'define fcm=ave(fc4,lon=$lon1,lon=$lon2)'
-   'define anm=ave(an4,lon=$lon1,lon=$lon2)'
+   'define zan=ave(an,lon=$lon1,lon=$lon2)'
+   'define zm=ave(tm,lon=$lon1,lon=$lon2)'
+   'define zmd=ave(tmd,lon=$lon1,lon=$lon2)'
+   'define sn'%n'=zmd '                                 
+   m=${nexp}+n
+   'define sn'%m'=zm-zan'                                 
 
-  if(n=1) 
-   'define sn'%n'=fcm '                                 
   endif
-  if(n>1) 
-   'define sn'%n'=fcm-sn1 '                                 
-  endif
-  m=${nexp}+n
-  'define sn'%m'=fcm-anm '                                 
 
   n=n+1
 endwhile
@@ -3521,7 +3545,7 @@ endwhile
       'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
       if(i=1); 'set rbcols 49    46    43   39    37      35   33    0     73    76    79   23   25  27   29  '; endif
     endif
-    if ( $var = "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
       'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
       'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
       if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
@@ -3541,7 +3565,7 @@ endwhile
     if ( $var = "VVELprs" )
       'set clevs             -1.8  -1.2 -0.9  -0.6  -0.3  -0.1  0  0.1 0.3    0.6   0.9   1.2  1.8 '
     endif
-    if ( $var = "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
       'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
       if(i=1); 'set clevs             0      3      6   9     12     15   18   21';endif                    
     endif
@@ -3644,8 +3668,13 @@ endif
   'set lev $lev1 $lev2'
   'set t 1  '
 
-
 n=1
+  'set lon $lon1 $lon2'
+  'define aa1=${scal}*ave((${var}.1 + ${var}.2 + ${var}.3 + ${var}.4)/4, time=${sdate},time=${edate})'
+  'set lon 0'
+  'define sn1=ave(aa1,lon=$lon1,lon=$lon2)'
+
+n=2
 while ( n <= ${nexp} )
   f1=(n-1)*4+1
   f2=(n-1)*4+2
@@ -3653,17 +3682,18 @@ while ( n <= ${nexp} )
   f4=(n-1)*4+4
   say f1 f2 f3 f4 
 
-  'set lon $lon1 $lon2'
-  'define aa=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})'
-  'set lon 0'
-  'define sn'%n'=ave(aa,lon=$lon1,lon=$lon2)'
-
-  if( $difmap = YES & n>1) 
+  if( $difmap = YES ) 
    'set lon $lon1 $lon2'
-   'define bb=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})-sn1'
+   'define bb'%n'=${scal}*ave((${var}.'%f1'-${var}.1  + ${var}.'%f2' -${var}.2 + ${var}.'%f3' -${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate})'
    'set lon 0'
-   'define sn'%n'=ave(bb,lon=$lon1,lon=$lon2)'
+   'define sn'%n'=ave(bb'%n',lon=$lon1,lon=$lon2)'
+  else
+  'set lon $lon1 $lon2'
+  'define aa'%n'=${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate})'
+  'set lon 0'
+  'define sn'%n'=ave(aa'%n',lon=$lon1,lon=$lon2)'
   endif
+
   n=n+1
 endwhile
 
@@ -3794,7 +3824,7 @@ endwhile
       'set clevs    -1.8  -1.2 -0.9  -0.6  -0.3  -0.1  0.1 0.3    0.6   0.9   1.2  1.8 '
       'set rbcols 49    46    42   39    36     32    0   22    26    29   73    76   79'
     endif
-    if ( $var = "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
       'set clevs             0      3      6   9     12     15   18   21'
       'set rbcols          0   31     33    35   37    42     44   46   48'
       if( $difmap = YES & i >1 ) 
@@ -3818,7 +3848,7 @@ endwhile
     if ( $var = "VVELprs" )
       'set clevs             -1.8  -1.2 -0.9  -0.6  -0.3  -0.1  0  0.1 0.3    0.6   0.9   1.2  1.8 '
     endif
-    if ( $var = "CLWMRprs" )
+    if ( $var= "CLWMRprs" | $var= "ICMRprs" | $var= "SNMRprs" | $var= "GRLEprs" | $var= "RWMRprs" )
       'set clevs             0      3      6   9     12     15   18   21'
       if( $difmap = YES & i >1 ) 
        'set clevs     -15  -12  -9   -6   -3   -1 1 3 6 9 12 15 '                                        
