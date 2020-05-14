@@ -91,12 +91,12 @@ else
  export fhlist=$(eval echo \${fhlist$fcst_day:-"f$fhr1 f$fhr2 f$fhr3 f$fhr4"})
 fi
 
-#--operational GFS only saves data on 26 layers up to 10hPa
+#--operational GFS only saves data on 31 layers up to 1hPa
 set -A sname $expnlist
-#if [ ${sname[0]} = gfs ]; then 
-# export nlev=26 
-# export ptop=10
-#fi
+if [ ${sname[0]} = gfs ]; then 
+ export nlev=31 
+ export ptop=1
+fi
 
 #==================================================================
 #-- create GrADS control files
@@ -3307,6 +3307,9 @@ if [ $mapair_zonalmean = "yes" ]; then
 
 #vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
 vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+if [ ${sname[0]} = gfs ]; then 
+  vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs"
+fi
 nvar=`echo $vlist |wc -w`
 
 #---------------------
