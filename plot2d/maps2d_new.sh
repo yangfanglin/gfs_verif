@@ -25,6 +25,7 @@ export pbtm=${pbtm:-1000}                     ;#bottom pressure for zonal mean m
 export ptop=${ptop:-1}                        ;#top pressure for zonal mean maps
 export masksfc=${masksfc:-1}                  ;#if .ne.0 then mask layers below the surface for certain plots
 export difmap=${difmap:-YES}                  ;#if YES, plot differences for all but the first panel.        
+export cldwat=${cldwat:-YES}                  ;#if YES, plot zonal mean proiles of all cloud hydrometers      
 export autolev=${autolev:-NO}                 ;#if YES, contour levels are automatically determined by grads               
 
 export obdata=${obdata:-/global/save/Fanglin.Yang/obdata}
@@ -2629,12 +2630,23 @@ if [ $mapair_layer = "yes" ]; then
 ###  generate 2D maps on specific layers of the air. No obs 
 #### ---------------------------------------------------------- 
 
-#for var in  TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs; do
-for var in  TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs; do
+#varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+if [ $cldwat = NO -o $cldwat = no ]; then
+  varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs"
+fi
+
+for var in  $varlist ; do
+
  levlist="1000 850 700 500 200 100 70 50 30 20 10 5 1 0.5 0.1 0.05 0.01"
+ if [ ${sname[0]} = gfs ]; then 
+    levlist="1000 850 700 500 200 100 70 50 30 20 10 5 1"
+ fi
+
  if [ $var = RHprs -o $var = CLWMRprs -o  $var = ICMRprs -o  $var = SNMRprs -o $var = GRLEprs -o  $var = RWMRprs ]; then
    levlist="1000 850 700 500 200 100 70 50"
  fi
+
 for lev in $levlist ; do
 
 if [ $var = "TMPprs" ];   then varname="Temp (K)"            scal=1            ; fi
@@ -3307,9 +3319,15 @@ if [ $mapair_zonalmean = "yes" ]; then
 
 #vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
 vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+
+if [ $cldwat = NO -o $cldwat = no ]; then
+    vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs"
+fi
+
 if [ ${sname[0]} = gfs ]; then 
   vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs"
 fi
+
 nvar=`echo $vlist |wc -w`
 
 #---------------------
