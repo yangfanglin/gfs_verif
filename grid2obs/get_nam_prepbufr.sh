@@ -73,7 +73,9 @@ else
 fi
 
 chmod a+r $namarcdir/$bufrfile                   
-#ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $namarcdir "
+if [ ${MAKE_REMOTE_NEWDIR:-YES} = YES ]; then 
+    ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $namarcdir "
+fi
 scp -rp $namarcdir/$bufrfile ${LOGNAME}@${CLIENT}:$namarcdir/.                  
 
 #........................................
