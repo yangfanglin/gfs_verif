@@ -11,6 +11,7 @@ rhost=`echo $CLIENT |cut -c 1-1 `
 
 NDATE=/gpfs/dell1/nco/ops/nwprod/prod_util.v1.1.0/exec/ips/ndate
 HPSSTAR=/u/Fanglin.Yang/bin/hpsstar
+DMPDIR=/gpfs/dell3/emc/global/dump
 
 CDATE=${1:-$(date +%Y%m%d)}
 CDATEM1=`$NDATE -24 ${CDATE}00 |cut -c 1-8`
@@ -34,10 +35,13 @@ errgdas=0
 for vcyc in 00 06 12 18; do
   filein=$COMROTNCO/gfs/prod/gdas.$IDAY/$GDAS.t${vcyc}z.prepbufr
   if [ $IDAY -ge 20190612 ]; then filein=$COMROTNCO/gfs/prod/gdas.$IDAY/${vcyc}/$GDAS.t${vcyc}z.prepbufr ;fi
+  filein1=$DMPDIR/gdas.$IDAY/$vcyc/$GDAS.t${vcyc}z.prepbufr
   fileout=prepbufr.gdas.${IDAY}${vcyc}
  if [ ! -s $comout/$fileout ]; then
   cp $filein $fileout
+  if [ $? -ne 0 ]; then cp $filein1 $fileout ;fi                  
   if [ $? -ne 0 ]; then scp ${CLIENT}:$filein $fileout ;fi
+  if [ $? -ne 0 ]; then scp ${CLIENT}:$filein1 $fileout ;fi
   if [ $? -ne 0 ]; then 
     yyyy=`echo $IDAY |cut -c 1-4 `
     mm=`echo $IDAY |cut -c 5-6 `

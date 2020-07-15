@@ -32,7 +32,7 @@ edate=${2:-$daym1}
 
 #-------------------------------------
 vdate=$edate
-while [ $vdate -gt $sdate ]; do
+while [ $vdate -ge $sdate ]; do
 #-------------------------------------
 
 DATE=$vdate
