@@ -31,7 +31,7 @@ set -x
 G2OSTATS=NO       ;#for making verification stats
 G2OPLOTS=YES      ;#for making graphics, set to YES after G2OSTAT finishes
 
-export machine=WCOSS                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
+export machine=WCOSS_D                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
 if [ $machine = WCOSS ]; then
 

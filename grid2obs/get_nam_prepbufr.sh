@@ -53,6 +53,7 @@ eval CYC=`echo $xdate |cut -c 9-10 `
 ARCH=/NCEPPROD/hpssprod/runhistory
 COMROT="/gpfs/dell1/nco/ops/com"
 ARCHNAM="/gpfs_dell1_nco_ops_com"
+if [ $PDY -le 20200228 ]; then ARCHNAM="/com" ;fi
 if [ $PDY -le 20190820 ]; then COMROT="/com2" ;fi
 namcomdir=$COMROT/nam/prod/nam.$PDY
 namarcdir=${nambufr_arch}/nam.$PDY
@@ -72,7 +73,7 @@ else
 fi
 
 chmod a+r $namarcdir/$bufrfile                   
-ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $namarcdir "
+#ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $namarcdir "
 scp -rp $namarcdir/$bufrfile ${LOGNAME}@${CLIENT}:$namarcdir/.                  
 
 #........................................
