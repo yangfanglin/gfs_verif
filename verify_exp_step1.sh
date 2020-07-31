@@ -1,5 +1,5 @@
 #!/bin/ksh
-#set -x
+set -x
 
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
@@ -29,6 +29,7 @@
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
+date
 export expnlist=${expnlist:-${1:-"pre13j pre13d"}}             ;#experiment name
 export expdlist=${expdlist:-${2:-"/global/hires/glopara/archive /global/hires/glopara/archive"}}    ;#experiment directory
 export complist=${complist:-${3:-"cirrus stratus"}}            ;#computers where experiments are run 
@@ -44,9 +45,9 @@ export sfcvsdb=${sfcvsdb:-${12:-YES}}                          ;#include the gro
 export iauf00=${iauf00:-${13:-NO}}                             ;#force pgbf00=pgbanl for IAU-type forecasts
 
 #
-export machine=${machine:-IBM}                                  ;#IBM(cirrus/stratus), GAEA, ZEUS, JET etc
-export asub=${asub:-a}                                          ;# string in pgb anal file after pgb
-export fsub=${fsub:-f}                                          ;# string in pgb fcst file after pgb 
+export machine=${machine:-WCOSS_D}                              ;#WCOSS, WCOSS_C, WCOSS_D, HERA, JET etc
+export asub=${asub:-a}                                          ;#string in pgb anal file after pgb
+export fsub=${fsub:-f}                                          ;#string in pgb fcst file after pgb 
 export canldir=${canldir:-/global/shared/stat/canl}             ;#consensus analysis directory      
 export ecmanldir=${ecmanldir:-/global/shared/stat/ecm}          ;#ecmwf analysis directory      
 export vsdbsave=${vsdbsave:-/stmp/$LOGNAME/vsdb_exp/vsdb_data}  ;#place where vsdb database is saved
@@ -54,6 +55,26 @@ export vsdbhome=${vsdbhome:-/global/save/$LOGNAME/VRFY/vsdb}    ;#script home
 export rundir=${rundir:-/stmp/${LOGNAME}/vsdb_exp}              ;#temporary workplace
 export APRUN=${APRUN:-""}                                       ;#affix for running batch jobs                
 if [ ${batch:-NO} != YES ]; then export APRUN="" ; fi
+
+
+#-----------------------------------------------
+#--for running MPMD
+export MPMD=NO
+if [ $machine = WCOSS_D -o $machine = WCOSS_DELL_P3 ]; then
+ export MPMD="YES"
+ export nproc=${nproc:-28}
+ export APRUNCFP="mpirun -n \$ncmd cfp"
+elif [ $machine = WCOSS_C ]; then
+ export MPMD="YES"
+ export nproc=${nproc:-24}
+ export APRUNCFP="aprun -j 1 -n \$ncmd -N $nproc -d 1 cfp"
+elif [ $machine = HERA ]; then
+ export MPMD="YES"
+ export nproc=${nproc:-40}
+ export APRUNCFP="srun --export=ALL -n \$ncmd --multi-prog"
+fi
+#-----------------------------------------------
+
 
 export scppgb=${scppgb:-NO}                                     ;#whether or not to copy pgb files from client
 if [ $scppgb = YES ]; then 
@@ -185,6 +206,13 @@ while [ $nn -le $nexp ] ; do
     IDAY=`echo $loop |cut -c 1-8`
     comout=$rundir/$exp/${exp}.${IDAY}
     mkdir -p $comout; cd $comout
+
+       if [ $MPMD = YES ]; then
+         ncmd=0
+         rm -f ./cfile; touch ./cfile
+         rm -f ./sfile; touch ./sfile
+       fi
+
        ffcst=00
        while [ $ffcst -le $vlength ] ; do
          filein=$exp_dir/$exp/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}
@@ -194,11 +222,33 @@ while [ $nn -le $nexp ] ; do
          if [ -s $filein ]; then
            ln -fs  $filein $fileout
          elif [ -s $filein1 ]; then
-           $cnvgrib -g21 $filein1 $fileout
+           if [ $MPMD = YES ]; then
+             ncmd=$((ncmd+1))
+             echo "$cnvgrib -g21 $filein1 $fileout" >> ./cfile
+             echo "$ncmd $cnvgrib -g21 $filein1 $fileout" >> ./sfile
+           else
+             $cnvgrib -g21 $filein1 $fileout
+           fi
          fi
          ffcst=$((ffcst+fhout))
          if [ $ffcst -lt 10 ]; then ffcst=0$ffcst ; fi
+
+         if [ $MPMD = YES ]; then
+          if [ $ncmd -eq $nproc -o $ffcst -gt $vlength ]; then
+            launcher=$(eval echo $APRUNCFP)
+            if [ $machine = HERA ]; then
+              $launcher ./sfile
+            else
+              $launcher ./cfile
+            fi
+            ncmd=0
+            rm -f ./cfile; touch ./cfile
+            rm -f ./sfile; touch ./sfile
+          fi
+         fi
+
        done
+
 
        if [ $iauf00 = YES ];  then
         filein=$exp_dir/$exp/pgb${asub}nl${cdump}${IDAY}${fcyc}
@@ -355,4 +405,5 @@ nn=`expr $nn + 1 `
 done ;#end of explist
 #--------------------
 
+date
 exit
