@@ -34,7 +34,7 @@ MAPSGDAS=NO              ;#To make analysis maps of time-mean increments
 MAPSENS=NO               ;#To make maps of ENKF ensemble mean and ensemble spread
 
 #----------------------------------------------------------------------
-export machine=JET                ;#WCOSS, WCOSS_C, WCOSS_D, THEIA, JET etc         
+export machine=WCOSS_D            ;#WCOSS, WCOSS_C, WCOSS_D, THEIA, JET etc         
 export machine=$(echo $machine|tr '[a-z]' '[A-Z]')
 myhome=`pwd`
 set -a;. ${myhome}/setup_envs.sh $machine 
@@ -65,13 +65,13 @@ export ftpdir=/home/people/emc/www/htdocs/gmb/$webhostid/vsdb   ;#where maps are
       if [ $MAKEVSDBDATA = YES ] ; then
 ### --------------------------------------------------------------
 export fcyclist="00 12"                        ;#forecast cycles to be verified
-export expnlist="prhs13 fim"                   ;#experiment names 
+export expnlist="gfs gfsv16"                   ;#experiment names 
 export expdlist="$myarch $myarch"              ;#exp directories, can be different
 export complist="$chost  $chost "              ;#computer names, can be different if passwordless ftp works 
-export dumplist=".gfs. .fim."                  ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
+export dumplist=".gfs. .gfs."                  ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
 export vhrlist="00 12 "                        ;#verification hours for each day             
-export DATEST=20150801                         ;#verification starting date
-export DATEND=20150815                         ;#verification ending date
+export DATEST=20190801                         ;#verification starting date
+export DATEND=20190815                         ;#verification ending date
 export vlength=384                             ;#forecast length in hour
 
 export rundir=$tmpdir/stats
@@ -81,7 +81,7 @@ export listvar="$listvar1,$listvar2"
 
 ## pgb files must be saved as $expdlist/$expnlist/pgbf${fhr}${cdump}${yyyymmdd}${cyc}
 if [ $batch = YES ]; then
-  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/N -r 4096/1 -t 6:00:00 \
+  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p $nproc/1/N -r 4096/1 -t 6:00:00 \
      -j vstep1 -o $tmpdir/vstep1.out  ${vsdbhome}/verify_exp_step1.sh
 else
      ${vsdbhome}/verify_exp_step1.sh 1>${tmpdir}/vstep1.out 2>&1

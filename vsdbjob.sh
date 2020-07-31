@@ -219,6 +219,7 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
     module use -a /usrx/local/dev/modulefiles
     module load GrADS/2.2.0
     module load imagemagick/6.9.9-25
+    module load CFP/2.0.1       
  fi
  export GRADSBIN=/usrx/local/dev/packages/grads/2.2.0/bin                             
  export IMGCONVERT=/usrx/local/dev/packages/ImageMagick/6.9.9-25/bin/convert  
