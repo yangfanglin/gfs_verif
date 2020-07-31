@@ -61,16 +61,6 @@ elif [ $machine = WCOSS_D ]; then
  export cputime=16:00:00                               ;#CPU time hh:mm:ss to run each batch job
  export MPMD=YES
 #----------------------------
-elif [ $machine = THEIA ]; then
- export vsdbsave=/scratch4/NCEPDEV/global/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
- export ACCOUNT=fv3-cpu                                ;#computer ACCOUNT task
- export CUE2RUN=batch                                  ;#default to batch queue
- export CUE2FTP=batch                                  ;#queue for data transfer
- export GROUP=g01                                      ;#group of account, g01 etc
- export nproc=24                                       ;#number of PEs per node   
- export cputime=6:00:00                                ;#CPU time hh:mm:ss to run each batch job
- export MPMD=NO  
-#----------------------------
 elif [ $machine = HERA ]; then
  export vsdbsave=/scratch1/NCEPDEV/global/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
  export ACCOUNT=fv3-cpu                                ;#computer ACCOUNT task
@@ -188,27 +178,6 @@ elif [ $machine = WCOSS_D ]; then
  export APRUN="mpirun "                                     ;#affix to run batch jobs   
 
 #----------------------------
-elif [ $machine = THEIA ]; then
- export vsdbhome=/scratch4/NCEPDEV/global/save/Fanglin.Yang/VRFY/vsdb ;#script home, do not change
- export obdata=/scratch1/NCEPDEV/global/Fanglin.Yang/save/obdata      ;#observation data for making 2dmaps
- export gstat=/scratch1/NCEPDEV/global/Fanglin.Yang/stat    ;#global stats directory              
- export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
- export canldir=$gstat/canl                                 ;#consensus analysis directory
- export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
- export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
- export gfswgnedir=$gstat/wgne                              ;#operational gfs precip QPF scores
- export gfsfitdir=$gstat/surufits                           ;#Suru operational model fit-to-obs database
- export SUBJOB=$vsdbhome/bin/sub_slurm                      ;#script for submitting batch jobs
- export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
- export GNOSCRUB=/scratch4/NCEPDEV/global/noscrub           ;#temporary directory                          
- export STMP=/scratch4/NCEPDEV/stmp3                        ;#temporary directory                          
- export PTMP=/scratch4/NCEPDEV/stmp3                        ;#temporary directory                          
- export GRADSBIN=/apps/grads/2.0.2/bin                      ;#GrADS executables       
- export IMGCONVERT=/apps/ImageMagick/7.0.5/bin/convert      ;#image magic converter
- export FC=/apps/intel/composer_xe_2013_sp1.2.144/bin/intel64/ifort              ;#intel compiler
- export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
- export APRUN=""                                            ;#affix to run batch jobs   
-
 elif [ $machine = HERA ]; then
  export vsdbhome=/scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/vsdb ;#script home, do not change
  export obdata=/scratch1/NCEPDEV/global/Fanglin.Yang/save/obdata      ;#observation data for making 2dmaps
