@@ -169,6 +169,7 @@ elif [ $machine = WCOSS_D ]; then
     module use -a /usrx/local/dev/modulefiles 2>>/dev/null
     module load GrADS/2.2.0               2>>/dev/null
     module load imagemagick/6.9.9-25      2>>/dev/null
+    module load CFP/2.0.1                 2>>/dev/null
  fi
  export GRADSBIN=/usrx/local/dev/packages/grads/2.2.0/bin   ;#GrADS executables       
  export GADDIR=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/tools/grads/lib
