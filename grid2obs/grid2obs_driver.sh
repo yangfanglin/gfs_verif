@@ -190,12 +190,12 @@ export DATEND=20130801                      ;#verification ending date
 export batch=YES                            ;#to run jobs in batch mode
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
 
-listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
+listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM,machine,nproc
 listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
 export listvar=$listvar1,$listvar2
 JJOB=${vsdbhome}/grid2obs/grid2obs.sh
 if [ $batch = YES ]; then
- $SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
+ $SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p $nproc/1/$share -r $memory/1 \
         -t 6:00:00 -j g2ogfs -o $rundir/g2ogfs.out $JJOB 
 else
  $JJOB 1> $rundir/g2ogfs.out 2>&1 
