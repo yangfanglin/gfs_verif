@@ -373,7 +373,8 @@ while [ $nn -le $nexp ] ; do
      #------------------------
 
        export work=${rundir}/${CDATE}/${exp}/${group}
-       rm -r $work;  mkdir -p $work
+       if [ -s $work ]; then rm -rf $work ;fi
+       mkdir -p $work
        cd $work     ||exit 8
        chmod u+rw *; rm -f *
 
