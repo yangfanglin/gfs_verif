@@ -39,7 +39,7 @@ while [ $ffcst -le $vlength ] ; do
   fileina=$exp_dir/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}
   fileinb=$exp_dir/pgb${fsub}${ffcst}${cdump}${IDAY}${fcyc}.grib2
   fileout=pgbf${ffcst}.${exp}.${IDAY}${fcyc}
-  rm $fileout
+  [[ -s $fileout ]] && rm $fileout
   if [ -s $fileina ]; then
    ln -fs  $fileina $fileout
   elif [ -s $fileinb ]; then
