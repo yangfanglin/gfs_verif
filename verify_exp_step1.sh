@@ -279,7 +279,11 @@ while [ $nn -le $nexp ] ; do
        fileout=${exp}.t${vhr}z.pgrbanl        
        if [ -s $fileout ]; then rm $fileout ; fi
        if [ $anl_type = "canl" ]; then 
-         ln -fs $canldir/pgb${asub}nl.${IDAY}${vhr} $fileout
+        if [ -s $canldir/pgb${asub}nl.${IDAY}${vhr} ]; then  
+          ln -fs $canldir/pgb${asub}nl.${IDAY}${vhr} $fileout
+        elif [ -s $canldir/pgb${asub}nl.canl.${IDAY}${vhr} ]; then
+          ln -fs $canldir/pgb${asub}nl.canl.${IDAY}${vhr} $fileout
+        fi
        elif [ $anl_type = "ecmwf" ]; then 
         if [ -s $ecmanldir/pgb${asub}nl.${IDAY}${vhr} ] ; then
          ln -fs $ecmanldir/pgb${asub}nl.${IDAY}${vhr} $fileout
