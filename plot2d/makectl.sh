@@ -114,11 +114,12 @@ mkdir -p $ctldir $datadir
 nhours=`expr $ndays \* 24 `
 sdate=${cdate}${cyc}
 edate=`$ndate +$nhours $sdate`
+testfile_type=${testfile_type:-pgbf24}
 
 #------------------------------
 while [ $sdate -le $edate ]; do
-testa=${expdir}/${exp}/pgbf24${dump}${sdate}
-testb=${expdir}/${exp}/pgbf24${dump}${sdate}.grib2
+testa=${expdir}/${exp}/${testfile_type}${dump}${sdate}
+testb=${expdir}/${exp}/${testfile_type}${dump}${sdate}.grib2
 if [ -s $testa -o -s $testb ]; then
 #------------------------------
 
