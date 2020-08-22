@@ -3035,12 +3035,18 @@ while ( n <= ${nexp} )
   if( $lev < 800 ); cutoff=$lev ; endif
   if( $masksfc > 0 )                
    'define ps=0.01*ave((PRESsfc.'%f1' + PRESsfc.'%f2' + PRESsfc.'%f3' + PRESsfc.'%f4')/4, time=${sdate},time=${edate})-'%cutoff
+   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}),ps)'
+  else
+   'define sn'%n'=(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}))'
   endif
 
-  'define sn'%n'=maskout(${scal}*ave((${var}.'%f1' + ${var}.'%f2' + ${var}.'%f3' + ${var}.'%f4')/4, time=${sdate},time=${edate}),ps)'
 
   if( $difmap = YES & n>1 ) 
-   'define sn'%n'=maskout(${scal}*ave((${var}.'%f1'-${var}.1 + ${var}.'%f2'-${var}.2 + ${var}.'%f3'-${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate}),ps)'
+   if( $masksfc > 0 )                
+    'define sn'%n'=maskout(${scal}*ave((${var}.'%f1'-${var}.1 + ${var}.'%f2'-${var}.2 + ${var}.'%f3'-${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate}),ps)'
+   else
+    'define sn'%n'=(${scal}*ave((${var}.'%f1'-${var}.1 + ${var}.'%f2'-${var}.2 + ${var}.'%f3'-${var}.3 + ${var}.'%f4'-${var}.4 )/4, time=${sdate},time=${edate}))'
+   endif
   endif
   'define yn'%n'=aave(sn'%n',lon=$lon1,lon=$lon2,lat=$lat1,lat=$lat2)'
 
