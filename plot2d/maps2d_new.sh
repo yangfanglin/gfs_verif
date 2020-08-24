@@ -10,6 +10,7 @@ set -x
 #### ----------------------------------------------------------------------------------- 
 
 export expnlist=${expnlist:-"pr4devb prnems1w"}             ;#experiments, up to 8; gfs will point to ops data
+export caplist=${caplist:-"$expnlist"}             
 export expdlist=${expdlist:-"/global/noscrub/emc.glopara/archive /global/noscrub/Fanglin.Yang/archive"} ;#data archive
 export dumplist=${dumplist:-".gfs. .gfs."}            ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
 export complist=${complist:-"gyre gyre"}              ;#computers where experiments are run
@@ -93,6 +94,7 @@ else
 fi
 
 #--operational GFS only saves data on 31 layers up to 1hPa
+set -A cname $caplist
 set -A sname $expnlist
 if [ ${sname[0]} = gfs ]; then 
  export nlev=31 
@@ -231,55 +233,55 @@ cat >${var}.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.1=${sname[0]}
+   mdc.1=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.2=${sname[1]}
+  mdc.2=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.3=${sname[2]}
+  mdc.3=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.4=${sname[3]}
+  mdc.4=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.5=${sname[4]}
+  mdc.5=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.6=${sname[5]}
+  mdc.6=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.7=${sname[6]}
+  mdc.7=${cname[6]}
 endif     
 if  ($nexp >7)
   'open $ctl8_f1'
   'open $ctl8_f2'
   'open $ctl8_f3'
   'open $ctl8_f4'
-  mdc.8=${sname[7]}
+  mdc.8=${cname[7]}
 endif     
 
 *-----
@@ -565,48 +567,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -777,48 +779,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -980,48 +982,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -1196,48 +1198,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -1397,48 +1399,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -1602,48 +1604,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -1817,48 +1819,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -2020,48 +2022,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -2223,48 +2225,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -2428,48 +2430,48 @@ cat >${var}ob.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.2=${sname[0]}
+   mdc.2=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.3=${sname[1]}
+  mdc.3=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.4=${sname[2]}
+  mdc.4=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.5=${sname[3]}
+  mdc.5=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.6=${sname[4]}
+  mdc.6=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.7=${sname[5]}
+  mdc.7=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.8=${sname[6]}
+  mdc.8=${cname[6]}
 endif     
 
 *-----
@@ -2673,41 +2675,41 @@ cat >${var}${lev}.gs <<EOF1
 'set display color  white'
   'open $ctl1_f4'
   'open $ctl1_a4'
-   mdc.1=${sname[0]}
+   mdc.1=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f4'
   'open $ctl2_a4'
-  mdc.2=${sname[1]}
+  mdc.2=${cname[1]}
 endif
 if  ($nexp >2)
   'open $ctl3_f4'
   'open $ctl3_a4'
-  mdc.3=${sname[2]}
+  mdc.3=${cname[2]}
 endif
 if  ($nexp >3)
   'open $ctl4_f4'
   'open $ctl4_a4'
-  mdc.4=${sname[3]}
+  mdc.4=${cname[3]}
 endif
 if  ($nexp >4)
   'open $ctl5_f4'
   'open $ctl5_a4'
-  mdc.5=${sname[4]}
+  mdc.5=${cname[4]}
 endif
 if  ($nexp >5)
   'open $ctl6_f4'
   'open $ctl6_a4'
-  mdc.6=${sname[5]}
+  mdc.6=${cname[5]}
 endif
 if  ($nexp >6)
   'open $ctl7_f4'
   'open $ctl7_a4'
-  mdc.7=${sname[6]}
+  mdc.7=${cname[6]}
 endif
 if  ($nexp >7)
   'open $ctl8_f4'
   'open $ctl8_a4'
-  mdc.8=${sname[7]}
+  mdc.8=${cname[7]}
 endif
 
 *-----
@@ -2965,55 +2967,55 @@ cat >${var}${lev}.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.1=${sname[0]}
+   mdc.1=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.2=${sname[1]}
+  mdc.2=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.3=${sname[2]}
+  mdc.3=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.4=${sname[3]}
+  mdc.4=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.5=${sname[4]}
+  mdc.5=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.6=${sname[5]}
+  mdc.6=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.7=${sname[6]}
+  mdc.7=${cname[6]}
 endif     
 if  ($nexp >7)
   'open $ctl8_f1'
   'open $ctl8_f2'
   'open $ctl8_f3'
   'open $ctl8_f4'
-  mdc.8=${sname[7]}
+  mdc.8=${cname[7]}
 endif     
 
 *-----
@@ -3192,6 +3194,10 @@ endwhile
     if( $difmap = YES & i>1 ) 
      'set clevs   'cm5' 'cm4' 'cm3' 'cm2' 'cm1' 'cms' 'cps' 'cp1' 'cp2' 'cp3' 'cp4' 'cp5
      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     if ( $var= "HGTprs")
+      'set clevs    -20   -15   -10   -6    -3     -1   1     3     6      10   15   20'
+      'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
+     endif
      if ( $var= "TMPprs")
       'set clevs   -4     -3    -2    -1   -0.5   -0.1  0.1   0.5   1     2     3     4'
       'set rbcols 49    46    42   39    36     32    0     22    26    29   73     76   79'
@@ -3366,41 +3372,41 @@ cat >${var}.gs <<EOF1
 'set display color  white'
   'open $ctl1_f4'
   'open $ctl1_a4'
-   mdc.1=${sname[0]}
+   mdc.1=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f4'
   'open $ctl2_a4'
-  mdc.2=${sname[1]}
+  mdc.2=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f4'
   'open $ctl3_a4'
-  mdc.3=${sname[2]}
+  mdc.3=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f4'
   'open $ctl4_a4'
-  mdc.4=${sname[3]}
+  mdc.4=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f4'
   'open $ctl5_a4'
-  mdc.5=${sname[4]}
+  mdc.5=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f4'
   'open $ctl6_a4'
-  mdc.6=${sname[5]}
+  mdc.6=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f4'
   'open $ctl7_a4'
-  mdc.7=${sname[6]}
+  mdc.7=${cname[6]}
 endif     
 if  ($nexp >7)
   'open $ctl8_f4'
   'open $ctl8_a4'
-  mdc.8=${sname[7]}
+  mdc.8=${cname[7]}
 endif     
 
 *-----
@@ -3639,55 +3645,55 @@ cat >${var}.gs <<EOF1
   'open $ctl1_f2'
   'open $ctl1_f3'
   'open $ctl1_f4'
-   mdc.1=${sname[0]}
+   mdc.1=${cname[0]}
 if  ($nexp >1)
   'open $ctl2_f1'
   'open $ctl2_f2'
   'open $ctl2_f3'
   'open $ctl2_f4'
-  mdc.2=${sname[1]}
+  mdc.2=${cname[1]}
 endif     
 if  ($nexp >2)
   'open $ctl3_f1'
   'open $ctl3_f2'
   'open $ctl3_f3'
   'open $ctl3_f4'
-  mdc.3=${sname[2]}
+  mdc.3=${cname[2]}
 endif     
 if  ($nexp >3)
   'open $ctl4_f1'
   'open $ctl4_f2'
   'open $ctl4_f3'
   'open $ctl4_f4'
-  mdc.4=${sname[3]}
+  mdc.4=${cname[3]}
 endif     
 if  ($nexp >4)
   'open $ctl5_f1'
   'open $ctl5_f2'
   'open $ctl5_f3'
   'open $ctl5_f4'
-  mdc.5=${sname[4]}
+  mdc.5=${cname[4]}
 endif     
 if  ($nexp >5)
   'open $ctl6_f1'
   'open $ctl6_f2'
   'open $ctl6_f3'
   'open $ctl6_f4'
-  mdc.6=${sname[5]}
+  mdc.6=${cname[5]}
 endif     
 if  ($nexp >6)
   'open $ctl7_f1'
   'open $ctl7_f2'
   'open $ctl7_f3'
   'open $ctl7_f4'
-  mdc.7=${sname[6]}
+  mdc.7=${cname[6]}
 endif     
 if  ($nexp >7)
   'open $ctl8_f1'
   'open $ctl8_f2'
   'open $ctl8_f3'
   'open $ctl8_f4'
-  mdc.8=${sname[7]}
+  mdc.8=${cname[7]}
 endif     
 
 *-----

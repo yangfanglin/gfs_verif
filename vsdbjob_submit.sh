@@ -234,8 +234,9 @@ export scrdir=${vsdbhome}/fit2obs
 ### make forecast maps including lat-lon and zonal-mean distributions          
       if [ $MAPS2D = YES ] ; then
 ### --------------------------------------------------------------
-export expnlist="gfs pr4rn_1512"        ;#experiments, up to 8; gfs will point to ops data
-export expdlist="$myarch  /gpfs/hps3/emc/global/noscrub/emc.glopara/archive"   ;#fcst data directories, can be different
+export expnlist="gfs gfsv16"         ;#experiments, up to 8; gfs will point to ops data
+export caplist="gfs gfsv16"          ;#captions of experiments shown in plots      
+export expdlist="$myarch  $myarch"   ;#fcst data directories, can be different
 export complist="$chost  $chost "    ;#computer names, can be different if passwordless ftp works 
 export dumplist=".gfs. .gfs."        ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
 
@@ -247,8 +248,8 @@ export cycle="00"                     ;#forecast cycle to verify, given only one
 export DATEST=20160101                ;#starting verifying date
 export ndays=31                        ;#number of days (cases)
 
-export ceres=YES                      ;#no uses srb/isccp obs, yes uses ceres obs
-export fma=yes                        ;#make forecast-analysis maps, default=yes
+export ceres=no                       ;#no uses srb/isccp obs, yes uses ceres obs
+export fma=no                         ;#make forecast-analysis maps, default=yes
 export nlev=31                        ;#pgb file vertical layers
 export grid=G2                        ;#pgb file resolution, G2-> 2.5deg;   G3-> 1deg
 export pbtm=1000                      ;#bottom pressure for zonal mean maps
