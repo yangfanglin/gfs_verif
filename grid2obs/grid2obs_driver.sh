@@ -31,7 +31,7 @@ set -x
 G2OSTATS=NO       ;#for making verification stats
 G2OPLOTS=YES      ;#for making graphics, set to YES after G2OSTAT finishes
 
-export machine=WCOSS_D                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
+export machine=WCOSS                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
 if [ $machine = WCOSS ]; then
 
@@ -118,6 +118,29 @@ export COMROTNAM=$COMROOTp2
 export cputime=10:00:00
 export nproc=28
 
+elif [ $machine = HERA ]; then
+
+export NOSCRUB=/scratch1/NCEPDEV/global                    
+export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data       
+export opsvsdb=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/vsdb_data 
+export vsdbhome=/scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/vsdb      
+export gdas_prepbufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/gdas                          
+export ndasbufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/ndas
+export nambufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/nam
+export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
+export ACCOUNT=fv3cpu                                       ;#computer ACCOUNT task
+export CUE2RUN=batch                                        ;#account type (dev, devhigh, or 1) to run 
+export CUE2FTP=batch                                        ;#account for data transfer                 
+export GROUP=g01                                            ;#account group
+export SUBJOB=$vsdbhome/bin/sub_slurm                       ;#script for submitting batch jobs
+export HPSSTAR=/home/Fanglin.Yang/bin/hpsstar_theia         ;#hpsstar                              
+export rundir=/scratch1/NCEPDEV/stmp2/$LOGNAME/g2o$$        ;#running directory
+export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64/ifort  
+export APRUN=""
+export COMROTNCO=/scratch1/NCEPDEV/rstprod/com                                           
+export COMROTNAM=$COMROTNCO                                                             
+export nproc=40
+
 elif [ $machine = THEIA ]; then
 
 export NOSCRUB=/scratch4/NCEPDEV/global/noscrub             ;#noscrub directory                 
@@ -190,12 +213,12 @@ export DATEND=20130801                      ;#verification ending date
 export batch=YES                            ;#to run jobs in batch mode
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
 
-listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM,machine,nproc
+listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
 listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
 export listvar=$listvar1,$listvar2
 JJOB=${vsdbhome}/grid2obs/grid2obs.sh
 if [ $batch = YES ]; then
- $SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p $nproc/1/$share -r $memory/1 \
+ $SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
         -t 6:00:00 -j g2ogfs -o $rundir/g2ogfs.out $JJOB 
 else
  $JJOB 1> $rundir/g2ogfs.out 2>&1 
