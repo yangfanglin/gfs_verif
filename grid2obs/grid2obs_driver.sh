@@ -28,10 +28,10 @@ set -x
 ##     processing GFS operational and parallel forecasts for all forecast cycles. 
 ##---------------------------------------------------------------------------------
 
-G2OSTATS=NO       ;#for making verification stats
-G2OPLOTS=YES      ;#for making graphics, set to YES after G2OSTAT finishes
+G2OSTATS=YES       ;#for making verification stats
+G2OPLOTS=NO       ;#for making graphics, set to YES after G2OSTAT finishes
 
-export machine=WCOSS                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
+export machine=HERA                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
 if [ $machine = WCOSS ]; then
 
@@ -128,7 +128,7 @@ export gdas_prepbufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/gd
 export ndasbufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/ndas
 export nambufr_arch=/scratch1/NCEPDEV/global/Fanglin.Yang/stat/prepbufr/nam
 export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
-export ACCOUNT=fv3cpu                                       ;#computer ACCOUNT task
+export ACCOUNT=fv3-cpu                                       ;#computer ACCOUNT task
 export CUE2RUN=batch                                        ;#account type (dev, devhigh, or 1) to run 
 export CUE2FTP=batch                                        ;#account for data transfer                 
 export GROUP=g01                                            ;#account group
@@ -189,7 +189,7 @@ export nproc=24
 fi
 
 
-export memory=10240; export share=N
+export memory=20480; export share=N
 if [ $CUE2RUN = dev_shared ]; then export memory=1024; export share=S; fi
 mkdir -p $rundir
 
@@ -198,8 +198,8 @@ mkdir -p $rundir
 #---produce g2o vsdb database
 if [ ${G2OSTATS:-NO} = YES ]; then
 #============================
-export cyclist="00 06 12 18"                    ;#forecast cycles
-export expnlist="prexp1 prexp2"                 ;#experiment names
+export cyclist="00"                        ;#forecast cycles
+export expnlist="ccppc384"                 ;#experiment names
 export expdlist="$NOSCRUB/$LOGNAME/archive $NOSCRUB/$LOGNAME/archive"
 export hpssdirlist="/NCEPDEV/hpssuser/g01/wx20rt/WCOSS /NCEPDEV/1year/hpsspara/runhistory/glopara"
 export dumplist=".gfs. .gfs."  
@@ -208,9 +208,9 @@ export fhoutsfc="3"                         ;#forecast output frequency in hours
 export gdtype="3"                           ;#pgb file resolution, 2 for 2.5-deg and 3 for 1-deg
 export vsdbsfc="YES"                        ;#run sfc verification
 export vsdbair="YES"                        ;#run upper-air verification
-export DATEST=20130701                      ;#verification starting date
-export DATEND=20130801                      ;#verification ending date
-export batch=YES                            ;#to run jobs in batch mode
+export DATEST=20190701                      ;#verification starting date
+export DATEND=20190707                      ;#verification ending date
+export batch=NO                            ;#to run jobs in batch mode
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
 
 listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
@@ -232,14 +232,14 @@ fi
 if [ ${G2OPLOTS:-NO} = YES ]; then
 #===========================
 
-export mdlist="gfs gfs2016 "          ;#experiment names, up to 10
-export caplist="gfs gfs2016 "         ;#experiment names to show on maps
-export cyclist="00 06 12 18"               ;#forecast cycles to verify
+export mdlist="gfs ccppc384 "          ;#experiment names, up to 10
+export caplist="gfs ccppc384 "         ;#experiment names to show on maps
+export cyclist="00"                    ;#forecast cycles to verify
 export vlength=168                         ;#forecast length in hour
 export fhoutair="6"                        ;#forecast output frequency in hours for raobs vrfy
 export fhoutsfc="3"                        ;#forecast output frequency in hours for sfc vrfy
-export DATEST=20160101                     ;#verification starting date
-export DATEND=20160131                     ;#verification ending date
+export DATEST=20190701                     ;#verification starting date
+export DATEND=20190707                     ;#verification ending date
 export maskmiss=1                          ;#remove missing data from all runs, 0-->NO, 1-->Yes
 export obairtype=ADPUPA                    ;#uppair observation type, ADPUPA or ANYAIR
 export plotair="YES"                        ;#make upper plots

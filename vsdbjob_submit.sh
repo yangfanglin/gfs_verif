@@ -41,6 +41,7 @@ set -a;. ${myhome}/setup_envs.sh $machine
 if [ $? -ne 0 -o $rc -gt 0 ]; then exit; fi
 set -ux
 
+export DATA=$STMP/$LOGNAME
 export tmpdir=$STMP/$LOGNAME/nwpvrfy$$               ;#temporary directory for running verification
 export mapdir=$tmpdir/web                            ;#local directory to display plots and web templates
 mkdir -p $tmpdir ||exit
