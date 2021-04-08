@@ -37,7 +37,7 @@ dirin=""
 envars="para"
 group=""
 jobname=""
-machine=""
+#machine=""
 output=""
 procs=0
 nodes=""
@@ -108,7 +108,7 @@ echo "#SBATCH -o $output"                      >> $cfile
 echo "#SBATCH -e $output"                      >> $cfile
 echo "#SBATCH -J $jobname"                     >> $cfile
 echo "#SBATCH -q $queue"                       >> $cfile
-echo "#SBATCH -p $partition"                   >> $cfile
+##echo "#SBATCH -p $partition"                 >> $cfile
 ##echo "#SBATCH -v $envars"                    >> $cfile
 echo "#SBATCH --nodes=$nodes --ntasks=$ntasks" >> $cfile
 echo "#SBATCH -t $timew"                       >> $cfile

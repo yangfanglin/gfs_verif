@@ -16,31 +16,32 @@ set -ux
 ##-------------------------------------------------------------------
 
 #..............
-MAKEVSDBDATA=NO           ;#To create VSDB date
+MAKEVSDBDATA=YES          ;#To create VSDB date
 MAKEMAPS=NO                ;#To make AC and RMS maps
 #..............
 
 #..............
-CONUSDATA=NO               ;#To generate precip verification stats
+CONUSDATA=YES              ;#To generate precip verification stats
 CONUSPLOTS=NO              ;#To make precip verification maps
 #..............
 
 FIT2OBS=NO                ;#To make fit-to-obs maps              
 
-MAPS2D=YES                 ;#To make forecast maps including lat-lon and zonal-mean distributions          
+MAPS2D=NO                  ;#To make forecast maps including lat-lon and zonal-mean distributions          
 
 MAPSGDAS=NO              ;#To make analysis maps of time-mean increments
 
 MAPSENS=NO               ;#To make maps of ENKF ensemble mean and ensemble spread
 
 #----------------------------------------------------------------------
-export machine=WCOSS_D            ;#WCOSS, WCOSS_C, WCOSS_D, THEIA, JET etc         
+export machine=HERA               ;#WCOSS, WCOSS_C, WCOSS_D, HERA, JET etc         
 export machine=$(echo $machine|tr '[a-z]' '[A-Z]')
 myhome=`pwd`
 set -a;. ${myhome}/setup_envs.sh $machine 
 if [ $? -ne 0 -o $rc -gt 0 ]; then exit; fi
 set -ux
 
+export DATA=$STMP/$LOGNAME
 export tmpdir=$STMP/$LOGNAME/nwpvrfy$$               ;#temporary directory for running verification
 export mapdir=$tmpdir/web                            ;#local directory to display plots and web templates
 mkdir -p $tmpdir ||exit
@@ -64,15 +65,15 @@ export ftpdir=/home/people/emc/www/htdocs/gmb/$webhostid/vsdb   ;#where maps are
 ###   make vsdb database
       if [ $MAKEVSDBDATA = YES ] ; then
 ### --------------------------------------------------------------
-export fcyclist="00 12"                        ;#forecast cycles to be verified
-export expnlist="gfs gfsv16"                   ;#experiment names 
-export expdlist="$myarch $myarch"              ;#exp directories, can be different
-export complist="$chost  $chost "              ;#computer names, can be different if passwordless ftp works 
-export dumplist=".gfs. .gfs."                  ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
-export vhrlist="00 12 "                        ;#verification hours for each day             
-export DATEST=20190801                         ;#verification starting date
-export DATEND=20190815                         ;#verification ending date
-export vlength=384                             ;#forecast length in hour
+export fcyclist="00"                           ;#forecast cycles to be verified
+export expnlist="testa"                        ;#experiment names 
+export expdlist="$myarch"                      ;#exp directories, can be different
+export complist="$chost"                       ;#computer names, can be different if passwordless ftp works 
+export dumplist=".gfs."                        ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
+export vhrlist="00"                            ;#verification hours for each day             
+export DATEST=20200101                         ;#verification starting date
+export DATEND=20200131                         ;#verification ending date
+export vlength=240                             ;#forecast length in hour
 
 export rundir=$tmpdir/stats
 export listvar1=fcyclist,expnlist,expdlist,complist,dumplist,vhrlist,DATEST,DATEND,vlength,rundir,APRUN
@@ -81,7 +82,7 @@ export listvar="$listvar1,$listvar2"
 
 ## pgb files must be saved as $expdlist/$expnlist/pgbf${fhr}${cdump}${yyyymmdd}${cyc}
 if [ $batch = YES ]; then
-  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p $nproc/1/N -r 4096/1 -t 6:00:00 \
+  $SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/N -r 4096/1 -t 6:00:00 \
      -j vstep1 -o $tmpdir/vstep1.out  ${vsdbhome}/verify_exp_step1.sh
 else
      ${vsdbhome}/verify_exp_step1.sh 1>${tmpdir}/vstep1.out 2>&1
@@ -98,13 +99,13 @@ fi
       if [ $MAKEMAPS = YES ] ; then
 ### --------------------------------------------------------------
 #
-export fcycle="00 12"                      ;#forecast cycles to be verified
-export mdlist="gfs prexp prexp2"           ;#experiment names, up to 10, to compare on maps
-export caplist="gfs exp1 exp2"             ;#captions of experiments shown in plots      
-export vsdblist="$gfsvsdb $vsdbsave $vsdbsave"  ;#vsdb stats directories 
-export vhrlist="00 12"                     ;#verification hours for each day to show on map
-export DATEST=20120201                     ;#verification starting date to show on map
-export DATEND=20120228                     ;#verification ending date to show on map
+export fcycle="00"                         ;#forecast cycles to be verified
+export mdlist="gfsv16 testa"               ;#experiment names, up to 10, to compare on maps
+export caplist="gfsv16 testa"              ;#captions of experiments shown in plots      
+export vsdblist="$gfsvsdb $vsdbsave"       ;#vsdb stats directories 
+export vhrlist="00"                        ;#verification hours for each day to show on map
+export DATEST=20200101                     ;#verification starting date to show on map
+export DATEND=20200131                     ;#verification ending date to show on map
 export vlength=240                         ;#forecast length in hour to show on map
 export maptop=10                           ;#can be set to 10, 50 or 100 hPa for cross-section maps
 export maskmiss=1                          ;#remove missing data from all models to unify sample size, 0-->NO, 1-->Yes
@@ -140,18 +141,17 @@ fi
 #-------------------
 for cyc in 00 12; do
 #-------------------
-export expnlist="prhs13 prtest"                          ;#experiment names
-export expdlist="$COMROT $COMROT"                        ;#fcst data directories, can be different
-export hpsslist="/NCEPDEV/hpssuser/g01/wx24fy/WCOSS /NCEPDEV/hpssuser/g01/wx24fy/WCOSS"  ;#hpss archive directory                  
-export complist="$chost  $chost "                        ;#computer names, can be different if passwordless ftp works 
-export ftyplist="flxf flxf"                              ;#file types: pgbq or flxf
-export dumplist=".gfs. .gfs."                            ;#file format ${ftyp}f${fhr}${dump}${yyyymmdd}${cyc}
-export ptyplist="PRATE PRATE"                            ;#precip types in GRIB: PRATE or APCP
-export bucket=6                        ;#accumulation bucket in hours. bucket=0 -- continuous accumulation
+export expnlist="testa"                                  ;#experiment names
+export expdlist="$myarch"                                ;#fcst data directories, can be different
+export complist="$chost"                                 ;#computer names, can be different if passwordless ftp works 
+export ftyplist="flxf"                                   ;#file types: pgbq or flxf
+export dumplist=".gfs."                                  ;#file format ${ftyp}f${fhr}${dump}${yyyymmdd}${cyc}
+export ptyplist="PRATE"                                  ;#precip types in GRIB: PRATE or APCP
+export bucket=6                                          ;#accumulation bucket in hours. bucket=0 -- continuous accumulation
 export fhout=6                                           ;#forecast output frequency in hours
 export cycle="$cyc"                                      ;#forecast cycle to verify, give only one
-export DATEST=20130601                                   ;#forecast starting date 
-export DATEND=20130630                                   ;#forecast ending date 
+export DATEST=20200101                                   ;#forecast starting date 
+export DATEND=20200131                                   ;#forecast ending date 
 export vhour=180                                         ;#verification length in hour
 export ARCDIR=$GNOSCRUB/$LOGNAME/archive                 ;#directory to save stats data
 export rundir=$tmpdir/mkup_precip$cyc                    ;#temporary running directory
@@ -180,14 +180,14 @@ done
 ###   make CONUS precip skill score maps 
       if [ $CONUSPLOTS = YES ] ; then
 ### --------------------------------------------------------------
-export expnlist="gfs prhs13"                              ;#experiment names, up to 6 , gfs is operational GFS
-export caplist="gfs gfsx"                                 ;#captions of experiments shown in plots      
+export expnlist="gfs testa"                               ;#experiment names, up to 6 , gfs is operational GFS
+export caplist="gfs testa"                                ;#captions of experiments shown in plots      
 export expdlist="${gfswgnedir} $myarch"                   ;#fcst data directories, can be different
 export complist="$chost  $chost "                         ;#computer names, can be different if passwordless ftp works 
 export cyclist="00 12"                                    ;#forecast cycles for making QPF maps, 00Z and/or 12Z 
 export vhour="180"                                         ;#forecast length for making QPF maps 
-export DATEST=20130601                                    ;#forecast starting date to show on map
-export DATEND=20130630                                    ;#forecast ending date to show on map
+export DATEST=20200101                                    ;#forecast starting date to show on map
+export DATEND=20200131                                    ;#forecast ending date to show on map
 export rundir=$tmpdir/plot_pcp
 export scrdir=${vsdbhome}/precip                  
                                                                                                                            
@@ -211,7 +211,7 @@ fi
 ###   make fit-to-obs plots
       if [ $FIT2OBS = YES ] ; then
 ### --------------------------------------------------------------
-export expnlist="fnl prt1534"                              ;#experiment names, only two allowed, fnl is operatinal GFS
+export expnlist="fnl testa"                                ;#experiment names, only two allowed, fnl is operatinal GFS
 export expdlist="$gfsfitdir $myarch"                    ;#fcst data directories, can be different
 export complist="$chost  $chost "                         ;#computer names, can be different if passwordless ftp works
 export endianlist="little little"           ;#big_endian or little_endian of fits data, CCS-big, Zeus-little
@@ -219,8 +219,8 @@ export cycle="00"                                         ;#forecast cycle to ve
 export oinc_f2o=24                                         ;#increment (hours) between observation verify times for timeout plots
 export finc_f2o=12                                         ;#increment (hours) between forecast lengths for timeout plots
 export fmax_f2o=120                                       ;#max forecast length to show for timeout plots
-export DATEST=20131120                                    ;#forecast starting date to show on map
-export DATEND=20131211                                    ;#forecast ending date to show on map
+export DATEST=20200101                                    ;#forecast starting date to show on map
+export DATEND=20200131                                    ;#forecast ending date to show on map
 export rundir=$tmpdir/fit
 export scrdir=${vsdbhome}/fit2obs
 
@@ -234,9 +234,8 @@ export scrdir=${vsdbhome}/fit2obs
 ### make forecast maps including lat-lon and zonal-mean distributions          
       if [ $MAPS2D = YES ] ; then
 ### --------------------------------------------------------------
-export expnlist="gfs gfsv16"         ;#experiments, up to 8; gfs will point to ops data
-export caplist="gfs gfsv16"          ;#captions of experiments shown in plots      
-export expdlist="$myarch  $myarch"   ;#fcst data directories, can be different
+export expnlist="gfs testa"          ;#experiments, up to 8; gfs will point to ops data
+export expdlist="$gstat  $myarch"    ;#fcst data directories, can be different
 export complist="$chost  $chost "    ;#computer names, can be different if passwordless ftp works 
 export dumplist=".gfs. .gfs."        ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
 
@@ -245,15 +244,15 @@ export fdlist="anl 1 5 10"            ;#fcst day to verify, e.g., d-5 uses f120 
 #export fhlist1="f06 f06 f18 f18"     ;#may specify exact fcst hours to compare for a specific day, must be four
 #export fhlist5="f120 f120 f120 f120" ;#may specify exact fcst hours to compare for a specific day, must be four
 export cycle="00"                     ;#forecast cycle to verify, given only one
-export DATEST=20160101                ;#starting verifying date
+export DATEST=20200101                ;#starting verifying date
 export ndays=31                        ;#number of days (cases)
 
 export ceres=no                       ;#no uses srb/isccp obs, yes uses ceres obs
 export fma=no                         ;#make forecast-analysis maps, default=yes
-export nlev=31                        ;#pgb file vertical layers
+export nlev=41                        ;#pgb file vertical layers
 export grid=G2                        ;#pgb file resolution, G2-> 2.5deg;   G3-> 1deg
 export pbtm=1000                      ;#bottom pressure for zonal mean maps
-export ptop=1                         ;#top pressure for zonal mean maps
+export ptop=0.01                      ;#top pressure for zonal mean maps
 export latlon="-90 90 0 360"          ;#map area lat1, lat2, lon1 and lon2
 export rundir=$tmpdir/2dmaps
 export batch=NO

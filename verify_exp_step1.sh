@@ -67,7 +67,7 @@ elif [ $machine = WCOSS_C ]; then
  export nproc=${nproc:-24}
  export APRUNCFP="aprun -j 1 -n \$ncmd -N $nproc -d 1 cfp"
 elif [ $machine = HERA ]; then
- export MPMD="YES"
+ export MPMD="NO"
  export nproc=${nproc:-40}
  export APRUNCFP="srun --export=ALL -n \$ncmd --multi-prog"
 fi
