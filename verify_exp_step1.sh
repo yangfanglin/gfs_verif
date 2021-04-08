@@ -1,5 +1,5 @@
 #!/bin/ksh
-#set -x
+set -x
 
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
@@ -53,8 +53,6 @@ export ecmanldir=${ecmanldir:-/global/shared/stat/ecm}          ;#ecmwf analysis
 export vsdbsave=${vsdbsave:-/stmp/$LOGNAME/vsdb_exp/vsdb_data}  ;#place where vsdb database is saved
 export vsdbhome=${vsdbhome:-/global/save/$LOGNAME/VRFY/vsdb}    ;#script home
 export rundir=${rundir:-/stmp/${LOGNAME}/vsdb_exp}              ;#temporary workplace
-export APRUN=${APRUN:-""}                                       ;#affix for running batch jobs                
-if [ ${batch:-NO} != YES ]; then export APRUN="" ; fi
 
 
 #-----------------------------------------------
@@ -72,6 +70,12 @@ elif [ $machine = HERA ]; then
  export MPMD="YES"
  export nproc=${nproc:-40}
  export APRUNCFP="srun --export=ALL -n \$ncmd --multi-prog"
+fi
+
+export APRUN=${APRUN:-""}                                       ;#affix for running batch jobs                
+if [ ${batch:-NO} != YES ]; then 
+ export MPMD=NO 
+ export APRUN=""
 fi
 #-----------------------------------------------
 
