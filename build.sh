@@ -75,6 +75,8 @@ for utilname in copygb copygb2 wgrib wgrib2 cnvgrib grbindex ; do
 done
 #wgrib=`which wgrib`
 #cp -p $wgrib $curdir/nwprod/util/exec/.
+grbmap=`which gribmap`
+cp -p $grbmap $curdir/nwprod/util/exec/.
 
 utilvar="ndate nhour ss2ggx mvgribdate"
 for utilname in $utilvar ; do
