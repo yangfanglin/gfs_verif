@@ -358,7 +358,7 @@ if($nmd >9); mdc.10=${mdnamec[9]} ;endif
  dist=cmax-cmin 
  if (dist = 0); dist=1; endif
  cmin=cmin-0.01*dist; cmax=cmax+0.01*dist
- cmin=substr(cmin,1,6); cmax=substr(cmax,1,6)
+ cmin=substr(cmin,1,10); cmax=substr(cmax,1,10)
  cintp=0
 *if( dist > 0.004 ); cintp=10*substr(dist/40,1,4); endif
 *if (cintp = 0 & dist > 0.0004 ); cintp=10*substr(dist/40,1,5); endif
