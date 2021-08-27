@@ -2633,9 +2633,9 @@ if [ $mapair_layer = "yes" ]; then
 #### ---------------------------------------------------------- 
 
 #varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
-varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
 if [ $cldwat = NO -o $cldwat = no ]; then
-  varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs"
+  varlist="TMPprs HGTprs O3MRprs RHprs  UGRDprs VGRDprs VVELprs SPFHprs"
 fi
 
 for var in  $varlist ; do
@@ -3330,14 +3330,14 @@ if [ $mapair_zonalmean = "yes" ]; then
 #### ---------------------------------------------------------------- 
 
 #vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
-vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
+vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs ICMRprs SNMRprs GRLEprs RWMRprs"
 
 if [ $cldwat = NO -o $cldwat = no ]; then
-    vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs"
+    vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs"
 fi
 
 if [ ${sname[0]} = gfs ]; then 
-  vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs CLWMRprs"
+  vlist="TMPprs HGTprs O3MRprs RHprs UGRDprs VGRDprs VVELprs SPFHprs CLWMRprs"
 fi
 
 nvar=`echo $vlist |wc -w`
