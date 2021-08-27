@@ -88,7 +88,8 @@ output=${output:-$jobname.out}
 myuser=$LOGNAME
 myhost=$(hostname)
 
-DATA=${DATA:-/scratch1/NCEPDEV/stmp2/$LOGNAME/sub}
+curdir=`pwd`
+DATA=${DATA:-${curdir:-/scratch1/NCEPDEV/stmp2/$LOGNAME/sub}}
 mkdir -p $DATA
 
 partition=${partition:-service}

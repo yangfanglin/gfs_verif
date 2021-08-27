@@ -24,6 +24,7 @@ export cpygb=${cpygb:-"$APRUN $NWPROD/util/exec/copygb"}
 export cpygb2=${cpygb2:-"$APRUN $NWPROD/util/exec/copygb2"}
 export wgrb=${wgrib:-$NWPROD/util/exec/wgrib}
 export wgrb2=${wgrib2:-$NWPROD/util/exec/wgrib2}
+export grbmap=${gribmap:-$NWPROD/util/exec/gribmap}
 #---------------------------------------------------------------------------------
 
 if [ $nlev = 31 ]; then
@@ -494,7 +495,7 @@ EOF
 #----------------
 fi
 #----------------
-gribmap -0 -i $ctldir/${exp}_anl.ctl
+$grbmap -0 -i $ctldir/${exp}_anl.ctl
 
 
 #----------------------------------
@@ -816,8 +817,8 @@ EOF
 #---------------
 fi
 #---------------
-gribmap -0 -i $ctldir/${exp}_ges.ctl
 
+$grbmap -0 -i $ctldir/${exp}_ges.ctl   
 
 #-----------------------------------
 n=`expr $n + 1 `
