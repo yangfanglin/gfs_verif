@@ -208,13 +208,14 @@ export fhoutsfc="3"                         ;#forecast output frequency in hours
 export gdtype="3"                           ;#pgb file resolution, 2 for 2.5-deg and 3 for 1-deg
 export vsdbsfc="YES"                        ;#run sfc verification
 export vsdbair="YES"                        ;#run upper-air verification
+export vlength=168                          ;#forecast length in hour
 export DATEST=20190701                      ;#verification starting date
 export DATEND=20190707                      ;#verification ending date
 export batch=NO                            ;#to run jobs in batch mode
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
 
 listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
-listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
+listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,vlength,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
 export listvar=$listvar1,$listvar2
 JJOB=${vsdbhome}/grid2obs/grid2obs.sh
 if [ $batch = YES ]; then
