@@ -235,6 +235,7 @@ export scrdir=${vsdbhome}/fit2obs
       if [ $MAPS2D = YES ] ; then
 ### --------------------------------------------------------------
 export expnlist="gfs testa"          ;#experiments, up to 8; gfs will point to ops data
+export caplist="gfs testa"           ;#captions of experiments shown in plots      
 export expdlist="$gstat  $myarch"    ;#fcst data directories, can be different
 export complist="$chost  $chost "    ;#computer names, can be different if passwordless ftp works 
 export dumplist=".gfs. .gfs."        ;#file format pgb${asub}${fhr}${dump}${yyyymmdd}${cyc}
