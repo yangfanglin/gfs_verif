@@ -58,7 +58,11 @@ export rundir=${rundir:-/stmp/${LOGNAME}/vsdb_exp}              ;#temporary work
 #-----------------------------------------------
 #--for running MPMD
 export MPMD=NO
-if [ $machine = WCOSS_D -o $machine = WCOSS_DELL_P3 ]; then
+if [ $machine = WCOSS2 ]; then
+ export MPMD="YES"
+ export nproc=${nproc:-128}
+ export APRUNCFP="mpiexec -n \$ncmd --ppn \$ncmd --cpu-bind verbose,depth --depth 1 cfp"
+elif [ $machine = WCOSS_D -o $machine = WCOSS_DELL_P3 ]; then
  export MPMD="YES"
  export nproc=${nproc:-28}
  export APRUNCFP="mpirun -n \$ncmd cfp"

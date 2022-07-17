@@ -65,11 +65,10 @@ penode="1/1/S"                                         ;# one pe, and shared on 
 
 #--for running MPMD
 export MPMD=${MPMD:-YES}
-if [ $machine != WCOSS_C -a $machine != WCOSS -a $machine != WCOSS_D -a $machine != JET ]; then export MPMD=NO; fi
+if [ $machine != WCOSS2 -a $machine != JET ]; then export MPMD=NO; fi
 if [ $CUE2RUN = dev_shared ]; then export MPMD=NO; fi
 nproc=${nproc:-24}                                     ;#number of PEs per node
-if [ $machine = WCOSS -a $CUE2RUN = dev ]; then nproc=16; fi 
-if [ $machine = WCOSS_D ]; then nproc=28; fi 
+if [ $machine = WCOSS2 ]; then nproc=128; fi 
 
 #--------------------------------------
 ##---gather vsdb stats from different experiments and put in a central location

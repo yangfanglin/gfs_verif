@@ -4,7 +4,7 @@ set -ux
 ## set up common directories, utilities and environment variables
 ## for different platforms, and assign user specific parameters.
 
-machine=${1:-WCOSS_C}
+machine=${1:-WCOSS2}
 machine=$(echo $machine|tr '[a-z]' '[A-Z]')
 export rc=0
 
@@ -20,45 +20,22 @@ export doftp="YES"             ;#whether or not to send maps to web server
 export scppgb="NO"             ;#copy files between machine? need passwordless ssh
 export batch="YES"             ;#run jobs at batch nodes                              
 export scorecard="NO"          ;#create scorecard text files and web display plate                          
-if [ $machine != WCOSS_C -a $machine != WCOSS -a $machine != WCOSS_D ]; then 
+if [ $machine != WCOSS2 ]; then 
  export doftp="NO"
 fi
 
 #==================================
 ## user-specific parameters
 #==================================
-if [ $machine = WCOSS ]; then
+if [ $machine = WCOSS2 ]; then
  chost=`echo $(hostname) |cut -c 1-1`
- export vsdbsave=/global/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
+ export vsdbsave=/lfs/h2/emc/physics/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
  export ACCOUNT=GFS-DEV                                ;#ibm computer ACCOUNT task
  export CUE2RUN=dev                                    ;#dev or dev_shared         
  export CUE2FTP=transfer                               ;#queue for data transfer
  export GROUP=g01                                      ;#group of account, g01 etc
- export nproc=24                                       ;#number of PEs per node   
- if [ $CUE2RUN = dev ]; then export nproc=16 ; fi
+ export nproc=128                                      ;#number of PEs per node   
  export cputime=6:00:00                                ;#CPU time hh:mm:ss to run each batch job
- export MPMD=YES
-#----------------------------
-elif [ $machine = WCOSS_C ]; then
- chost=`echo $(hostname) |cut -c 1-1`
- export vsdbsave=/gpfs/hps3/emc/global/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
- export ACCOUNT=GFS-DEV                                ;#ibm computer ACCOUNT task
- export CUE2RUN=dev                                    ;#dev or dev_shared         
- export CUE2FTP=dev_transfer                           ;#queue for data transfer
- export GROUP=g01                                      ;#group of account, g01 etc
- export nproc=24                                       ;#number of PEs per node   
- export cputime=10:00:00                               ;#CPU time hh:mm:ss to run each batch job
- export MPMD=YES
-#----------------------------
-elif [ $machine = WCOSS_D ]; then
- chost=`echo $(hostname) |cut -c 1-1`
- export vsdbsave=/gpfs/dell2/emc/modeling/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
- export ACCOUNT=GFS-DEV                                ;#ibm computer ACCOUNT task
- export CUE2RUN=dev                                    ;#dev or dev_shared         
- export CUE2FTP=dev_transfer                           ;#queue for data transfer
- export GROUP=g01                                      ;#group of account, g01 etc
- export nproc=28                                       ;#number of PEs per node   
- export cputime=16:00:00                               ;#CPU time hh:mm:ss to run each batch job
  export MPMD=YES
 #----------------------------
 elif [ $machine = HERA ]; then
@@ -98,85 +75,43 @@ fi
 #=====================================
 ## common machine-dependent parameters
 #=====================================
-#----------------------------
-if [ $machine = WCOSS ]; then
- chost=`echo $(hostname) |cut -c 1-1`
- export vsdbhome=/global/save/Fanglin.Yang/VRFY/vsdb        ;#script home, do not change
- export obdata=/global/save/Fanglin.Yang/obdata             ;#observation data for making 2dmaps
- export gstat=/global/noscrub/Fanglin.Yang/stat             ;#global stats directory              
- export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
- export canldir=$gstat/canl                                 ;#consensus analysis directory
- export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
- export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
- export gfswgnedir=$gstat/wgne                              ;#operational gfs precip QPF scores
- export gfsfitdir=/global/save/Suranjana.Saha               ;#Suru operational model fit-to-obs database
- export SUBJOB=$vsdbhome/bin/sub_wcoss                      ;#script for submitting batch jobs
- export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
- export GNOSCRUB=/global/noscrub                            ;#archive directory                          
- export STMP=/stmpd2                                        ;#temporary directory                          
- export PTMP=/ptmpd2                                        ;#temporary directory                          
- export GRADSBIN=/usrx/local/GrADS/2.0.2/bin                ;#GrADS executables       
- export IMGCONVERT=/usrx/local/ImageMagick/6.8.3-3/bin/convert                ;#image magic converter
- export FC=/usrx/local/intel/composer_xe_2011_sp1.11.339/bin/intel64/ifort    ;#intel compiler
- export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
- export APRUN=""                                            ;#affix to run batch jobs   
 
-#----------------------------
-elif [ $machine = WCOSS_C ]; then
+if [ $machine = WCOSS2 ]; then
  chost=`echo $(hostname) |cut -c 1-1`
- export vsdbhome=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/VRFY/vsdb     ;#script home, do not change
- export obdata=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/obdata          ;#observation data for making 2dmaps
- export gstat=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/stat             ;#global stats directory              
- export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
- export canldir=$gstat/canl                                 ;#consensus analysis directory
- export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
- export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
- export gfswgnedir=$gstat/wgne                              ;#operational gfs precip QPF scores
- export gfsfitdir=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/stat/fit2obs     ;#Suru operational model fit-to-obs database
- export SUBJOB=$vsdbhome/bin/sub_wcoss_c                    ;#script for submitting batch jobs
- export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
- export GNOSCRUB=/gpfs/hps3/emc/global/noscrub               ;#archive directory                          
- export STMP=/gpfs/hps3/stmp                                 ;#temporary directory                          
- export PTMP=/gpfs/hps3/ptmp                                 ;#temporary directory                          
- export GRADSBIN=/usrx/local/dev/GrADS/2.0.2/bin            ;#GrADS executables       
- export IMGCONVERT=/usr/bin/convert                         ;#image magic converter
- export FC=/opt/intel/composer_xe_2015.3.187/bin/intel64/ifort    ;#intel compiler
- export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
- export APRUN="aprun -n 1 -N 1 -j 1 -d 1"                   ;#affix to run batch jobs   
-
-#----------------------------
-elif [ $machine = WCOSS_D ]; then
- chost=`echo $(hostname) |cut -c 1-1`
- export vsdbhome=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/vsdb                              
- export obdata=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/obdata       ;#observation data for making 2dmaps
- export gstat=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat          ;#global stats directory              
- export gfsvsdb=$gstat/vsdb_data                            ;#operational gfs vsdb database
+ export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/VRFY/vsdb                                   
+ export obdata=/lfs/h2/emc/physics/noscrub/fanglin.yang/obdata                      ;#observation data for making 2dmaps
+ export gfsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/vrfygfs/vsdb_data          ;#operational gfs vsdb database
+ export gstat=/lfs/h2/emc/physics/noscrub/fanglin.yang/archive/ops/global           ;#global stats directory              
  export canldir=$gstat/canl                                 ;#consensus analysis directory
  export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
  export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
  export gfswgnedir=$gstat/wgne                              ;#operational gfs precip QPF scores
  export gfsfitdir=$gstat/fit2obs                            ;#Suru operational model fit-to-obs database
- export SUBJOB=$vsdbhome/bin/sub_wcoss_d                    ;#script for submitting batch jobs
+ export SUBJOB=$vsdbhome/bin/sub_wcoss2                     ;#script for submitting batch jobs
  export NWPROD=$vsdbhome/nwprod                             ;#common utilities and libs included in /nwprod
- export GNOSCRUB=/gpfs/dell2/emc/modeling/noscrub            ;#archive directory                          
- export STMP=/gpfs/dell2/stmp                                ;#temporary directory                          
- export PTMP=/gpfs/dell2/ptmp                                ;#temporary directory                          
- if [ ! -z $MODULESHOME ]; then
-    . $MODULESHOME/init/bash              2>>/dev/null
-    module load ips/18.0.1.163            2>>/dev/null
-    module load impi/18.0.1               2>>/dev/null
-    module load EnvVars/1.0.2             2>>/dev/null
-    module use -a /usrx/local/dev/modulefiles 2>>/dev/null
-    module load GrADS/2.2.0               2>>/dev/null
-    module load imagemagick/6.9.9-25      2>>/dev/null
-    module load CFP/2.0.1                 2>>/dev/null
- fi
- export GRADSBIN=/usrx/local/dev/packages/grads/2.2.0/bin   ;#GrADS executables       
- export GADDIR=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/tools/grads/lib
- export IMGCONVERT=/usrx/local/dev/packages/ImageMagick/6.9.9-25/bin/convert       ;#image magic converter
- export FC=/usrx/local/prod/intel/2018UP01/compilers_and_libraries/linux/bin/intel64/ifort 
+ export GNOSCRUB=/lfs/h2/emc/physics/noscrub                 ;#archive directory                          
+ export STMP=/lfs/h2/emc/stmp                                ;#temporary directory                          
+ export PTMP=/lfs/h2/emc/ptmp                                ;#temporary directory                          
+
+ source /usr/share/lmod/lmod/init/bash
+   module purge
+   module load intel/19.1.3.304
+   module load libjpeg/9c
+   module load prod_util/2.0.13
+   module load grib_util/1.2.4
+   module load prod_envir/2.0.6
+   module load wgrib2/2.0.8
+   module load imagemagick/7.0.8-7
+   module load cfp/2.0.4
+   module use /apps/test/lmodules/core
+   module load GrADS/2.2.2
+
+ export GRADSBIN=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f//bin 
+ export GADDIR=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f/lib
+ export IMGCONVERT=/apps/spack/imagemagick/7.0.8-7/cce/11.0.1/fyjvsbwngyzlsiluc4udbnxkhlbwkzc3/bin/convert 
+ export FC=/pe/intel/compilers_and_libraries_2020.4.304/linux/bin/intel64/ifort              
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
- export APRUN="mpirun "                                     ;#affix to run batch jobs   
+ export APRUN="mpiexec -l"                                  ;#affix to run batch jobs   
 
 #----------------------------
 elif [ $machine = HERA ]; then

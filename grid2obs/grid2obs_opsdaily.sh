@@ -175,6 +175,7 @@ export NDATE=/gpfs/dell1/nco/ops/nwprod/prod_util.v1.1.0/exec/ips/ndate
 CDATE=${1:-$(date +%Y%m%d)}
 CDATM1=`$NDATE -24 ${CDATE}00 |cut -c 1-8 `
 CDATM2=`$NDATE -48 ${CDATE}00 |cut -c 1-8 `
+CDATM3=`$NDATE -72 ${CDATE}00 |cut -c 1-8 `
 chost=`echo $(hostname)|cut -c 1-1`
 
 #---prepare prepbufr data
@@ -206,7 +207,7 @@ export gdtype="3"                           ;#pgb file resolution, 2 for 2.5-deg
 export vsdbsfc="YES"                        ;#run sfc verification
 export vsdbair="YES"                        ;#run upper-air verification
 export vlength=168                          ;#forecast length in hour
-export DATEST=$CDATM2                       ;#verification starting date
+export DATEST=$CDATM3                       ;#verification starting date
 export DATEND=$CDATM1                       ;#verification ending date
 export batch=YES
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
@@ -300,7 +301,7 @@ export MPMD="YES"                          ;#use MPMD to submit multiple jobs in
 
 export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
 export webhostid=wx24fy                    ;#login id on webhost
-export ftpdir=/home/people/emc/www/htdocs/gmb/STATS_vsdb      ;#where maps are displayed on webhost
+export ftpdir=/home/people/emc/www/htdocs/gmb/wx24fy/STATS_vsdb      ;#where maps are displayed on webhost
 export doftp="YES"                                            ;#whether or not sent maps to ftpdir
 ${vsdbhome}/grid2obs/grid2obs_plot.sh
 
@@ -329,7 +330,7 @@ export MPMD="YES"                          ;#use MPMD to submit multiple jobs in
 
 export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
 export webhostid=wx24fy                    ;#login id on webhost
-export ftpdir=/home/people/emc/www/htdocs/gmb/STATS_vsdb/ensm      ;#where maps are displayed on webhost
+export ftpdir=/home/people/emc/www/htdocs/gmb/wx24fy/STATS_vsdb/ensm      ;#where maps are displayed on webhost
 export doftp="YES"                                            ;#whether or not sent maps to ftpdir
 #${vsdbhome}/grid2obs/grid2obs_plot.sh
 

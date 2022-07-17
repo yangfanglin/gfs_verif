@@ -133,7 +133,7 @@ echo ${mdnamec2}
 for stat in $statlist ; do  #Loop over cor, rms, bias
 if [[ $stat = "cor" ]] ; then
   statname="Anomaly Correlation"
-  vnamlist="HGT WIND T PMSL"
+  vnamlist="HGT WIND T "
   levlist="P250 P500 P700 P1000"
   statspan=11
 elif [[ $stat = "rms" ]] ; then
