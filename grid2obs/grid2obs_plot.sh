@@ -56,7 +56,7 @@ mkdir -p $rundir $locwebdir $mapdir
 
 #--for running MPMD
 export MPMD=${MPMD:-YES}     
-if [ $machine != WCOSS_C -a $machine != WCOSS -a $machine != WCOSS_D ]; then MPMD=NO; fi
+if [ $machine != WCOSS2 ]; then MPMD=NO; fi
 if [ $CUE2RUN = dev_shared ]; then  MPMD=NO; fi
 nproc=${nproc:-24}           ;#number of PEs per node
 
@@ -240,6 +240,10 @@ for varname in $bigvnamlist; do
      echo ". /opt/modules/3.2.6.7/init/sh"    >>$jobscript
      echo "module load cfp-intel-sandybridge" >>$jobscript
      echo "launcher='aprun -n $iproc -N $iproc -j 1 -d 1 cfp' " >>$jobscript
+     echo "\$launcher \$MP_CMDFILE"           >>$jobscript
+   elif [ $machine = WCOSS2 ] ; then
+     echo "module load cfp/2.0.4"             >>$jobscript
+     echo "launcher='mpiexec -n $iproc -ppn $iproc --cpu-bind verbose,depth --depth 1 cfp' " >>$jobscript
      echo "\$launcher \$MP_CMDFILE"           >>$jobscript
    elif [ $machine = WCOSS_D ] ; then
      echo ". $MODULESHOME/init/bash"          >>$jobscript

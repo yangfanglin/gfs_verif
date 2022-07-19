@@ -31,7 +31,7 @@ set -x
 G2OSTATS=YES       ;#for making verification stats
 G2OPLOTS=NO       ;#for making graphics, set to YES after G2OSTAT finishes
 
-export machine=HERA                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
+export machine=WCOSS2                                    ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
 if [ $machine = WCOSS ]; then
 
@@ -118,6 +118,49 @@ export COMROTNAM=$COMROOTp2
 export cputime=10:00:00
 export nproc=28
 
+elif [ $machine = WCOSS2 ]; then
+
+export NOSCRUB=/lfs/h2/emc/physics/noscrub                         ;#noscrub directory                 
+export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data                ;#place where vsdb database is saved
+export opsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/vrfygfs    ;#operational model grid-to-obs data base
+export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/VRFY/vsdb                    ;#verify source code and scripts
+export gdas_prepbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/gdas ;#ops gdas prepbufr archive
+export ndasbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/ndas     
+export nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/nam         
+export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
+export ACCOUNT=GFS-DEV                                      ;#ibm computer ACCOUNT task
+export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run 
+export CUE2FTP=transfer                                     ;#account for data transfer                 
+export GROUP=g01                                            ;#account group
+export HPSSTAR=/u/fanglin.yang/bin/hpsstar                  ;#hpsstar                              
+export SUBJOB=$vsdbhome/bin/sub_wcoss2                      ;#script for submitting batch jobs
+export rundir=/lfs/h2/emc/stmp/$LOGNAME/g2o$$                ;#running directory
+export FC=/pe/intel/compilers_and_libraries_2020.4.304/linux/bin/intel64/ifort             
+export APRUN=""                                     ;#affix to run batch jobs
+
+  module purge
+  module load envvar/1.0
+  module load intel/19.1.3.304
+  module load PrgEnv-intel/8.1.0
+  module load craype/2.7.10
+  module load cray-pals/1.0.17
+  module load cray-mpich/8.1.9
+
+  module load libjpeg/9c
+  module load prod_util/2.0.13
+  module load grib_util/1.2.4
+  module load prod_envir/2.0.6
+  module load wgrib2/2.0.8
+  module load imagemagick/7.0.8-7
+  module load cfp/2.0.4
+  module use /apps/test/lmodules/core
+  module load GrADS/2.2.2
+
+export COMROTNCO=$COMROOT
+export COMROTNAM=$COMROOT                                                   
+export cputime=10:00:00
+export nproc=128
+
 elif [ $machine = HERA ]; then
 
 export NOSCRUB=/scratch1/NCEPDEV/global                    
@@ -191,6 +234,7 @@ fi
 
 export memory=20480; export share=N
 if [ $CUE2RUN = dev_shared ]; then export memory=1024; export share=S; fi
+if [ $machine = WCOSS2 ]; then export memory=3072MB; export share=S; fi
 mkdir -p $rundir
 
 

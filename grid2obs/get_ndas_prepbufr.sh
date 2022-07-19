@@ -149,12 +149,12 @@ chmod a+r $savedir/ndas.${date1}/$ndas1/*
 chmod a+r $savedir/ndas.${date1}/$ndas2/*
 chmod a+r $savedir/ndas.${date1}/$ndas3/*
 
-ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date1} "
-ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date2} "
-ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date3} "
-scp -rp $savedir/ndas.${date1}/$ndas1 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date1}/.
-scp -rp $savedir/ndas.${date2}/$ndas2 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date2}/.
-scp -rp $savedir/ndas.${date3}/$ndas3 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date3}/.
+#ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date1} "
+#ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date2} "
+#ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $savedir/ndas.${date3} "
+#scp -rp $savedir/ndas.${date1}/$ndas1 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date1}/.
+#scp -rp $savedir/ndas.${date2}/$ndas2 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date2}/.
+#scp -rp $savedir/ndas.${date3}/$ndas3 ${LOGNAME}@${CLIENT}:${savedir}/ndas.${date3}/.
 
 #ssh -q -l $LOGNAME ${CLIENT} "chmod a+r $savedir/ndas.${date1}/* "
 #ssh -q -l $LOGNAME ${CLIENT} "chmod a+r $savedir/ndas.${date2}/* "

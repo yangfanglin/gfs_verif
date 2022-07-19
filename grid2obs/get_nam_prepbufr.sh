@@ -8,16 +8,9 @@ set -x
 #  retied. All files are now in the "nam.YYYYMMDD" com2 directory.
 #  Fanglin Yang, April 2017
 
-nambufr_arch=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat/prepbufr/nam
-NDATE=/gpfs/dell1/nco/ops/nwprod/prod_util.v1.1.0/exec/ips/ndate
-HPSSTAR=/u/Fanglin.Yang/bin/hpsstar
-
-myhost=`echo $(hostname) |cut -c 1-1 `
-if [ $myhost = m ]; then HOST=mars; CLIENT=venus ; fi
-if [ $myhost = v ]; then HOST=venus; CLIENT=mars ; fi
-rhost=`echo $CLIENT |cut -c 1-1 `
-
-#----------------------------------------------
+nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/nam      
+NDATE=/apps/ops/prod/nco/core/prod_util.v2.0.5/exec/ndate       
+HPSSTAR=/u/fanglin.yang/bin/hpsstar
 
 today=$(date +%Y%m%d)00
 daym1=`$NDATE -24 $today`
@@ -27,8 +20,6 @@ edate=${2:-$daym1}
 
 #sdate=2017032000
 #edate=2017041700
-
-
 
 #-------------------------------------
 vdate=$edate
@@ -51,11 +42,11 @@ eval PDY=`echo $xdate |cut -c 1-8 `
 eval CYC=`echo $xdate |cut -c 9-10 `
 
 ARCH=/NCEPPROD/hpssprod/runhistory
-COMROT="/gpfs/dell1/nco/ops/com"
+COMROT="/lfs/h1/ops/prod/com"      
 ARCHNAM="/gpfs_dell1_nco_ops_com"
 if [ $PDY -le 20200228 ]; then ARCHNAM="/com" ;fi
 if [ $PDY -le 20190820 ]; then COMROT="/com2" ;fi
-namcomdir=$COMROT/nam/prod/nam.$PDY
+namcomdir=$COMROT/nam/v4.2/nam.$PDY
 namarcdir=${nambufr_arch}/nam.$PDY
 namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_nam_prod_nam.${PDY}${CYC}.bufr.tar
 bufrfile=nam.t${CYC}z.prepbufr.$suffix
@@ -71,12 +62,6 @@ if [ -s $namcomdir/$bufrfile ]; then
 else 
   $HPSSTAR get $namtar ./$bufrfile
 fi
-
-chmod a+r $namarcdir/$bufrfile                   
-if [ ${MAKE_REMOTE_NEWDIR:-YES} = YES ]; then 
-    ssh -q -l $LOGNAME ${CLIENT} "mkdir -p $namarcdir "
-fi
-scp -rp $namarcdir/$bufrfile ${LOGNAME}@${CLIENT}:$namarcdir/.                  
 
 #........................................
 fi

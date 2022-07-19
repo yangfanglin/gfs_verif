@@ -1,41 +1,38 @@
 #!/bin/ksh
 set -x
 
-##----for CCS batch job------------------------
-###@ account_no = GFS-T2O
-###@ class = 1  
-###@ output = g2o.out
-###@ error = g2o.out
-###@ job_type = serial
-###@ job_name = g2o
-###@ parallel_threads=1
-###@ task_affinity = core(1)
-###@ wall_clock_limit = 03:00:00
-###@ node_resources = ConsumableMemory(106 GB)
-###@ node_usage = not_shared
-###@ queue
-##------------------------------------------
-
 ##-----for WCOSS batch job-----------------
-#BSUB -a poe
-#BSUB -e g2o.out
-#BSUB -o g2o.out
-#BSUB -J g2o
-#BSUB -network type=sn_all:mode=US
-#BSUB -q dev
-#BSUB -n 1
-#BSUB -R span[ptile=1]
-#BSUB -R affinity[core]
-#BSUB -x
-#BSUB -W 6:00
-export MP_EUIDEVELOP=min
-export KMP_STACKSIZE=2048m
-export MPICH_ALLTOALL_THROTTLE=0
-export MP_SINGLE_THREAD=yes
-export MP_SHARED_MEMORY=no
-export MP_MPILIB=mpich2
-export MP_LABELIO=yes
-export MP_STDOUTMODE=ordered
+##BSUB -a poe
+##BSUB -e g2o.out
+##BSUB -o g2o.out
+##BSUB -J g2o
+##BSUB -network type=sn_all:mode=US
+##BSUB -q dev
+##BSUB -n 1
+##BSUB -R span[ptile=1]
+##BSUB -R affinity[core]
+##BSUB -x
+##BSUB -W 6:00
+#export MP_EUIDEVELOP=min
+#export KMP_STACKSIZE=2048m
+#export MPICH_ALLTOALL_THROTTLE=0
+#export MP_SINGLE_THREAD=yes
+#export MP_SHARED_MEMORY=no
+#export MP_MPILIB=mpich2
+#export MP_LABELIO=yes
+#export MP_STDOUTMODE=ordered
+##-----------------------------------------
+
+##-----for WCOSS2 batch job-----------------
+#PBS -N g2o
+#PBS -j g2o.out
+#PBS -e g2o.out
+#PBS -o g2o.out
+#PBS -A GFS-DEV
+#PBS -q dev
+#PBS -l select=1:ncpus=1:mpiprocs=1:ompthreads=1
+#PBS -l walltime=6:00:00
+#PBS -l debug=true
 ##-----------------------------------------
 
 

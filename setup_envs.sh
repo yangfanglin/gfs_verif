@@ -93,18 +93,23 @@ if [ $machine = WCOSS2 ]; then
  export STMP=/lfs/h2/emc/stmp                                ;#temporary directory                          
  export PTMP=/lfs/h2/emc/ptmp                                ;#temporary directory                          
 
- source /usr/share/lmod/lmod/init/bash
-   module purge
-   module load intel/19.1.3.304
-   module load libjpeg/9c
-   module load prod_util/2.0.13
-   module load grib_util/1.2.4
-   module load prod_envir/2.0.6
-   module load wgrib2/2.0.8
-   module load imagemagick/7.0.8-7
-   module load cfp/2.0.4
-   module use /apps/test/lmodules/core
-   module load GrADS/2.2.2
+  module purge
+  module load envvar/1.0
+  module load intel/19.1.3.304
+  module load PrgEnv-intel/8.1.0
+  module load craype/2.7.10
+  module load cray-pals/1.0.17
+  module load cray-mpich/8.1.9
+
+  module load libjpeg/9c        
+  module load prod_util/2.0.13
+  module load grib_util/1.2.4
+  module load prod_envir/2.0.6
+  module load wgrib2/2.0.8
+  module load imagemagick/7.0.8-7
+  module load cfp/2.0.4
+  module use /apps/test/lmodules/core
+  module load GrADS/2.2.2
 
  export GRADSBIN=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f//bin 
  export GADDIR=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f/lib
