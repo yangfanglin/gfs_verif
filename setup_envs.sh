@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/ksh -l
 set -ux
 
 ## set up common directories, utilities and environment variables
@@ -29,7 +29,7 @@ fi
 #==================================
 if [ $machine = WCOSS2 ]; then
  chost=`echo $(hostname) |cut -c 1-1`
- export vsdbsave=/lfs/h2/emc/physics/noscrub/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
+ export vsdbsave=/lfs/h2/emc/physics/noscrub/$LOGNAME/data/archive/vsdb_data  ;#place where vsdb database is saved
  export ACCOUNT=GFS-DEV                                ;#ibm computer ACCOUNT task
  export CUE2RUN=dev                                    ;#dev or dev_shared         
  export CUE2FTP=transfer                               ;#queue for data transfer
@@ -78,10 +78,10 @@ fi
 
 if [ $machine = WCOSS2 ]; then
  chost=`echo $(hostname) |cut -c 1-1`
- export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/VRFY/vsdb                                   
- export obdata=/lfs/h2/emc/physics/noscrub/fanglin.yang/obdata                      ;#observation data for making 2dmaps
- export gfsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/vrfygfs/vsdb_data          ;#operational gfs vsdb database
- export gstat=/lfs/h2/emc/physics/noscrub/fanglin.yang/archive/ops/global           ;#global stats directory              
+ export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/save/VRFY/vsdb                                   
+ export obdata=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/obdata                      ;#observation data for making 2dmaps
+ export gfsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/vrfygfs/vsdb_data          ;#operational gfs vsdb database
+ export gstat=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/archive/ops/global           ;#global stats directory              
  export canldir=$gstat/canl                                 ;#consensus analysis directory
  export ecmanldir=$gstat/ecm                                ;#ecmwf analysis directory
  export OBSPCP=$gstat/OBSPRCP                               ;#observed precip for verification
@@ -93,23 +93,23 @@ if [ $machine = WCOSS2 ]; then
  export STMP=/lfs/h2/emc/stmp                                ;#temporary directory                          
  export PTMP=/lfs/h2/emc/ptmp                                ;#temporary directory                          
 
-  module purge
-  module load envvar/1.0
-  module load intel/19.1.3.304
-  module load PrgEnv-intel/8.1.0
-  module load craype/2.7.10
-  module load cray-pals/1.0.17
-  module load cray-mpich/8.1.9
+    module purge                           2>>/dev/null
+    module load envvar/1.0                 2>>/dev/null
+    module load intel/19.1.3.304           2>>/dev/null
+    module load PrgEnv-intel/8.1.0         2>>/dev/null
+    module load craype/2.7.10              2>>/dev/null
+    module load cray-pals/1.0.17           2>>/dev/null
+    module load cray-mpich/8.1.9           2>>/dev/null
 
-  module load libjpeg/9c        
-  module load prod_util/2.0.13
-  module load grib_util/1.2.4
-  module load prod_envir/2.0.6
-  module load wgrib2/2.0.8
-  module load imagemagick/7.0.8-7
-  module load cfp/2.0.4
-  module use /apps/test/lmodules/core
-  module load GrADS/2.2.2
+    module load libjpeg/9c                 2>>/dev/null
+    module load prod_util/2.0.13           2>>/dev/null
+    module load grib_util/1.2.4            2>>/dev/null
+    module load prod_envir/2.0.6           2>>/dev/null
+    module load wgrib2/2.0.8               2>>/dev/null
+    module load imagemagick/7.0.8-7        2>>/dev/null
+    module load cfp/2.0.4                  2>>/dev/null
+    module use /apps/test/lmodules/core    2>>/dev/null
+    module load GrADS/2.2.2                2>>/dev/null
 
  export GRADSBIN=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f//bin 
  export GADDIR=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f/lib

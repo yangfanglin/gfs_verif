@@ -19,8 +19,8 @@ while [ $IDAY -le $CDATE ]; do
 export COMROTNCO=/lfs/h1/ops/prod/com
 export GDAS=gdas
 
-comout=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/gdas
-remote=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/gdas
+comout=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/gdas
+remote=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/gdas
 cd $comout
 
 errgdas=0

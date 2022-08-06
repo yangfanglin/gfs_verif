@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/ksh -l 
 set -x
 
 ##---------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ set -x
 ##---------------------------------------------------------------------------------
 
 G2OSTATS=YES      ;#for making verification stats
-G2OPLOTS=YES      ;#for making graphics, set to YES after G2OSTAT finishes
+G2OPLOTS=NO      ;#for making graphics, set to YES after G2OSTAT finishes
 
 export machine=WCOSS2                                       ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
@@ -122,15 +122,15 @@ elif [ $machine = WCOSS2 ]; then
 
 export NOSCRUB=/lfs/h2/emc/physics/noscrub                         ;#noscrub directory
 export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data                ;#place where vsdb database is saved
-export opsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/vrfygfs    ;#operational model grid-to-obs data base
-export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/VRFY/vsdb                    ;#verify source code and scripts
-export gdas_prepbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/gdas ;#ops gdas prepbufr archive
-export ndasbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/ndas
-export nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/nam
+export opsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/vrfygfs    ;#operational model grid-to-obs data base
+export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/save/VRFY/vsdb                    ;#verify source code and scripts
+export gdas_prepbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/gdas ;#ops gdas prepbufr archive
+export ndasbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/ndas
+export nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/nam
 export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
 export ACCOUNT=GFS-DEV                                      ;#ibm computer ACCOUNT task
 export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run
-export CUE2FTP=transfer                                     ;#account for data transfer
+export CUE2FTP=dev                                          ;#account for data transfer
 export GROUP=g01                                            ;#account group
 export HPSSTAR=/u/fanglin.yang/bin/hpsstar                  ;#hpsstar
 export SUBJOB=$vsdbhome/bin/sub_wcoss2                      ;#script for submitting batch jobs
@@ -224,19 +224,19 @@ chost=`echo $(hostname)|cut -c 1-1`
 
 #---prepare prepbufr data
 rm $rundir/g2o*.out
-$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1/S -r 512/1 -t 3:00:00 -j getgfsbufr \
+$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1 -r 1024/1 -t 3:00:00 -j getgfsbufr \
         -o $rundir/get_opsgfs_prepbufr.out $vsdbhome/grid2obs/get_opsgfs_prepbufr.sh
-$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1/S -r 512/1 -t 3:00:00 -j getnambufr \
+$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1 -r 1024/1 -t 3:00:00 -j getnambufr \
         -o $rundir/get_nam_prepbufr.out $vsdbhome/grid2obs/get_nam_prepbufr.sh
 
-
+exit
 
 #============================
 #---produce g2o vsdb database
 if [ $G2OSTATS = YES ]; then
 #============================
 
-myarch="/lfs/h2/emc/physics/noscrub/fanglin.yang/archive/ops/global"
+myarch="/lfs/h2/emc/physics/noscrub/fanglin.yang/data/archive/ops/global"
 
 ##-ops GFS
 export cyclist="00 06 12 18"                    ;#forecast cycles
@@ -256,9 +256,9 @@ export batch=YES
 export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
 listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
 listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
-export listvar=$listvar1,$listvar2
+export listvar="$listvar1,$listvar2"
 JJOB=${vsdbhome}/grid2obs/grid2obs.sh
-$SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
+$SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
         -t 6:00:00 -j g2ogfs -o $rundir/g2ogfs.out $JJOB 
 
 
@@ -282,33 +282,9 @@ listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhouta
 listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
 export listvar=$listvar1,$listvar2
 JJOB=${vsdbhome}/grid2obs/grid2obs.sh
-$SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
+$SUBJOB -e $listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
         -t 6:00:00 -j g2oecm -o $rundir/g2oecm.out $JJOB 
 
-
-
-##-ops ensemble means
-export cyclist="00 12"                      ;#forecast cycles
-export expnlist="gefsm ecmwfm cmcem fensm naefsm"        ;#experiment names
-export expdlist="$myarch $myarch $myarch $myarch $myarch " 
-export dumplist=".gefsm. .ecmwfm. .cmcem. .fensm. .naefsm."  
-export complist="$(hostname) $(hostname) $(hostname) $(hostname) $(hostname)"
-export fhoutair="12"                        ;#forecast output frequency in hours for raobs vrfy
-export fhoutsfc="12"                        ;#forecast output frequency in hours for sfc vrfy
-export gdtype="3"                           ;#pgb file resolution, 2 for 2.5-deg and 3 for 1-deg
-export vsdbsfc="YES"                        ;#run sfc verification
-export vsdbair="YES"                        ;#run upper-air verification
-export vlength=168                          ;#forecast length in hour
-export DATEST=$CDATM1                       ;#verification starting date
-export DATEND=$CDATM1                       ;#verification ending date
-export batch=YES
-export runhpss=NO                           ;#run hpsstar in batch mode to get missing data
-listvar1=vsdbhome,vsdbsave,cyclist,expnlist,expdlist,hpssdirlist,dumplist,fhoutair,fhoutsfc,,vsdbsfc,vsdbair,gdtype,APRUN,COMROTNCO,COMROTNAM
-listvar2=NWPROD,SUBJOB,ACCOUNT,CUE2RUN,CUE2FTP,GROUP,DATEST,DATEND,rundir,HPSSTAR,gdas_prepbufr_arch,batch,runhpss,ndasbufr_arch,nambufr_arch
-export listvar=$listvar1,$listvar2
-JJOB=${vsdbhome}/grid2obs/grid2obs.sh
-#$SUBJOB -e listvar,$listvar -a $ACCOUNT  -q $CUE2RUN -g $GROUP -p 1/1/$share -r $memory/1 \
-#        -t 6:00:00 -j g2oensm -o $rundir/g2oensm.out $JJOB 
 
 #-------
 fi
@@ -348,34 +324,6 @@ export ftpdir=/home/people/emc/www/htdocs/gmb/wx24fy/STATS_vsdb      ;#where map
 export doftp="YES"                                            ;#whether or not sent maps to ftpdir
 ${vsdbhome}/grid2obs/grid2obs_plot.sh
 
-
-
-
-
-
-#--ops ensemble means
-sleep 7200
-ndays=181
-nhours=`expr $ndays \* 24 `
-export rundir=$rundir/ensm                     ;#running directory
-export DATEND=`$NDATE -48 $(date +%Y%m%d)00 |cut -c 1-8`     ;#forecast ending date
-export DATEST=`$NDATE -$nhours ${DATEND}00 |cut -c 1-8 `     ;#forecast starting date
-export mdlist="gefsm ecmwfm cmcem naefsm fensm gfs"      ;#experiment names, up to 10
-export cyclist="00"                        ;#forecast cycles to verify
-export vlength=168                         ;#forecast length in hour
-export fhoutair="6"                        ;#forecast output frequency in hours for raobs vrfy
-export fhoutsfc="6"                        ;#forecast output frequency in hours for sfc vrfy
-export maskmiss=0                          ;#remove missing data from all runs, 0-->NO, 1-->Yes
-export obairtype=ADPUPA                    ;#uppair observation type, ADPUPA or ANYAIR
-export plotair="YES"                        ;#make upper plots
-export plotsfc="YES"                       ;#make sfc plots
-export MPMD="YES"                          ;#use MPMD to submit multiple jobs in one node
-
-export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
-export webhostid=wx24fy                    ;#login id on webhost
-export ftpdir=/home/people/emc/www/htdocs/gmb/wx24fy/STATS_vsdb/ensm      ;#where maps are displayed on webhost
-export doftp="YES"                                            ;#whether or not sent maps to ftpdir
-#${vsdbhome}/grid2obs/grid2obs_plot.sh
 
 #-------
 fi

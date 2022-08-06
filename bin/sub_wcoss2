@@ -1,8 +1,6 @@
 #!/bin/ksh
 set -x
 #
-# May 28, 2013 - Shrinivas Moorthi :now updated for lsf9.1.1 - should handle coupled case also
-#
 usage="\
 Usage:  $0 [options] executable [args]
       where the options are:
@@ -61,7 +59,7 @@ nosub=NO
 account=""
 binding="NO"
 dirin=""
-envars=""
+envars="NONE"
 group=""
 jobname=""
 #machine=""
@@ -158,7 +156,7 @@ export TZ=GMT
 cfile=$DATA/sub$$
 > $cfile
 
- echo "#!/bin/ksh --login"                                         >> $cfile
+ echo "#!/bin/ksh -l"                                              >> $cfile
  echo "#PBS -N $jobname"                                           >> $cfile
  echo "#PBS -j oe"                                                 >> $cfile
  echo "#PBS -e $output"                                            >> $cfile
@@ -169,7 +167,9 @@ cfile=$DATA/sub$$
  echo "#PBS -l place=vscatter:exclhost"                            >> $cfile
  echo "#PBS -l walltime=${timew}"                                  >> $cfile
  echo "#PBS -l debug=true"                                         >> $cfile
+if [[ $envars != NONE ]];then
  echo "#PBS -v $envars"                                            >> $cfile
+fi
 
 
 if [[ -n $when ]];then

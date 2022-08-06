@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/ksh -l
 set -x
 
 ##-----for WCOSS batch job-----------------

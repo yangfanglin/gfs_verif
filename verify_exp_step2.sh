@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/ksh -l
 set -x
 
 #----------------------------------------------------------------------
@@ -64,8 +64,8 @@ penode="1/1/S"                                         ;# one pe, and shared on 
 ##if [ $machine != "IBM" ]; then penode="1/1/N"  ;fi   ;# one pe and non-shared on other machines
 
 #--for running MPMD
-export MPMD=${MPMD:-YES}
-if [ $machine != WCOSS2 -a $machine != JET ]; then export MPMD=NO; fi
+export MPMD=NO
+#if [ $machine = WCOSS2 ]; then export MPMD=YES; fi
 if [ $CUE2RUN = dev_shared ]; then export MPMD=NO; fi
 nproc=${nproc:-24}                                     ;#number of PEs per node
 if [ $machine = WCOSS2 ]; then nproc=128; fi 
@@ -410,15 +410,36 @@ while [ $nc -lt $ncount ]; do
      echo "module load cfp-intel-sandybridge" >>$jobscript
      echo "launcher='aprun -n $iproc -N $iproc -j 1 -d 1 cfp' " >>$jobscript
      echo "\$launcher \$MP_CMDFILE"           >>$jobscript
+
    elif [ $machine = WCOSS2 ] ; then
+
+     echo "#!/bin/ksh -l"                     >>$jobscript
+     echo "set -x"                            >>$jobscript
+     echo "module purge"                      >>$jobscript
+     echo "module load envvar/1.0"            >>$jobscript
+     echo "module load intel/19.1.3.304"      >>$jobscript
+     echo "module load PrgEnv-intel/8.1.0"    >>$jobscript
+     echo "module load craype/2.7.10"         >>$jobscript
+     echo "module load cray-pals/1.0.17"      >>$jobscript
+     echo "module load cray-mpich/8.1.9"      >>$jobscript
+     echo "module load libjpeg/9c"            >>$jobscript
+     echo "module load prod_util/2.0.13"      >>$jobscript
+     echo "module load grib_util/1.2.4"       >>$jobscript
+     echo "module load prod_envir/2.0.6"      >>$jobscript
+     echo "module load wgrib2/2.0.8"          >>$jobscript
+     echo "module load imagemagick/7.0.8-7"   >>$jobscript
      echo "module load cfp/2.0.4"             >>$jobscript
+     echo "module use /apps/test/lmodules/core" >>$jobscript
+     echo "module load GrADS/2.2.2"             >>$jobscript
      echo "launcher='mpiexec -n $iproc -ppn $iproc --cpu-bind verbose,depth --depth 1 cfp' " >>$jobscript
      echo "\$launcher \$MP_CMDFILE"           >>$jobscript
+
    elif [ $machine = WCOSS_D ] ; then
      echo ". $MODULESHOME/init/bash"          >>$jobscript
      echo "module load CFP/2.0.1"             >>$jobscript
      echo "launcher='mpirun ' "               >>$jobscript
      echo "\$launcher -n $iproc cfp \$MP_CMDFILE "           >>$jobscript
+
    else
      echo "launcher=mpirun.lsf"               >>$jobscript
      echo "\$launcher"                        >>$jobscript

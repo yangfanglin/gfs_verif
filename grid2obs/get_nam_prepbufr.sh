@@ -8,7 +8,7 @@ set -x
 #  retied. All files are now in the "nam.YYYYMMDD" com2 directory.
 #  Fanglin Yang, April 2017
 
-nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/stat/prepbufr/nam      
+nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/nam      
 NDATE=/apps/ops/prod/nco/core/prod_util.v2.0.5/exec/ndate       
 HPSSTAR=/u/fanglin.yang/bin/hpsstar
 
