@@ -115,7 +115,7 @@ jobname=${jobname:-$bn}
 output=${output:-$jobname.out}
 myuser=$LOGNAME
 myhost=$(hostname)
-envars=$envars
+export envars=$envars
 
 NDATE=${NDATE:-/apps/ops/prod/nco/core/prod_util.v2.0.5/exec/ndate}   
 pext=${pext:-""}
@@ -168,7 +168,13 @@ cfile=$DATA/sub$$
  echo "#PBS -l walltime=${timew}"                                  >> $cfile
  echo "#PBS -l debug=true"                                         >> $cfile
 if [[ $envars != NONE ]];then
- echo "#PBS -v $envars"                                            >> $cfile
+ envlist=" "
+ for var in `echo $envars |sed "s?\,? ?g" ` ; do
+  eval export vartmp=$`echo \$var`
+  envlist=$var=\"$vartmp\",$envlist
+ done
+ echo "#PBS -v $envlist"                                           >> $cfile
+ #echo "#PBS -v $var=\"$vartmp\" "                                 >> $cfile
 fi
 
 

@@ -33,95 +33,10 @@ G2OPLOTS=NO       ;#for making graphics, set to YES after G2OSTAT finishes
 
 export machine=WCOSS2                                    ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
-if [ $machine = WCOSS ]; then
-
-export NOSCRUB=/global/noscrub          ;#noscrub directory                 
-export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data         ;#place where vsdb database is saved
-export opsvsdb=/global/save/Fanglin.Yang/vrfygfs/vsdb_data  ;#operational model grid-to-obs data base
-export vsdbhome=/global/save/Fanglin.Yang/VRFY/vsdb         ;#verify source code and scripts
-export gdas_prepbufr_arch=/global/noscrub/Fanglin.Yang/prepbufr/gdas ;#ops gdas prepbufr archive
-export ndasbufr_arch=/global/noscrub/Fanglin.Yang/prepbufr/ndas
-export nambufr_arch=/global/noscrub/Fanglin.Yang/prepbufr/nam
-export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
-export ACCOUNT=GFS-T2O                                      ;#ibm computer ACCOUNT task
-export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run 
-export CUE2FTP=transfer                                     ;#account for data transfer                 
-export GROUP=g01                                            ;#account group
-export HPSSTAR=/u/Fanglin.Yang/bin/hpsstar                  ;#hpsstar                              
-export SUBJOB=$vsdbhome/bin/sub_wcoss                       ;#script for submitting batch jobs
-export rundir=/stmpd2/$LOGNAME/g2o$$                          ;#running directory
-export FC=/usrx/local/intel/composer_xe_2011_sp1.11.339/bin/intel64/ifort ;#fortran compiler
-export APRUN=""
-export COMROTNCO=/gpfs/hps/nco/ops/com                                                                   
-export COMROTNAM=/com2                                                                   
-export cputime=06:00:00
-export nproc=24                                             ;#PEs per node 
-if [ $CUE2RUN = dev ]; then export nproc=16; fi  
-
-elif [ $machine = WCOSS_C ]; then
-
-export NOSCRUB=/gpfs/hps3/emc/global/noscrub                 ;#noscrub directory                 
-export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data         ;#place where vsdb database is saved
-export opsvsdb=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/stat/vsdb_data  ;#operational model grid-to-obs data base
-export vsdbhome=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/VRFY/vsdb      ;#verify source code and scripts
-export gdas_prepbufr_arch=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/prepbufr/gdas ;#ops gdas prepbufr archive
-export ndasbufr_arch=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/prepbufr/ndas
-export nambufr_arch=/gpfs/hps3/emc/global/noscrub/Fanglin.Yang/prepbufr/nam
-export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
-export ACCOUNT=GFS-T2O                                      ;#ibm computer ACCOUNT task
-export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run 
-export CUE2FTP=dev_transfer                                 ;#account for data transfer                 
-export GROUP=g01                                            ;#account group
-export HPSSTAR=/u/Fanglin.Yang/bin/hpsstar                  ;#hpsstar                              
-export SUBJOB=$vsdbhome/bin/sub_wcoss_c                     ;#script for submitting batch jobs
-export rundir=/gpfs/hps3/stmp/$LOGNAME/g2o$$                ;#running directory
-export FC=/opt/intel/composer_xe_2015.3.187/bin/intel64/ifort  ;#fortran compiler
-export APRUN="aprun -n 1 -N 1 -j 1 -d 1"
-. $MODULESHOME/init/sh
-module load prod_envir/1.0.2
-export COMROTNCO=$COMROOT
-export COMROTNAM=$COMROOTp2                                                             
-export cputime=10:00:00
-export nproc=24
-
-elif [ $machine = WCOSS_D ]; then
-
-export NOSCRUB=/gpfs/dell2/emc/modeling/noscrub                    ;#noscrub directory                 
-export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data                ;#place where vsdb database is saved
-export opsvsdb=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat  ;#operational model grid-to-obs data base
-export vsdbhome=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/VRFY/vsdb      ;#verify source code and scripts
-export gdas_prepbufr_arch=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat/prepbufr/gdas ;#ops gdas prepbufr archive
-export ndasbufr_arch=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat/prepbufr/ndas
-export nambufr_arch=/gpfs/dell2/emc/modeling/noscrub/Fanglin.Yang/stat/prepbufr/nam
-export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
-export ACCOUNT=GFS-T2O                                      ;#ibm computer ACCOUNT task
-export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run 
-export CUE2FTP=dev_transfer                                 ;#account for data transfer                 
-export GROUP=g01                                            ;#account group
-export HPSSTAR=/u/Fanglin.Yang/bin/hpsstar                  ;#hpsstar                              
-export SUBJOB=$vsdbhome/bin/sub_wcoss_d                     ;#script for submitting batch jobs
-export rundir=/gpfs/dell3/stmp/$LOGNAME/g2o$$                ;#running directory
-export FC=/usrx/local/prod/intel/2018UP01/compilers_and_libraries/linux/bin/intel64/ifort
-export APRUN=""                                     ;#affix to run batch jobs
-if [ ! -z $MODULESHOME ]; then
-    . $MODULESHOME/init/bash              2>>/dev/null
-    module load prod_envir/1.0.2          2>>/dev/null
-    module load ips/18.0.1.163            2>>/dev/null
-    module load impi/18.0.1               2>>/dev/null
-    module load EnvVars/1.0.2             2>>/dev/null
-    module use -a /usrx/local/dev/modulefiles 2>>/dev/null
-    module load GrADS/2.2.0               2>>/dev/null
-    module load imagemagick/6.9.9-25      2>>/dev/null
-fi
-export COMROTNCO=$COMROOT
-export COMROTNAM=$COMROOTp2                                                             
-export cputime=10:00:00
-export nproc=28
-
-elif [ $machine = WCOSS2 ]; then
+if [ $machine = WCOSS2 ]; then
 
 export NOSCRUB=/lfs/h2/emc/physics/noscrub                         ;#noscrub directory                 
-export vsdbsave=$NOSCRUB/$LOGNAME/archive/vsdb_data                ;#place where vsdb database is saved
+export vsdbsave=$NOSCRUB/$LOGNAME/data/archive/vsdb_data                ;#place where vsdb database is saved
 export opsvsdb=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/vrfygfs    ;#operational model grid-to-obs data base
 export vsdbhome=/lfs/h2/emc/physics/noscrub/fanglin.yang/save/VRFY/vsdb                    ;#verify source code and scripts
 export gdas_prepbufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/gdas ;#ops gdas prepbufr archive
@@ -130,7 +45,7 @@ export nambufr_arch=/lfs/h2/emc/physics/noscrub/fanglin.yang/data/stat/prepbufr/
 export NWPROD=$vsdbhome/nwprod                              ;#utilities in nwprod
 export ACCOUNT=GFS-DEV                                      ;#ibm computer ACCOUNT task
 export CUE2RUN=dev                                          ;#account type (dev, devhigh, or 1) to run 
-export CUE2FTP=transfer                                     ;#account for data transfer                 
+export CUE2FTP=dev_transfer                                     ;#account for data transfer                 
 export GROUP=g01                                            ;#account group
 export HPSSTAR=/u/fanglin.yang/bin/hpsstar                  ;#hpsstar                              
 export SUBJOB=$vsdbhome/bin/sub_wcoss2                      ;#script for submitting batch jobs

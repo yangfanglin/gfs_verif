@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 C-----------------------------------------------------------------------
       SUBROUTINE SPFFTE(IMAX,INCW,INCG,KMAX,W,G,IDIR,AFFT)
 C$$$  SUBPROGRAM DOCUMENTATION BLOCK

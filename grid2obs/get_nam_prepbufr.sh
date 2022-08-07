@@ -18,8 +18,8 @@ daym2=`$NDATE -48 $today`
 sdate=${1:-$daym2}
 edate=${2:-$daym1}
 
-#sdate=2017032000
-#edate=2017041700
+#sdate=2019010100
+#edate=2022080500
 
 #-------------------------------------
 vdate=$edate
@@ -41,14 +41,20 @@ eval YYYYMM=`echo $xdate |cut -c 1-6 `
 eval PDY=`echo $xdate |cut -c 1-8 `
 eval CYC=`echo $xdate |cut -c 9-10 `
 
-ARCH=/NCEPPROD/hpssprod/runhistory
 COMROT="/lfs/h1/ops/prod/com"      
-ARCHNAM="/gpfs_dell1_nco_ops_com"
-if [ $PDY -le 20200228 ]; then ARCHNAM="/com" ;fi
-if [ $PDY -le 20190820 ]; then COMROT="/com2" ;fi
-namcomdir=$COMROT/nam/v4.2/nam.$PDY
+namcomdir=$COMROT/obsproc/v1.0/nam.$PDY
 namarcdir=${nambufr_arch}/nam.$PDY
-namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_nam_prod_nam.${PDY}${CYC}.bufr.tar
+
+ARCH=/NCEPPROD/hpssprod/runhistory
+ARCHNAM="/com"
+if [ $PDY -le 20200226 ]; then
+ ARCHNAM="/gpfs_dell1_nco_ops_com"
+fi
+namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.0_nam.${PDY}${CYC}.bufr.tar
+if [ $PDY -le 20220628 ]; then
+ namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_nam_prod_nam.${PDY}${CYC}.bufr.tar
+fi
+
 bufrfile=nam.t${CYC}z.prepbufr.$suffix
 
 #........................................

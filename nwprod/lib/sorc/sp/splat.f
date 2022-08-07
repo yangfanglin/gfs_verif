@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 C-----------------------------------------------------------------------
       SUBROUTINE SPLAT(IDRT,JMAX,SLAT,WLAT)
 C$$$  SUBPROGRAM DOCUMENTATION BLOCK
@@ -141,14 +152,8 @@ C  EQUALLY-SPACED LATITUDES INCLUDING POLES
         DO JS=1,JHO
           BWORK(JS)=-D1/(4*(JS-1)**2-1)
         ENDDO
-
-
-
-
-
         call ludcmp(awork,jho,jhe,ipvt)
         call lubksb(awork,jho,jhe,ipvt,bwork)
-
         WLAT(1)=0.
         DO J=1,JHO
           WLAT(J+1)=BWORK(J)
@@ -181,14 +186,8 @@ C  EQUALLY-SPACED LATITUDES EXCLUDING POLES
         DO JS=1,JHO
           BWORK(JS)=-D1/(4*(JS-1)**2-1)
         ENDDO
-
-
-
-
-
         call ludcmp(awork,jho,jhe,ipvt,d)
         call lubksb(awork,jho,jhe,ipvt,bwork)
-
         WLAT(1)=0.
         DO J=1,JHO
           WLAT(J)=BWORK(J)

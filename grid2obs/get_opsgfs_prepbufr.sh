@@ -25,7 +25,8 @@ cd $comout
 
 errgdas=0
 for vcyc in 00 06 12 18; do
-  filein=$COMROTNCO/gfs/v16.2/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
+  #filein=$COMROTNCO/gfs/v16.2/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
+  filein=$COMROTNCO/obsproc/v1.0/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
   filein1=$DMPDIR/gdas.$IDAY/$vcyc/atmos/$GDAS.t${vcyc}z.prepbufr
   fileout=prepbufr.gdas.${IDAY}${vcyc}
  if [ ! -s $comout/$fileout ]; then
@@ -37,8 +38,18 @@ for vcyc in 00 06 12 18; do
     dd=`echo $IDAY |cut -c 7-8 `
 
     hpssdir=/NCEPPROD/hpssprod/runhistory/rh${yyyy}/${yyyy}${mm}/${yyyy}${mm}${dd}
-    if [ $IDAY -ge 20190612 ]; then
-     if [ $IDAY -ge 20190612 ]; then tarfile=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yyyy}${mm}${dd}_${vcyc}.gdas.tar ; fi
+    if [ $IDAY -ge 20210321 ]; then
+     tarfile=com_gfs_prod_gdas.${yyyy}${mm}${dd}_${vcyc}.gdas.tar 
+     $HPSSTAR  get ${hpssdir}/$tarfile   ./gdas.${IDAY}/${vcyc}/atmos/${GDAS}.t${vcyc}z.prepbufr  
+     mv gdas.${IDAY}/${vcyc}/$GDAS.t${vcyc}z.prepbufr $fileout
+     rm -rf gdas.${IDAY}
+    elif [ $IDAY -ge 20200226 ]; then
+     tarfile=com_gfs_prod_gdas.${yyyy}${mm}${dd}_${vcyc}.gdas.tar 
+     $HPSSTAR  get ${hpssdir}/$tarfile   ./gdas.${IDAY}/${vcyc}/${GDAS}.t${vcyc}z.prepbufr  
+     mv gdas.${IDAY}/${vcyc}/$GDAS.t${vcyc}z.prepbufr $fileout
+     rm -rf gdas.${IDAY}
+    elif [ $IDAY -ge 20190612 ]; then
+     tarfile=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yyyy}${mm}${dd}_${vcyc}.gdas.tar 
      $HPSSTAR  get ${hpssdir}/$tarfile   ./gdas.${IDAY}/${vcyc}/${GDAS}.t${vcyc}z.prepbufr  
      mv gdas.${IDAY}/${vcyc}/$GDAS.t${vcyc}z.prepbufr $fileout
      rm -rf gdas.${IDAY}
