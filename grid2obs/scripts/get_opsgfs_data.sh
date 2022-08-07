@@ -110,7 +110,6 @@ while [ $ffcst -le $vlength ] ; do
  ffcst=`expr $ffcst + $fhout `
  if [ $ffcst -lt 10 ]; then ffcst=0$ffcst ; fi
 done
-fi
 #------------------------------------------
 fi
 #------------------------------------------

@@ -163,8 +163,13 @@ cfile=$DATA/sub$$
  echo "#PBS -o $output"                                            >> $cfile
  echo "#PBS -A $account"                                           >> $cfile
  echo "#PBS -q $queue"                                             >> $cfile
- echo "#PBS -l select=$nodes:ncpus=$tot_size:mpiprocs=$task_node:ompthreads=$nthreads"  >>$cfile
- echo "#PBS -l place=vscatter:exclhost"                            >> $cfile
+ if [ $queue = dev_transfer -o $tot_size -eq 1 ]; then
+  echo "#PBS -l select=1:ncpus=1:mpiprocs=1"                       >>$cfile
+  echo "#PBS -l place=shared"                                      >> $cfile
+ else
+  echo "#PBS -l select=$nodes:ncpus=$tot_size:mpiprocs=$task_node:ompthreads=$nthreads"  >>$cfile
+  echo "#PBS -l place=vscatter:exclhost"                            >> $cfile
+ fi
  echo "#PBS -l walltime=${timew}"                                  >> $cfile
  echo "#PBS -l debug=true"                                         >> $cfile
 if [[ $envars != NONE ]];then

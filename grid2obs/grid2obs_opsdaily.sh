@@ -139,12 +139,11 @@ chost=`echo $(hostname)|cut -c 1-1`
 
 #---prepare prepbufr data
 rm $rundir/g2o*.out
-$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1 -r 1024/1 -t 3:00:00 -j getgfsbufr \
+$SUBJOB -a $ACCOUNT  -q dev_transfer -g $GROUP -p 1/1/S -r 1024/1 -t 3:00:00 -j getgfsbufr \
         -o $rundir/get_opsgfs_prepbufr.out $vsdbhome/grid2obs/get_opsgfs_prepbufr.sh
-$SUBJOB -a $ACCOUNT  -q $CUE2FTP -g $GROUP -p 1/1 -r 1024/1 -t 3:00:00 -j getnambufr \
+$SUBJOB -a $ACCOUNT  -q dev_transfer -g $GROUP -p 1/1/S -r 1024/1 -t 3:00:00 -j getnambufr \
         -o $rundir/get_nam_prepbufr.out $vsdbhome/grid2obs/get_nam_prepbufr.sh
 
-exit
 
 #============================
 #---produce g2o vsdb database
