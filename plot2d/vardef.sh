@@ -475,8 +475,8 @@ export color_POTsig995="49   46   42   39    36   32      0     22   26   29  73
 
 export vname_PRATEsfc="Surface Precipitation Rate [mm/day] "
 export scale_PRATEsfc=24*3600
-export clevs0_PRATsfc=" 0.1  0.2  0.4 0.6  0.8  1  1.5  2  2.5  3"                         
-export color0_PRATsfc="0  32    34   36  37   39 42   44  46  47  49"                      
+export clevs0_PRATEsfc=" 0.1  0.2  0.4 0.6  0.8  1  1.5  2  2.5  3"                         
+export color0_PRATEsfc="0  32    34   36  37   39 42   44  46  47  49"                      
 export clevs_PRATEsfc="  -3   -2   -1.5 -1.0  -0.5 -0.1     0.1   0.5   1   1.5 2   3"                        
 export color_PRATEsfc="49   46   42   39    36    32      0     22   26   29  73  76   79" 
 

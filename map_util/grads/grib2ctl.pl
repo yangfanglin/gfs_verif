@@ -22,9 +22,9 @@
 #	  will fail under number of situations
 #         finite number of NCEP grids are supported
 #
-# requires wgrib 1.7.4 or higher
-# wesley ebisuzaki, 
-#  http://www.cpc.ncep.noaa.gov/products/wesley/grib2ctl.html
+# requires wgrib v1.8.0.12 or higher
+# 
+# documentation:  http://www.cpc.ncep.noaa.gov/products/wesley/grib2ctl.html
 #
 #
 # added output for rotated LatLon grids
@@ -32,14 +32,14 @@
 #             Fri Sep 14 13:54:00 GMT 2001
 # -ts, -lc options: Ag Stephens, BADC 3/2003
 
-$version="0.9.12.5p39a";
+$version="0.9.12.5p39g";
 use POSIX;
 
 # ***** if wgrib is not on path, add it here
-# $wgrib='/u/wx51we/home/bin/wgrib';
-#$wgrib='wgrib';
-$wgrib=(system("wgrib --v > /dev/null 2>&1") == 0) ? 'wgrib' : '/usrx/local/grads/bin/wgrib' ;  # NCEP only
-
+#$wgrib='/u/wx51we/home/bin/wgrib';
+#$wgrib='/nwprod/util/exec/wgrib';
+$wgrib='/apps/grads/2.0.2/bin/wgrib';
+#  $wgrib='wgrib';
 
 # **** directory of interpolation files
 $pdef_dir='/usr/local/lib/grads';
@@ -107,7 +107,8 @@ foreach $_ (@ARGV) {
       /^-iso_profile/ && do { undef @allow_profile; $allow_profile[235]='yes'; last SWITCH };
       /^-prs_profile/ && do { undef @allow_profile; $allow_profile[100]='yes'; last SWITCH };
       /^-m_profile/ && do { undef @allow_profile; $allow_profile[103]='yes'; 
-                             $allow_profile[105]='yes' ; last SWITCH };
+                                  $allow_profile[105]='yes' ; last SWITCH };
+      /^-no_profile/ && do { undef @allow_profile; last SWITCH };
 
       /^-raw/ && do { $raw="yes" ; last SWITCH };
       /^-/ && do { print STDERR "unknown option: $_\n"; exit 8; };
@@ -139,8 +140,9 @@ if ($file eq "") {
    print STDERR " -ts[timestep]   .. set timestep for individual time files (e.g. -ts6hr)\n";
    print STDERR " -lc             .. set lowercase option for parameter names\n";
    print STDERR " -iso_profile    .. set z coordinate to ocean isotherms\n";
-   print STDERR " -m_profile      .. set z coordinate to meters above ground/msl\n";
    print STDERR " -prs_profile    .. set z coordinate to pressure (mb)\n";
+   print STDERR " -m_profile      .. set z coordinate to meters above ground/msl\n";
+   print STDERR " -no_profile     .. no z coordinates\n";
 #   print STDERR " -eta            .. ETA model levels\n";
 #   print STDERR " -gfs            .. GFS (MRF) model level (default)\n";
 #   print STDERR " -noah           .. NOAH model levels (default)\n";
@@ -165,7 +167,7 @@ if (-d "c:\\") {
    $sys="win";
 }
 else {
-   $ListA="/tmp/grib2ctl.$$.tmp";
+   $ListA="/tmp/g$$.tmp";
    $TmpFile="/dev/null";
    unlink $ListA;
    $sys="unix";
@@ -197,6 +199,7 @@ if ($template eq "on") {
 
    $dir=$gfile;
    $dir =~ s=(/*)[^/]*$=$1=;
+   $gfile =~ s/^$dir//;
 
    $head=$gfile;
    $head =~ s=\\d\{.*==;
@@ -252,7 +255,6 @@ if ($template eq "on") {
          }
       }
    }
-
    $file="$dir$head$min_tval$tail";
    if ($sys eq 'win') {
       $file =~ s=/=\\=g;
@@ -277,7 +279,6 @@ if ( ! -s $ListA ) {
     print STDERR "Big problem:\n";
     print STDERR "  either $file is missing or not a grib file\n";
     print STDERR "  or wgrib is not on your path\n";
-    unlink $ListA;
     exit 8;
 }
 
@@ -287,7 +288,6 @@ open (FileDate, "<$ListA");
 while (defined($_ = <FileDate>)) {
 
    # date table
-
    $_ =~ s/^.*D=//;
    $d=substr($_, 0, 10);
    $dates{$d}="";
@@ -322,7 +322,6 @@ $hour = substr($time,8,2);
 
 if ($mo < 0 || $mo > 12) {
    print "illegal date code $time\n";
-   unlink $ListA;
    exit 8;
 }
 
@@ -1025,8 +1024,10 @@ else {
    '112' => 'dlr',
    '113' => 'tht',
    '114' => 'tlr',
+   '114' => 'ceil',
    '116' => 'plg',
    '117' => 'pv',
+   '119' => 'eta',
    '121' => 'plr',
    '126' => 'pa',
    '128' => 'slr',
@@ -1043,6 +1044,7 @@ else {
    '212' => 'lcb',
    '213' => 'lct',
    '214' => 'lcl',
+   '220' => 'pbl',
    '222' => 'mcb',
    '223' => 'mct',
    '224' => 'mcl',
@@ -1052,6 +1054,7 @@ else {
    '235' => 'tmp',
    '237' => 'bmxl',
    '238' => 'bitl',
+   '240' => 'omxl',
    '242' => 'cvb',
    '243' => 'cvt',
    '244' => 'cvl',
@@ -1222,6 +1225,23 @@ foreach $fname (sort keys(%flevels)) {
          $out[$nvar++] = "${name}${lev1}_${lev2}mb  0 $kpds5,$kpds6,$ll ** ${lev1}-${lev2} mb above gnd $comment";
       }
    }
+   elsif ($kpds6 == 117) {
+      foreach $ll (sort {$a <=> $b} split(' ',$kpds7s)) {
+         $lev1=$ll;
+         if ($lev1 > 32668) { $lev1 = 32768 - $lev1; }
+         $lev2 = $lev1;
+         if ($lev1 < 0) { $lev1 = -$lev1; $lev1 = "neg$lev1"; }
+         $out[$nvar++] = "${name}pv${lev1}  0 $kpds5,$kpds6,$ll ** pot vorticity = ${lev2} units level $comment";
+      }
+   }
+   elsif ($kpds6 == 119) {
+      foreach $ll (sort {$b <=> $a} split(' ',$kpds7s)) {
+         $lev1 = $ll / 10000.0;
+         $lev2 = $lev1;
+         $lev2 =~ s/\./p/;
+         $out[$nvar++] = "${name}eta${lev2}  0 $kpds5,$kpds6,$ll ** Eta=${lev1} level $comment";
+      }
+   }
    elsif ($kpds6 == 235) {
       foreach $ll (sort {$a <=> $b} split(' ',$kpds7s)) {
          $val = $ll;
@@ -1264,6 +1284,9 @@ foreach $fname (sort keys(%flevels)) {
    }
    elsif ($kpds6 == 8) {
       $out[$nvar++] = "${name}toa  0 $kpds5,$kpds6,0 ** top of atmos $comment";
+   }
+   elsif ($kpds6 == 102) {
+      $out[$nvar++] = "${name}msl  0 $kpds5,$kpds6,0 ** mean-sea level $comment";
    }
    elsif ($kpds6 == 200) {
       $out[$nvar++] = "${name}clm  0 $kpds5,$kpds6,0 ** atmos column $comment";
@@ -1346,20 +1369,6 @@ foreach $fname (sort keys(%flevels)) {
    elsif ($kpds6 == 252) {
       $out[$nvar++] = "${name}dcct  0 $kpds5,$kpds6,0 ** deep convective cloud top $comment";
    }
-   elsif ($kpds6 == 117) {
-      if ($kpds7s =~ s/ 2 / /) {
-         $out[$nvar++] = "${name}pv2  0 $kpds5,$kpds6,2 ** pot vorticity = 2 units level $comment";
-      }
-      if ($kpds7s =~ s/ 32770 / /) {
-         $out[$nvar++] = "${name}pvneg2  0 $kpds5,$kpds6,32770 ** pot vorticity = -2 units level $comment";
-      }
-      if ($kpds7s =~ s/ 2000 / /) {
-         $out[$nvar++] = "${name}pv2  0 $kpds5,$kpds6,2000 ** pot vorticity = 2000 units level $comment";
-      }
-      if ($kpds7s =~ s/ 34768 / /) {
-         $out[$nvar++] = "${name}pvneg2  0 $kpds5,$kpds6,34768 ** pot vorticity = -2000 units level $comment";
-      }
-   }
    elsif ($nlev == 1) {
       # unknown single level
       $kpds7s =~ s/^ //;
@@ -1420,6 +1429,7 @@ sub tdef {
    local($tmp);
    local($n);
    $n=$ntime;
+
    if ($timestep) { $dt=$timestep  }
    else { 
       if ($ntime == 1) {
@@ -1455,4 +1465,3 @@ sub tdef {
    }
    print "tdef $n linear ${hour}Z$day$month$year $dt\n";
 }
-

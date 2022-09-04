@@ -112,7 +112,7 @@ if [ $machine = WCOSS2 ]; then
     module load GrADS/2.2.2                2>>/dev/null
 
  export GRADSBIN=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f//bin 
- export GADDIR=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f/lib
+ export GADDIR=/apps/test/grads/spack/opt/spack/cray-sles15-zen2/gcc-11.2.0/grads-2.2.2-wckmyzg7qh5smosf6och6ehqtqlxoy4f/data
  export IMGCONVERT=/apps/spack/imagemagick/7.0.8-7/cce/11.0.1/fyjvsbwngyzlsiluc4udbnxkhlbwkzc3/bin/convert 
  export FC=/pe/intel/compilers_and_libraries_2020.4.304/linux/bin/intel64/ifort              
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options

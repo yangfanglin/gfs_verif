@@ -150,7 +150,7 @@ $SUBJOB -a $ACCOUNT  -q dev_transfer -g $GROUP -p 1/1/S -r 1024/1 -t 3:00:00 -j 
 if [ $G2OSTATS = YES ]; then
 #============================
 
-myarch="/lfs/h2/emc/physics/noscrub/fanglin.yang/data/archive/ops/global"
+myarch="/lfs/h2/emc/physics/noscrub/fanglin.yang/data/ops/global"
 
 ##-ops GFS
 export cyclist="00 06 12 18"                    ;#forecast cycles
@@ -213,7 +213,7 @@ dd=`echo $today |cut -c 8-8`
 if [ $dd -eq 2 -o $dd -eq 7 ]; then
 
 #--ops GFS
-ndays=731
+ndays=1110
 nhours=`expr $ndays \* 24 `
 export rundir=$rundir/gfs                     ;#running directory
 export DATEND=`$NDATE -48 $(date +%Y%m%d)00 |cut -c 1-8`     ;#forecast ending date
@@ -230,7 +230,7 @@ export maskmiss=1                          ;#remove missing data from all runs, 
 export obairtype=ADPUPA                    ;#uppair observation type, ADPUPA or ANYAIR
 export plotair="YES"                        ;#make upper plots
 export plotsfc="YES"                       ;#make sfc plots
-export MPMD="YES"                          ;#use MPMD to submit multiple jobs in one node
+export MPMD="NO"                          ;#use MPMD to submit multiple jobs in one node
 
 export webhost=emcrzdm.ncep.noaa.gov       ;#host for web display
 export webhostid=wx24fy                    ;#login id on webhost

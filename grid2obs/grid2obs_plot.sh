@@ -392,6 +392,10 @@ for varname in $bigvnamlist; do
      echo "module load cfp-intel-sandybridge" >>$jobscript
      echo "launcher='aprun -n $iproc -N $iproc -j 1 -d 1 cfp' " >>$jobscript
      echo "\$launcher \$MP_CMDFILE"           >>$jobscript
+   elif [ $machine = WCOSS2 ] ; then
+     echo "module load cfp/2.0.4"             >>$jobscript
+     echo "launcher='mpiexec -n $iproc -ppn $iproc --cpu-bind verbose,depth --depth 1 cfp' " >>$jobscript
+     echo "\$launcher \$MP_CMDFILE"           >>$jobscript
    elif [ $machine = WCOSS_D ] ; then
      echo ". $MODULESHOME/init/bash"          >>$jobscript
      echo "module load CFP/2.0.1"             >>$jobscript

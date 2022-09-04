@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/ksh -l
 set -x
 
 #----------------------------------------------------------------------
@@ -29,6 +29,21 @@ set -x
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
+export machine=${machine:-WCOSS_D}                              ;#WCOSS, WCOSS_C, WCOSS_D, HERA, JET etc
+
+if [ $machine = WCOSS2 ]; then
+    module purge                           2>>/dev/null
+    module load envvar/1.0                 2>>/dev/null
+    module load intel/19.1.3.304           2>>/dev/null
+    module load PrgEnv-intel/8.1.0         2>>/dev/null
+    module load craype/2.7.10              2>>/dev/null
+    module load cray-pals/1.0.17           2>>/dev/null
+    module load cray-mpich/8.1.9           2>>/dev/null
+    module load libjpeg/9c                 2>>/dev/null
+    module load grib_util/1.2.4            2>>/dev/null
+fi
+#-----------------------------------------------
+
 date
 export expnlist=${expnlist:-${1:-"pre13j pre13d"}}             ;#experiment name
 export expdlist=${expdlist:-${2:-"/global/hires/glopara/archive /global/hires/glopara/archive"}}    ;#experiment directory
@@ -45,7 +60,6 @@ export sfcvsdb=${sfcvsdb:-${12:-YES}}                          ;#include the gro
 export iauf00=${iauf00:-${13:-NO}}                             ;#force pgbf00=pgbanl for IAU-type forecasts
 
 #
-export machine=${machine:-WCOSS_D}                              ;#WCOSS, WCOSS_C, WCOSS_D, HERA, JET etc
 export asub=${asub:-a}                                          ;#string in pgb anal file after pgb
 export fsub=${fsub:-f}                                          ;#string in pgb fcst file after pgb 
 export canldir=${canldir:-/global/shared/stat/canl}             ;#consensus analysis directory      
@@ -84,6 +98,7 @@ fi
 #-----------------------------------------------
 
 
+
 export scppgb=${scppgb:-NO}                                     ;#whether or not to copy pgb files from client
 if [ $scppgb = YES ]; then 
  echo "scppgb capability has been removed. set scppgb=NO. exit" 
@@ -112,7 +127,7 @@ export wgrib2=${wgrib:-$NWPROD/util/exec/wgrib2}
 export gbindex=${gbindex:-$NWPROD/util/exec/grbindex}
 export cpygb=${cpygb:-$NWPROD/util/exec/copygb}
 export ndate=${ndate:-$NWPROD/util/exec/ndate}
-export cnvgrib=${cnvgrib:-$NWPROD/util/exec/cnvgrib}
+export cnvgrib=${CNVGRIB:-${cnvgrib:-$NWPROD/util/exec/cnvgrib}}
 
 export gd=${gd:-G2}         ### 2.5x2.5 common grid for verification
 if [ $gd = "G2" ]; then 

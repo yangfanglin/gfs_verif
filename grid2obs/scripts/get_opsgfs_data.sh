@@ -1,5 +1,5 @@
 #!/bin/ksh
-#set -x
+set -x
 
 # get operatinal GFS forecast and analysis data 
 # in /com or from HPSS archive          
@@ -33,7 +33,7 @@ cd $comout  ||exit 8
 errgfs=0
 ffcst=00
 while [ $ffcst -le $vlength ] ; do
-   fileina=$COMROT/gfs/prod/gfs.$IDAY/gfs.t${fcyc}z.pgrbf${ffcst}
+   fileina=$COMROT/gfs/v16.2/gfs.$IDAY/atmos/gfs.t${fcyc}z.pgrbf${ffcst}
    fileinb=$exp_dir/pgbf${ffcst}.$exp.${IDAY}${fcyc}
    fileinc=$exp_dir/pgbf${ffcst}.$exp.${IDAY}${fcyc}.grib2
    fileout=pgbf${ffcst}.${exp}.${IDAY}${fcyc}
@@ -52,7 +52,7 @@ done
 
 errgdas=0
 for vcyc in $vhlist; do
-  fileina=$COMROT/gfs/prod/gdas.$IDAY/$GDAS.t${vcyc}z.prepbufr
+  fileina=$COMROT/gfs/v16.2/gdas.$IDAY/atmos/$GDAS.t${vcyc}z.prepbufr
   fileinb=${gdas_prepbufr_arch}/prepbufr.gdas.${IDAY}${vcyc} 
   fileout=prepbufr.gdas.${IDAY}${vcyc}
   if [ -s $fileina ]; then
