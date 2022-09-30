@@ -3971,6 +3971,7 @@ if [ \$? -ne 0 ]; then
  ssh -l $webhostid ${webhost} " mkdir -p $ftpdir "
  scp -rp $srcdir/html/* ${webhostid}@${webhost}:$ftpdir/.
 fi
+cd $tmpdir
 if [ -s ftp_obs ]; then sftp  ${webhostid}@${webhost} < ftp_obs  ;fi
 if [ -s ftp_sfc ]; then sftp  ${webhostid}@${webhost} < ftp_sfc  ;fi
 if [ -s ftp_air ]; then sftp  ${webhostid}@${webhost} < ftp_air  ;fi
