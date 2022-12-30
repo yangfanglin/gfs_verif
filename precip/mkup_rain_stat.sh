@@ -105,7 +105,7 @@ while [ $hr -le $fhend ]; do
   else
    echo "$filename does not exist"
   fi
-  hr=`expr $hr + 6 `
+  hr=`expr $hr + $fhout `
 done
 
  ## interpolate all flux file to the operational flx 1152x576 grid
