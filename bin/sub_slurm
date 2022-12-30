@@ -89,7 +89,7 @@ myuser=$LOGNAME
 myhost=$(hostname)
 
 curdir=`pwd`
-DATA=${DATA:-${curdir:-/scratch1/NCEPDEV/stmp2/$LOGNAME/sub}}
+DATA=${DATA:-${rundir:-/scratch1/NCEPDEV/stmp2/$LOGNAME/sub}}
 mkdir -p $DATA
 
 partition=${partition:-service}
