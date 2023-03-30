@@ -1,4 +1,4 @@
-#!/bin/ksh -l
+#!/bin/ksh 
 set -x
 
 #----------------------------------------------------------------------
@@ -413,7 +413,7 @@ while [ $nc -lt $ncount ]; do
 
    elif [ $machine = WCOSS2 ] ; then
 
-     echo "#!/bin/ksh -l"                     >>$jobscript
+     echo "#!/bin/ksh   "                     >>$jobscript
      echo "set -x"                            >>$jobscript
      echo "module purge"                      >>$jobscript
      echo "module load envvar/1.0"            >>$jobscript
