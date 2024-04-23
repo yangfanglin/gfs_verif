@@ -136,7 +136,7 @@ elif [ $machine = HERA ]; then
  export PTMP=/scratch1/NCEPDEV/stmp2                        ;#temporary directory                          
  export GRADSBIN=/apps/grads/2.0.2/bin                      ;#GrADS executables
  export IMGCONVERT=/usr/bin/convert                         ;#image magic converter
- export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64/ifort
+ export FC=/apps/oneapi/compiler/2023.2.0/linux/bin/intel64/ifort                                         
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
  export APRUN=""
 
