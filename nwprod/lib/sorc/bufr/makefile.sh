@@ -178,16 +178,16 @@ err_make=$?
 [ $err_make -ne 0 ]  && exit 99
 
 set -x
-export LIB="${libroot}libbufr_4_E8.a"
-if [ $FCMP != xlf_r ] ; then
- cpp $cppops -DBUILD=NORMAL bufrlib.E08 bufrlib.prm
- export FFLAGS=" -DUNDERSCORE -O2 "
- export CFLAGS=" -DUNDERSCORE -O2 "
- export AFLAGS=
- make -f make.libbufr
- err_make=$?; [ $err_make -ne 0 ]  && exit 99
-fi
-
+#export LIB="${libroot}libbufr_4_E8.a"
+#if [ $FCMP != xlf_r ] ; then
+# cpp $cppops -DBUILD=NORMAL bufrlib.E08 bufrlib.prm
+# export FFLAGS=" -DUNDERSCORE -O2 "
+# export CFLAGS=" -DUNDERSCORE -O2 "
+# export AFLAGS=
+# make -f make.libbufr
+# err_make=$?; [ $err_make -ne 0 ]  && exit 99
+#fi
+#
  
 #-------------------------------------------------------------------------------
 #   Update libbufr_8_64.a (8-byte REAL, 8-byte INT, 64-bit compilation,

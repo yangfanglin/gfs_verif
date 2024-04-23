@@ -57,6 +57,15 @@ elif [ $mac2 = ll -o $mac2 = sl ]; then
  export INCMOD=$LIBDIR/incmod/sigio_4
  export LIBSM="-L${LIBDIR} -lbacio_4 -lw3lib-2.0_4 -lw3nco_4 -lsp_4 -lsigio_4"
 
+elif [ $mac2 = hf ]; then
+ export machine=hera    
+ export FC=ifort
+ export FFLAGSM="-O3 -free -convert big_endian -traceback"
+ export LDFLAGSM=-qopenmp
+ export LIBDIR=../../../lib
+ export INCMOD=$LIBDIR/incmod/sigio_4
+ export LIBSM="-L${LIBDIR} -lbacio_4 -lw3lib-2.0_4 -lw3nco_4 -lsp_4 -lsigio_4"
+
 else
  machine=IBMP6
  export FC=xlf90_r

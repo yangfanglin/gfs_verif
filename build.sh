@@ -9,12 +9,12 @@ set -x
 ## to first build the following librairies and utilities, then compile 
 ## a list of executables. Check each one carefully if it fails to compile.   
 
-machine=WCOSS2  ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, WCOSS2, THEIA, HERA
+machine=HERA    ;#IBM, JET, GAEA, WCOSS, WCOSS_C, WCOSS_D, WCOSS2, THEIA, HERA
 curdir=`pwd`
 
 if [ $machine = THEIA -o $machine = HERA ];then
  FCMP=ifort
- CCMP=cc
+ CCMP=icc
  ln -fs /scratch1/NCEPDEV/global/Fanglin.Yang/save/VRFY/fixvsdb/fix $curdir/nwprod/.
 elif [ $machine = JET ];then
  FCMP=ifort
@@ -55,7 +55,7 @@ if [ ! -s $curdir/precip/exec ]; then mkdir $curdir/precip/exec ; fi
 #if [ $machine = IBM -o $machine = JET ]; then setlib=no; fi
 setlib=yes
 if [ $setlib = yes ]; then
-for libname in bacio bufr ip sp sigio w3lib-2.0 w3nco_v2.0.6; do
+for libname in bacio ip sp sigio w3lib-2.0 w3nco_v2.0.6 bufr; do
   rm $curdir/nwprod/lib/*${libname}*.a
   rm $curdir/nwprod/lib/incmod/*/*${libname}*.mod
   cd $curdir/nwprod/lib/sorc/$libname
@@ -75,7 +75,8 @@ if [ $machine = WCOSS2 ]; then srcdir=/apps/ops/prod/libs/intel/19.1.3.304/grib_
 if [ $machine = THEIA ]; then srcdir=/scratch4/NCEPDEV/global/save/Fanglin.Yang/para_gfs/nwprod_wcoss/util/exec ; fi
 if [ $machine = HERA ]; then srcdir=/scratch1/NCEPDEV/global/Fanglin.Yang/save/para_gfs/nwprod_wcoss/util/exec ; fi
 if [ $machine = JET ]; then srcdir=/lfs3/projects/hwrf-vd/soft/grib_util.v1.0.1/bin ;fi
-for utilname in copygb copygb2 wgrib wgrib2 cnvgrib grbindex ; do
+
+for utilname in copygb copygb2 wgrib wgrib2 cnvgrib grbindex ndate nhour; do
  cp -p $srcdir/$utilname    $curdir/nwprod/util/exec/.
 done
 #wgrib=`which wgrib`
@@ -83,7 +84,7 @@ done
 grbmap=`which gribmap`
 cp -p $grbmap $curdir/nwprod/util/exec/.
 
-utilvar="ndate nhour ss2ggx mvgribdate"
+utilvar="ss2ggx mvgribdate"
 for utilname in $utilvar ; do
   rm $curdir/nwprod/util/exec/$utilname                 
   cd $curdir/nwprod/util/sorc/${utilname}.fd
