@@ -1,4 +1,4 @@
-#!/bin/ksh -l
+#!/bin/ksh 
 set -ux
 
 ## set up common directories, utilities and environment variables

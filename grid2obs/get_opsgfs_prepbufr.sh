@@ -5,13 +5,11 @@ set -x
 
 NDATE=/apps/ops/prod/nco/core/prod_util.v2.0.5/exec/ndate        
 HPSSTAR=/u/fanglin.yang/bin/hpsstar
-DMPDIR=/lfs/h2/emc/global/noscrub/emc.global/dump
+#DMPDIR=/lfs/h2/emc/global/noscrub/emc.global/dump
+DMPDIR=/lfs/h2/emc/dump/noscrub/dump                 
 
 CDATE=${1:-$(date +%Y%m%d)}
-CDATEM1=`$NDATE -24 ${CDATE}00 |cut -c 1-8`
-CDATEM2=`$NDATE -48 ${CDATE}00 |cut -c 1-8`
-CDATEM3=`$NDATE -240 ${CDATE}00 |cut -c 1-8`
-
+CDATEM1=`$NDATE -720 ${CDATE}00 |cut -c 1-8`
 
 IDAY=$CDATEM1
 while [ $IDAY -le $CDATE ]; do
@@ -26,11 +24,11 @@ cd $comout
 errgdas=0
 for vcyc in 00 06 12 18; do
   #filein=$COMROTNCO/gfs/v16.2/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
-  filein=$COMROTNCO/obsproc/v1.0/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
+  filein=$COMROTNCO/obsproc/v1.1/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
   filein1=$DMPDIR/gdas.$IDAY/$vcyc/atmos/$GDAS.t${vcyc}z.prepbufr
   fileout=prepbufr.gdas.${IDAY}${vcyc}
  if [ ! -s $comout/$fileout ]; then
-  cp $filein $fileout
+  cp -p $filein $fileout
   if [ $? -ne 0 ]; then cp $filein1 $fileout ;fi                  
   if [ $? -ne 0 ]; then 
     yyyy=`echo $IDAY |cut -c 1-4 `
