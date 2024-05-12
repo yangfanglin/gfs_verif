@@ -31,7 +31,7 @@ set -x
 G2OSTATS=YES       ;#for making verification stats
 G2OPLOTS=NO       ;#for making graphics, set to YES after G2OSTAT finishes
 
-export machine=WCOSS2                                    ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
+export machine=HERA                                      ;#WCOSS, WCOSS_C, WCOSS_D, THEIA
 
 if [ $machine = WCOSS2 ]; then
 
@@ -94,7 +94,7 @@ export GROUP=g01                                            ;#account group
 export SUBJOB=$vsdbhome/bin/sub_slurm                       ;#script for submitting batch jobs
 export HPSSTAR=/home/Fanglin.Yang/bin/hpsstar_theia         ;#hpsstar                              
 export rundir=/scratch1/NCEPDEV/stmp2/$LOGNAME/g2o$$        ;#running directory
-export FC=/apps/intel/parallel_studio_xe_2019.4.070/compilers_and_libraries_2019/linux/bin/intel64/ifort  
+export FC=/apps/oneapi/compiler/2023.2.0/linux/bin/intel64/ifort
 export APRUN=""
 export COMROTNCO=/scratch1/NCEPDEV/rstprod/com                                           
 export COMROTNAM=$COMROTNCO                                                             

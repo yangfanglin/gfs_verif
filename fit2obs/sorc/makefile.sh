@@ -14,7 +14,7 @@ if [ $FCMP = xlf_r ] ; then
  export W3LIB=w3_4          
  export FFLAGS="-qsmp=noauto -qmaxmem=-1 "
 else
- export FFLAGS="-O3 -traceback -mkl"
+ export FFLAGS="-O3 -traceback -qmkl"
 fi
 
 rm -f *.x

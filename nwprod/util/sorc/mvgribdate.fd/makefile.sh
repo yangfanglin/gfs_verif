@@ -13,7 +13,7 @@ else
  export LIBDIR=../../../lib
  export W3LIB=w3nco_4
  export BACIOLIB=bacio_4
- export FFLAGS="-O2 -convert big_endian -traceback -mkl -free"
+ export FFLAGS="-O2 -convert big_endian -traceback -qmkl -free"
 fi
 make clean
 make -f Makefile

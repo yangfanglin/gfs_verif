@@ -126,7 +126,7 @@ elif [[ $verbose = YES ]];then
   cat $cfile
 fi
 
-sbatch=${sbatch:-/apps/slurm/default/bin/sbatch}
+sbatch=${sbatch:-/apps/slurm_hera/default/bin/sbatch}
 
 ofile=$DATA/subout$$
 >$ofile
