@@ -156,7 +156,7 @@ export TZ=GMT
 cfile=$DATA/sub$$
 > $cfile
 
- echo "#!/bin/ksh -l"                                              >> $cfile
+ echo "#!/bin/ksh   "                                              >> $cfile
  echo "#PBS -N $jobname"                                           >> $cfile
  echo "#PBS -j oe"                                                 >> $cfile
  echo "#PBS -e $output"                                            >> $cfile

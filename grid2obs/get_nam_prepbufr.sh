@@ -14,9 +14,14 @@ HPSSTAR=/u/fanglin.yang/bin/hpsstar
 
 today=$(date +%Y%m%d)00
 daym1=`$NDATE -24 $today`
-daym2=`$NDATE -48 $today`
+daym2=`$NDATE -240 $today`
+
 sdate=${1:-$daym2}
 edate=${2:-$daym1}
+
+if [ $sdate -eq $edate ]; then 
+ edate=`$NDATE +24 $edate`
+fi
 
 #sdate=2019010100
 #edate=2022080500
@@ -50,7 +55,10 @@ ARCHNAM="/com"
 if [ $PDY -le 20200226 ]; then
  ARCHNAM="/gpfs_dell1_nco_ops_com"
 fi
-namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.0_nam.${PDY}${CYC}.bufr.tar
+namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.1_nam.${PDY}${CYC}.bufr.tar
+if [ $PDY -le 20221128 ]; then
+ namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.0_nam.${PDY}${CYC}.bufr.tar 
+fi
 if [ $PDY -le 20220628 ]; then
  namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_nam_prod_nam.${PDY}${CYC}.bufr.tar
 fi

@@ -1,4 +1,4 @@
-#!/bin/ksh -l
+#!/bin/ksh 
 set -ux
 
 ## set up common directories, utilities and environment variables
@@ -36,7 +36,7 @@ if [ $machine = WCOSS2 ]; then
  export GROUP=g01                                      ;#group of account, g01 etc
  export nproc=128                                      ;#number of PEs per node   
  export cputime=6:00:00                                ;#CPU time hh:mm:ss to run each batch job
- export MPMD=YES
+ export MPMD=NO
 #----------------------------
 elif [ $machine = HERA ]; then
  export vsdbsave=/scratch1/NCEPDEV/global/$LOGNAME/archive/vsdb_data  ;#place where vsdb database is saved
@@ -116,7 +116,8 @@ if [ $machine = WCOSS2 ]; then
  export IMGCONVERT=/apps/spack/imagemagick/7.0.8-7/cce/11.0.1/fyjvsbwngyzlsiluc4udbnxkhlbwkzc3/bin/convert 
  export FC=/pe/intel/compilers_and_libraries_2020.4.304/linux/bin/intel64/ifort              
  export FFLAG="-O2 -convert big_endian -FR"                 ;#intel compiler options
- export APRUN="mpiexec -l"                                  ;#affix to run batch jobs   
+ #export APRUN="mpiexec -l"                                  ;#affix to run batch jobs   
+ export APRUN=""                                           ;#affix to run batch jobs   
 
 #----------------------------
 elif [ $machine = HERA ]; then

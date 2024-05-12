@@ -34,7 +34,7 @@ MAPSGDAS=NO              ;#To make analysis maps of time-mean increments
 MAPSENS=NO               ;#To make maps of ENKF ensemble mean and ensemble spread
 
 #----------------------------------------------------------------------
-export machine=HERA               ;#WCOSS, WCOSS_C, WCOSS_D, HERA, JET etc         
+export machine=WCOSS2             ;#WCOSS2, HERA, JET etc         
 export machine=$(echo $machine|tr '[a-z]' '[A-Z]')
 myhome=`pwd`
 set -a;. ${myhome}/setup_envs.sh $machine 
@@ -256,7 +256,7 @@ export pbtm=1000                      ;#bottom pressure for zonal mean maps
 export ptop=0.01                      ;#top pressure for zonal mean maps
 export latlon="-90 90 0 360"          ;#map area lat1, lat2, lon1 and lon2
 export rundir=$tmpdir/2dmaps
-export batch=NO
+export batch=YES
 
 export climo_ceres=no                 ;#plot CERES climatology (yes) or monthly means (no); "no" valid Mar2000-Jun2016
 export use_calipso_cldfrc=no          ;#plot cloud fractions use CALIPSO climatology; **only use if climo_ceres set to 'yes'**

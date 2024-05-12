@@ -91,10 +91,10 @@ elif [ $machine = HERA ]; then
 fi
 
 export APRUN=${APRUN:-""}                                       ;#affix for running batch jobs                
-if [ ${batch:-NO} != YES ]; then 
+#if [ ${batch:-NO} != YES ]; then 
  export MPMD=NO 
  export APRUN=""
-fi
+#fi
 #-----------------------------------------------
 
 
