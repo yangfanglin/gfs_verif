@@ -149,7 +149,7 @@ C  ----------------------
 C  INITIALIZE /BITBUF/
 C  -------------------
 
-      MAXBYT = 10000
+      MAXBYT = 20000
 
 C  INITIALIZE /MAXCMP/
 C  -------------------
