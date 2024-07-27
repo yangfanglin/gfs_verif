@@ -25,11 +25,13 @@ errgdas=0
 for vcyc in 00 06 12 18; do
   #filein=$COMROTNCO/gfs/v16.2/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
   filein=$COMROTNCO/obsproc/v1.1/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
-  filein1=$DMPDIR/gdas.$IDAY/$vcyc/atmos/$GDAS.t${vcyc}z.prepbufr
+  filein1=$COMROTNCO/obsproc/v1.2/gdas.$IDAY/${vcyc}/atmos/$GDAS.t${vcyc}z.prepbufr
+  filein2=$DMPDIR/gdas.$IDAY/$vcyc/atmos/$GDAS.t${vcyc}z.prepbufr
   fileout=prepbufr.gdas.${IDAY}${vcyc}
  if [ ! -s $comout/$fileout ]; then
   cp -p $filein $fileout
   if [ $? -ne 0 ]; then cp $filein1 $fileout ;fi                  
+  if [ $? -ne 0 ]; then cp $filein2 $fileout ;fi                  
   if [ $? -ne 0 ]; then 
     yyyy=`echo $IDAY |cut -c 1-4 `
     mm=`echo $IDAY |cut -c 5-6 `

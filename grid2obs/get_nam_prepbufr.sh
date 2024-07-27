@@ -47,7 +47,8 @@ eval PDY=`echo $xdate |cut -c 1-8 `
 eval CYC=`echo $xdate |cut -c 9-10 `
 
 COMROT="/lfs/h1/ops/prod/com"      
-namcomdir=$COMROT/obsproc/v1.0/nam.$PDY
+#namcomdir=$COMROT/obsproc/v1.0/nam.$PDY   ;#up to 2024052100
+namcomdir=$COMROT/obsproc/v2.0/nam.$PDY
 namarcdir=${nambufr_arch}/nam.$PDY
 
 ARCH=/NCEPPROD/hpssprod/runhistory
@@ -55,7 +56,10 @@ ARCHNAM="/com"
 if [ $PDY -le 20200226 ]; then
  ARCHNAM="/gpfs_dell1_nco_ops_com"
 fi
-namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.1_nam.${PDY}${CYC}.bufr.tar
+namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.2_nam.${PDY}${CYC}.bufr.tar
+if [ $PDY -le 20240521 ]; then
+ namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.1_nam.${PDY}${CYC}.bufr.tar
+fi
 if [ $PDY -le 20221128 ]; then
  namtar=$ARCH/rh${YYYY}/${YYYYMM}/${PDY}${ARCHNAM}_obsproc_v1.0_nam.${PDY}${CYC}.bufr.tar 
 fi
