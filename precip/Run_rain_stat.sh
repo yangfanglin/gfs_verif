@@ -70,7 +70,7 @@ while [ $CDATE -le $edate ]; do
     if [ $fhp -lt 10 ]; then fhp=0$fhp ; fi
     filein=$DATDIR/${file_type}${fhp}${cdump}$cdatex 
     fileout=$LOCDIR/${exps}_${ymdx}${cyc}_${fh}_${fhp}
-    $wgrib $filein | grep "$precip_type" | $wgrib -i -grib $filein -o $fileout
+    $wgrib $filein | grep "$precip_type" | grep ave | $wgrib -i -grib $filein -o $fileout
 
     fh=`expr $fh + $fhout `
   done

@@ -21,7 +21,7 @@
 !
  
 !     parameter(JI=2500*1500,JO=93*65,NUMREG=10,NUMTHR=9) 
-      parameter(JI=4000*2000,JO=93*65,NUMREG=10,NUMTHR=9) 
+      parameter(JI=6000*5000,JO=93*65,NUMREG=10,NUMTHR=9) 
       parameter(nc=200)
 
       integer IPOPT(20)
